@@ -18,8 +18,10 @@ Thumbs.db
 .idea/
 .history/
 
-# VS Code Einstellungen erlauben, aber Cache ignorieren
+# VS Code Settings
 .vscode/*
-!.vscode/tasks.json
-!.vscode/launch.json
+
+!.vscode/settings.json
 !.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json

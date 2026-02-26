@@ -1,0 +1,13 @@
+{
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.wordWrap": "on",
+    "files.autoSave": "afterDelay",
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    }
+}
