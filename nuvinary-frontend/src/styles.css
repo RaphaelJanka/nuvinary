@@ -1,3 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  /* Hier definierst du deine Marken-Farben direkt */
+  --color-primary: #183550;
+  --color-accent: #ff9130;
+  --color-accent-glare: #ffbb18;
+
+  /* Vanta-spezifische Farben für die Konsistenz */
+  --color-vanta-sky: #e8e1f0;
+  --color-vanta-cloud: #adadde;
+}
+
+/* Restliches globales CSS */
+body {
+  @apply bg-vanta-sky;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
