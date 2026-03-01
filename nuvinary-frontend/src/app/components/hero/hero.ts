@@ -15,11 +15,11 @@ interface VantaWindow extends Window {
 }
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-hero',
   imports: [Header],
-  templateUrl: './home.html',
+  templateUrl: './hero.html',
 })
-export class Home implements OnDestroy {
+export class Hero implements OnDestroy {
   private vantaEffect?: VantaEffect;
   private vantaContainer = viewChild.required<ElementRef<HTMLElement>>('vantaContainer');
 

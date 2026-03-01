@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth/auth-service';
 })
 export class Login {
   private authService = inject(AuthService);
+  authError = this.authService.authError;
 
   loginModel = signal<LoginData>({
     email: '',
@@ -30,13 +31,13 @@ export class Login {
     maxLength(loginSchema.email, 128, { message: 'E-mail must be at most 128 characters long' });
   });
 
-  onSubmit() {
+  onSubmit(event: Event) {
+    event.preventDefault();
     if (this.loginForm().valid()) {
       const success = this.authService.login(this.loginModel());
       if (success) {
-        console.log('Login successful');
-      } else {
-        console.error('Login failed');
+        this.loginModel.set({ email: '', password: '' });
+        this.loginForm().reset();
       }
     }
   }

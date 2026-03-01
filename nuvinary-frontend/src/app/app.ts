@@ -1,17 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
 })
-export class App implements OnInit {
-  private readonly titleService = inject(Title);
+export class App {
   protected readonly title = signal('Nuvinary');
-
-  ngOnInit(): void {
-    this.titleService.setTitle(this.title());
-  }
 }

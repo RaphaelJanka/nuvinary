@@ -14,7 +14,7 @@
         Welcome Back
       </h2>
 
-      <form class="flex flex-col gap-8">
+      <form (submit)="onSubmit($event)" class="flex flex-col gap-8">
         <div class="flex flex-col gap-3">
           <label for="email" class="text-xs font-bold uppercase ml-1 text-brand"
             >Email Address</label
@@ -33,7 +33,7 @@
               }
             </div>
           }
-          @if (loginForm.email().valid()) {
+          @if (loginForm.email().valid() && !authError()) {
             <div class="ps-1">
               <p class="text-green-500 text-xs">Email looks good!</p>
             </div>
@@ -56,21 +56,28 @@
               }
             </div>
           }
-          @if (loginForm.password().valid()) {
+          @if (loginForm.password().valid() && !authError()) {
             <div class="ps-1">
               <p class="text-green-500 text-xs">Password looks good!</p>
             </div>
           }
         </div>
 
-        <button
-          type="submit"
-          (click)="onSubmit()"
-          [disabled]="!loginForm().valid()"
-          class="mt-4 font-bold py-3 rounded-xl shadow-lg transition-all enabled:bg-brand enabled:hover:bg-brand-light enabled:text-white enabled:shadow-brand/20 enabled:active:scale-95 disabled:bg-gray-300 disabled:text-white disabled:shadow-none"
-        >
-          Sign In
-        </button>
+        <div class="flex flex-col gap-3">
+          @if (authError()) {
+            <div class="mt-4">
+              <p class="text-red-500 text-sm text-center">{{ authError() }}</p>
+            </div>
+          }
+
+          <button
+            type="submit"
+            [disabled]="!loginForm().valid()"
+            class="mt-4 font-bold py-3 rounded-xl shadow-lg transition-all enabled:bg-brand enabled:hover:bg-brand-light enabled:text-white enabled:shadow-brand/20 enabled:active:scale-95 disabled:bg-gray-300 disabled:text-white disabled:shadow-none"
+          >
+            Sign In
+          </button>
+        </div>
       </form>
       <div class="mt-8 text-center">
         <p class="text-sm text-text-main">

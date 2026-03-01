@@ -6,5 +6,5 @@ export const testUser: User = {
   password: 'password1234',
   firstName: 'Test',
   lastName: 'User',
-  credits: 1000,
+  credits: 10,
 };
