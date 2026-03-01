@@ -3,6 +3,7 @@ import { Footer } from '../footer/footer';
 import { email, form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
 import { LoginData } from '../../interfaces/auth/loginData';
 import { AuthService } from '../../services/auth/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import { AuthService } from '../../services/auth/auth-service';
 })
 export class Login {
   private authService = inject(AuthService);
+  private router = inject(Router);
   authError = this.authService.authError;
 
   loginModel = signal<LoginData>({
@@ -38,6 +40,7 @@ export class Login {
       if (success) {
         this.loginModel.set({ email: '', password: '' });
         this.loginForm().reset();
+        this.router.navigate(['/app']);
       }
     }
   }
