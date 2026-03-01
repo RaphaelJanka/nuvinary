@@ -1,4 +1,5 @@
 import { afterNextRender, Component, ElementRef, OnDestroy, viewChild } from '@angular/core';
+import { Header } from './header/header';
 
 interface VantaEffect {
   destroy: () => void;
@@ -10,7 +11,7 @@ declare const VANTA: {
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [Header],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })

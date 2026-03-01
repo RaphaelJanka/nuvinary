@@ -9,13 +9,13 @@
   --color-accent-glare: #ffbb18;
 
   /* Vanta-spezifische Farben für die Konsistenz */
-  --color-vanta-sky: #e8e1f0;
+  /* --color-vanta-sky: #e8e1f0; */
   --color-vanta-cloud: #adadde;
 }
 
 /* Restliches globales CSS */
 body {
-  @apply bg-vanta-sky;
+  @apply bg-purple-100;
   margin: 0;
   font-family: 'Inter', sans-serif;
 }
