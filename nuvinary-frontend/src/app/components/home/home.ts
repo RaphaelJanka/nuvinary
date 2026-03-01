@@ -21,7 +21,6 @@ declare const VANTA: {
   selector: 'app-home',
   imports: [Header],
   templateUrl: './home.html',
-  styleUrl: './home.css',
 })
 export class Home implements OnDestroy {
   private vantaEffect?: VantaEffect;
