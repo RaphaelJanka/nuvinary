@@ -7,15 +7,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { Header } from './header/header';
+import * as THREE from 'three';
+import CLOUDS, { VantaEffect } from 'vanta/dist/vanta.clouds.min.js';
 
-interface VantaEffect {
-  destroy: () => void;
-  resize: () => void;
+interface VantaWindow extends Window {
+  THREE?: typeof THREE;
 }
-
-declare const VANTA: {
-  CLOUDS: (config: unknown) => VantaEffect;
-};
 
 @Component({
   selector: 'app-home',
@@ -28,30 +25,28 @@ export class Home implements OnDestroy {
 
   @HostListener('window:resize')
   onResize() {
-    // Wenn der Effekt bereits initialisiert wurde, sag ihm Bescheid
-    if (this.vantaEffect) {
-      this.vantaEffect.resize();
-    }
+    this.vantaEffect?.resize();
   }
 
   constructor() {
     afterNextRender(() => {
-      if (typeof VANTA !== 'undefined') {
-        this.vantaEffect = VANTA.CLOUDS({
-          el: this.vantaContainer().nativeElement,
-          mouseControls: false,
-          touchControls: false,
-          minHeight: 200.0,
-          minWidth: 200.0,
-          speed: 0.3,
-          skyColor: 0xedadb0,
-          cloudColor: 0xadadde,
-          cloudShadowColor: 0x183550,
-          sunColor: 0xffbb18,
-          sunGlareColor: 0xffb530,
-          sunLightColor: 0xff9130,
-        });
-      }
+      (window as VantaWindow).THREE = THREE;
+
+      this.vantaEffect = CLOUDS({
+        el: this.vantaContainer().nativeElement,
+        THREE: THREE,
+        mouseControls: false,
+        touchControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        speed: 0.3,
+        skyColor: 0xedadb0,
+        cloudColor: 0xadadde,
+        cloudShadowColor: 0x183550,
+        sunColor: 0xffbb18,
+        sunGlareColor: 0xffb530,
+        sunLightColor: 0xff9130,
+      });
     });
   }
 
