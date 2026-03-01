@@ -22,9 +22,22 @@
           <input
             type="email"
             id="email"
+            [formField]="loginForm.email"
             placeholder="Enter your E-mail"
             class="bg-page-bg/30 border border-brand/10 rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-brand/40 transition-all placeholder:text-sm"
           />
+          @if (loginForm.email().touched() && loginForm.email().invalid()) {
+            <div class="ps-1">
+              @for (error of loginForm.email().errors(); track error.message) {
+                <p class="text-red-500 text-xs">{{ error.message }}</p>
+              }
+            </div>
+          }
+          @if (loginForm.email().valid()) {
+            <div class="ps-1">
+              <p class="text-green-500 text-xs">Email looks good!</p>
+            </div>
+          }
         </div>
 
         <div class="flex flex-col gap-3">
@@ -32,19 +45,33 @@
           <input
             type="password"
             id="password"
+            [formField]="loginForm.password"
             placeholder="Enter your password"
             class="bg-page-bg/30 border border-brand/10 rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-brand/40 transition-all placeholder:text-sm"
           />
+          @if (loginForm.password().touched() && loginForm.password().invalid()) {
+            <div class="ps-1">
+              @for (error of loginForm.password().errors(); track error.message) {
+                <p class="text-red-500 text-xs">{{ error.message }}</p>
+              }
+            </div>
+          }
+          @if (loginForm.password().valid()) {
+            <div class="ps-1">
+              <p class="text-green-500 text-xs">Password looks good!</p>
+            </div>
+          }
         </div>
 
         <button
           type="submit"
-          class="mt-4 bg-brand hover:bg-brand-light text-white font-bold py-3 rounded-xl shadow-lg shadow-brand/20 transition-all active:scale-95"
+          (click)="onSubmit()"
+          [disabled]="!loginForm().valid()"
+          class="mt-4 font-bold py-3 rounded-xl shadow-lg transition-all enabled:bg-brand enabled:hover:bg-brand-light enabled:text-white enabled:shadow-brand/20 enabled:active:scale-95 disabled:bg-gray-300 disabled:text-white disabled:shadow-none"
         >
           Sign In
         </button>
       </form>
-
       <div class="mt-8 text-center">
         <p class="text-sm text-text-main">
           New to Nuvinary?
