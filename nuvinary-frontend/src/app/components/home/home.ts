@@ -1,8 +1,16 @@
-import { afterNextRender, Component, ElementRef, OnDestroy, viewChild } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  viewChild,
+} from '@angular/core';
 import { Header } from './header/header';
 
 interface VantaEffect {
   destroy: () => void;
+  resize: () => void;
 }
 
 declare const VANTA: {
@@ -18,6 +26,14 @@ declare const VANTA: {
 export class Home implements OnDestroy {
   private vantaEffect?: VantaEffect;
   private vantaContainer = viewChild.required<ElementRef<HTMLElement>>('vantaContainer');
+
+  @HostListener('window:resize')
+  onResize() {
+    // Wenn der Effekt bereits initialisiert wurde, sag ihm Bescheid
+    if (this.vantaEffect) {
+      this.vantaEffect.resize();
+    }
+  }
 
   constructor() {
     afterNextRender(() => {

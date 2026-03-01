@@ -1,5 +1,5 @@
 <header
-  class="fixed left-0 top-0 w-full z-50 flex h-16 items-center justify-between px-4 lg:px-8 shadow-lg backdrop-blur-xl /* Der Hintergrund-Gradient */ bg-linear-to-r from-black/20 via-white/10 to-black/20 border-b border-white/15"
+  class="fixed left-0 right-0 top-0 w-full max-w-app-max-width m-auto z-50 flex h-16 items-center justify-between px-4 lg:px-8 shadow-lg backdrop-blur-xl /* Der Hintergrund-Gradient */ bg-linear-to-r from-black/20 via-white/10 to-black/20 border-b border-white/15"
 >
   <div class="flex items-center gap-2 cursor-pointer" routerLink="/">
     <div
@@ -11,13 +11,13 @@
   <div class="flex gap-4">
     <button
       routerLink="/login"
-      class="rounded-xl px-6 py-3 bg-white text-blue-900 text-sm font-bold transition-all ease-linear duration-75 cursor-pointer hover:bg-orange-500 hover:border-orange-500 hover:text-white hover:shadow-orange-500/50 hover:duration-[50]"
+      class="rounded-xl px-6 py-3 border-white/30 bg-white/5 backdrop-blur-sm text-white border text-sm font-bold transition-all ease-linear duration-75 hover:bg-brand-light hover:border-brand-light hover:shadow-brand-light/50 hover:scale-110 hover:duration-[50] active:duration-0"
     >
       Sign in
     </button>
     <button
       routerLink="/login"
-      class="rounded-xl tracking-tighter bg-white px-6 py-3 text-sm font-bold text-blue-900 shadow-lg transition-all ease-linear duration-75 cursor-pointer hover:bg-orange-500 hover:text-white hover:shadow-orange-500/50 hover:scale-110 hover:duration-[50] active:scale-95 active:duration-0"
+      class="rounded-xl tracking-tighter bg-brand px-6 py-3 text-sm font-bold text-white shadow-lg transition-all ease-linear duration-75 hover:bg-brand-light hover:shadow-brand-light/50 hover:scale-110 hover:duration-[50] active:scale-95 active:duration-0"
     >
       Sign up
     </button>

@@ -4,18 +4,32 @@
 
 @theme {
   /* Hier definierst du deine Marken-Farben direkt */
-  --color-primary: #183550;
-  --color-accent: #ff9130;
-  --color-accent-glare: #ffbb18;
 
-  /* Vanta-spezifische Farben für die Konsistenz */
-  /* --color-vanta-sky: #e8e1f0; */
-  --color-vanta-cloud: #adadde;
+  /* Die Hauptfarben deiner App */
+  --color-brand: #6366f1; /* Indigo-500 */
+  --color-brand-light: #818cf8; /* Indigo-400 (Hover) */
+  --color-brand-dark: #4f46e5; /* Indigo-600 (Pressed) */
+
+  /* Der sanfte Hintergrund */
+  --color-page-bg: #f3f0ff; /* Sehr helles Purple (ähnlich purple-100) */
+  --color-card-bg: #ffffff;
+
+  /* Text-Farben für perfekten Kontrast */
+  --color-text-main: #1e1b4b; /* Sehr dunkles Indigo/Slate für Headlines */
+
+  --spacing-app-max-width: 1920px;
 }
 
 /* Restliches globales CSS */
 body {
-  @apply bg-purple-100;
+  background-color: var(--color-page-bg);
+  color: var(--color-text-main);
   margin: 0;
   font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+a {
+  cursor: pointer;
 }
