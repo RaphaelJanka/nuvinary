@@ -1,1 +1,10 @@
-<div class="h-16 bg-page-bg"></div>
+<header class="flex h-16 items-center px-6">
+  <button
+    (click)="onToggleSidebar()"
+    class="p-2 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white"
+  >
+    <lucide-icon [img]="menuIcon" class="w-6 h-6 stroke-[1.5px]"></lucide-icon>
+  </button>
+
+  <span class="ms-4 font-bold text-xl tracking-tight text-white">Nuvinary</span>
+</header>

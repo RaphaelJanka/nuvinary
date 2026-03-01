@@ -11,11 +11,10 @@
   --color-brand-dark: #4f46e5; /* Indigo-600 (Pressed) */
 
   /* Der sanfte Hintergrund */
-  --color-page-bg: #f3f0ff; /* Sehr helles Purple (ähnlich purple-100) */
+  --color-page-bg: #d8d4e8; /* Sehr helles Purple (ähnlich purple-100) */
   --color-card-bg: #ffffff;
-
-  /* Text-Farben für perfekten Kontrast */
-  --color-text-main: #1e1b4b; /* Sehr dunkles Indigo/Slate für Headlines */
+  --color-sheet-bg: #f2eef5;
+  --color-text-main: #1e1b4b;
 
   --spacing-app-max-width: 1920px;
 }

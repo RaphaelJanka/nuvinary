@@ -1,16 +1,17 @@
 <div class="flex h-screen flex-col overflow-hidden">
-  <app-main-header></app-main-header>
+  <app-main-header class="bg-page-bg"></app-main-header>
 
   <div class="flex flex-1 overflow-hidden">
     <app-sidebar
       [class.w-64]="!isCollapsed()"
-      [class.w-20]="isCollapsed()"
+      [class.w-10]="isCollapsed()"
       class="transition-all duration-300 ease-in-out bg-page-bg"
     />
 
     <main
-      class="flex-1 overflow-y-auto p-6 me-8 bg-white rounded-t-2xl transition-all duration-300"
+      class="flex-1 overflow-y-auto p-6 me-10 bg-sheet-bg rounded-t-2xl transition-all duration-300"
     >
+      <div class="bg-white h-6 w-6"></div>
       <router-outlet />
     </main>
   </div>
