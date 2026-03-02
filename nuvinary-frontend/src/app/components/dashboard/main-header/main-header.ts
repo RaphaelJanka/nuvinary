@@ -1,6 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
 import { SidebarService } from '../services/sidebar-service';
-import { LucideAngularModule, Menu } from 'lucide-angular';
+import {
+  ChartLine,
+  CircleUserRound,
+  LockOpen,
+  LogOut,
+  LucideAngularModule,
+  Menu,
+  Settings,
+} from 'lucide-angular';
 import { AuthService } from '../../../auth/services/auth-service';
 import { Router } from '@angular/router';
 
@@ -14,6 +22,12 @@ export class MainHeader {
   private authService = inject(AuthService);
   private router = inject(Router);
   readonly menuIcon = Menu;
+  readonly circleUserRoundIcon = CircleUserRound;
+  readonly logOutIcon = LogOut;
+  readonly settingsIcon = Settings;
+  readonly lockOpenIcon = LockOpen;
+  readonly chartLineIcon = ChartLine;
+
   authUser = this.authService.authUser;
   isMenuOpen = false;
 
