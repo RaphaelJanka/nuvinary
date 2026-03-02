@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { Footer } from '../footer/footer';
 import { email, form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
-import { LoginData } from '../../interfaces/auth/loginData';
-import { AuthService } from '../../services/auth/auth-service';
+import { LoginData } from '../../auth/interfaces/loginData';
+import { AuthService } from '../../auth/services/auth-service';
 import { Router } from '@angular/router';
 
 @Component({

@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { SidebarService } from '../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
+import { AuthService } from '../../../auth/services/auth-service';
 
 @Component({
   selector: 'app-main-header',
@@ -9,11 +10,24 @@ import { LucideAngularModule, Menu } from 'lucide-angular';
 })
 export class MainHeader {
   private sidebarService = inject(SidebarService);
+  private authService = inject(AuthService);
   readonly menuIcon = Menu;
+  authUser = this.authService.authUser;
+  isMenuOpen = false;
+
+  userInitials = computed(() => {
+    const user = this.authUser();
+    if (!user) return '';
+    return user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase();
+  });
 
   isCollapsed = this.sidebarService.isCollapsed;
 
   onToggleSidebar() {
     this.sidebarService.toggle();
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }
