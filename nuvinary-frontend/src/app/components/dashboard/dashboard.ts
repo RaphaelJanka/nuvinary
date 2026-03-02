@@ -6,11 +6,11 @@ import { SidebarService } from './services/sidebar-service';
 import { AuthService } from '../../auth/services/auth-service';
 
 @Component({
-  selector: 'app-app-shell',
+  selector: 'app-dashboard',
   imports: [MainHeader, Sidebar, RouterOutlet],
-  templateUrl: './app-shell.html',
+  templateUrl: './dashboard.html',
 })
-export class AppShell {
+export class Dashboard {
   private sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
   authError = this.authService.authError;

@@ -12,21 +12,21 @@ export const routes: Routes = [
     loadComponent: () => import('./components/login/login').then((m) => m.Login),
   },
   {
-    path: 'app',
-    loadComponent: () => import('./components/app-shell/app-shell').then((m) => m.AppShell),
+    path: 'dashboard',
+    loadComponent: () => import('./components/dashboard/dashboard').then((m) => m.Dashboard), // Add AuthGuard here when implemented
     children: [
       { path: '', redirectTo: 'gallery', pathMatch: 'full' },
       {
         path: 'gallery',
         title: 'Gallery',
         loadComponent: () =>
-          import('./components/app-shell/gallery/gallery').then((m) => m.Gallery),
+          import('./components/dashboard/gallery/gallery').then((m) => m.Gallery),
       },
       {
         path: 'visionboard',
         title: 'Vision Board',
         loadComponent: () =>
-          import('./components/app-shell/visionboard/visionboard').then((m) => m.VisionBoard),
+          import('./components/dashboard/visionboard/visionboard').then((m) => m.VisionBoard),
       },
     ],
   },
