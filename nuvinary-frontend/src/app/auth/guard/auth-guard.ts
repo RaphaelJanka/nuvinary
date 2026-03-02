@@ -7,9 +7,8 @@ export const authGuard = () => {
   const router = inject(Router);
 
   if (authService.authUser()) {
-    return true; // User ist im Signal (LocalStorage), darf durch
+    return true;
   }
 
-  // Nicht eingeloggt? Ab zum Login
   return router.parseUrl('/login');
 };

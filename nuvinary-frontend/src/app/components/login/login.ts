@@ -40,7 +40,7 @@ export class Login {
       if (success) {
         this.loginModel.set({ email: '', password: '' });
         this.loginForm().reset();
-        this.router.navigate(['/app']);
+        this.router.navigate(['/dashboard']);
       }
     }
   }

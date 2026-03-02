@@ -2,7 +2,6 @@ import { effect, Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user';
 import { LoginData } from '../interfaces/loginData';
 import { testUser } from '../../test/testdata/user';
-import { log } from 'three';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +41,6 @@ export class AuthService {
 
     if (credentials.email === testUser.email && credentials.password === testUser.password) {
       this._authUserSignal.set(testUser);
-      log('User logged in successfully:', testUser);
       return true;
     }
     console.error('Login failed');
@@ -52,6 +50,5 @@ export class AuthService {
 
   logOut() {
     this._authUserSignal.set(null);
-    log('User logged out successfully');
   }
 }

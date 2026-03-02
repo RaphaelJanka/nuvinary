@@ -2,6 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { SidebarService } from '../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 import { AuthService } from '../../../auth/services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-header',
@@ -11,6 +12,7 @@ import { AuthService } from '../../../auth/services/auth-service';
 export class MainHeader {
   private sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
+  private router = inject(Router);
   readonly menuIcon = Menu;
   authUser = this.authService.authUser;
   isMenuOpen = false;
@@ -29,5 +31,10 @@ export class MainHeader {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  onLogOut() {
+    this.authService.logOut();
+    this.router.navigate(['/login']);
   }
 }
