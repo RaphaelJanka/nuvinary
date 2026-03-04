@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { Footer } from '../footer/footer';
 import { email, form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
-import { LoginData } from '../../auth/interfaces/loginData';
-import { AuthService } from '../../auth/services/auth-service';
+
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/auth/auth.service';
+import { LoginData } from '../../core/auth/auth.interfaces';
 
 @Component({
   selector: 'app-login',

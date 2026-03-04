@@ -7,9 +7,10 @@ import {
   LucideAngularModule,
   Settings,
 } from 'lucide-angular';
-import { AuthService } from '../../../../auth/services/auth-service';
+
 import { Router } from '@angular/router';
 import { LucideIconData } from 'lucide-angular/src/icons';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 interface MenuItem {
   label: string;

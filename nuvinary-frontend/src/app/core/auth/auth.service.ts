@@ -1,6 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { User } from '../interfaces/user';
-import { LoginData } from '../interfaces/loginData';
+import { LoginData, User } from './auth.interfaces';
 import { testUser } from '../../test/testdata/user';
 
 @Injectable({

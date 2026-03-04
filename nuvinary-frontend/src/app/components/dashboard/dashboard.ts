@@ -3,7 +3,7 @@ import { MainHeader } from './main-header/main-header';
 import { Sidebar } from './sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { SidebarService } from './services/sidebar-service';
-import { AuthService } from '../../auth/services/auth-service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',

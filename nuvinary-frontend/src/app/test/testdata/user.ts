@@ -1,4 +1,4 @@
-import { User } from '../../auth/interfaces/user';
+import { User } from '../../core/auth/auth.interfaces';
 
 export const testUser: User = {
   id: 1,
