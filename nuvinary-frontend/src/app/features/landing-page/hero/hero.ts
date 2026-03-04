@@ -21,7 +21,7 @@ interface VantaWindow extends Window {
 })
 export class Hero implements OnDestroy {
   private vantaEffect?: VantaEffect;
-  private vantaContainer = viewChild.required<ElementRef<HTMLElement>>('vantaContainer');
+  private readonly vantaContainer = viewChild.required<ElementRef<HTMLElement>>('vantaContainer');
 
   @HostListener('window:resize')
   onResize() {

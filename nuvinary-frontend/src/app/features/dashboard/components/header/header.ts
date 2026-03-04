@@ -11,26 +11,23 @@ import { AuthService } from '../../../../core/auth/auth.service';
   templateUrl: './header.html',
 })
 export class Header {
-  private sidebarService = inject(SidebarService);
-  private authService = inject(AuthService);
-  readonly menuIcon = Menu;
-
-  authUser = this.authService.authUser;
-  isMenuOpen = false;
-
-  userInitials = computed(() => {
+  private readonly sidebarService = inject(SidebarService);
+  private readonly authService = inject(AuthService);
+  protected readonly isCollapsed = this.sidebarService.isCollapsed;
+  protected readonly authUser = this.authService.authUser;
+  protected isMenuOpen = false;
+  protected readonly menuIcon = Menu;
+  protected readonly userInitials = computed<string>(() => {
     const user = this.authUser();
-    if (!user) return '';
+    if (!user?.firstName || !user.lastName) return '';
     return user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase();
   });
 
-  isCollapsed = this.sidebarService.isCollapsed;
-
-  onToggleSidebar() {
+  protected onToggleSidebar() {
     this.sidebarService.toggle();
   }
 
-  toggleMenu() {
+  protected onToggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
 }

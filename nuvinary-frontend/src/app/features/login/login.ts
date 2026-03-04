@@ -12,16 +12,15 @@ import { LoginData } from '../../core/auth/auth.interfaces';
   templateUrl: './login.html',
 })
 export class Login {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  authError = this.authService.authError;
-
-  loginModel = signal<LoginData>({
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  protected readonly authError = this.authService.authError;
+  private readonly loginModel = signal<LoginData>({
     email: '',
     password: '',
   });
 
-  loginForm = form(this.loginModel, (loginSchema) => {
+  protected readonly loginForm = form(this.loginModel, (loginSchema) => {
     required(loginSchema.email, { message: 'E-mail is required' });
     required(loginSchema.password, { message: 'Password is required' });
     email(loginSchema.email, { message: 'Please enter a valid e-mail address' });
@@ -34,7 +33,7 @@ export class Login {
     maxLength(loginSchema.email, 128, { message: 'E-mail must be at most 128 characters long' });
   });
 
-  onSubmit(event: Event) {
+  protected onSubmit(event: Event) {
     event.preventDefault();
     if (this.loginForm().valid()) {
       const success = this.authService.login(this.loginModel());
