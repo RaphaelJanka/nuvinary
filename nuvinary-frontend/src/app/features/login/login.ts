@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Footer } from '../footer/footer';
+import { Footer } from '../../shared/components/footer/footer';
 import { email, form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
 
 import { Router, RouterLink } from '@angular/router';

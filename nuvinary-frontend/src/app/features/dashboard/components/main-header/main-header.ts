@@ -1,9 +1,9 @@
 import { Component, computed, inject } from '@angular/core';
-import { SidebarService } from '../services/sidebar-service';
+import { SidebarService } from '../../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
 import { UserMenu } from './user-menu/user-menu';
-import { AuthService } from '../../../core/auth/auth.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-main-header',

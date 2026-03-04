@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { MainHeader } from './main-header/main-header';
-import { Sidebar } from './sidebar/sidebar';
+import { MainHeader } from './components/main-header/main-header';
+import { Sidebar } from './components/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { SidebarService } from './services/sidebar-service';
 import { AuthService } from '../../core/auth/auth.service';
