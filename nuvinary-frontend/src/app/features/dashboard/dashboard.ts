@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MainHeader } from './components/main-header/main-header';
+import { Header } from './components/header/header';
 import { Sidebar } from './components/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { SidebarService } from './services/sidebar-service';
@@ -7,7 +7,7 @@ import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MainHeader, Sidebar, RouterOutlet],
+  imports: [Header, Sidebar, RouterOutlet],
   templateUrl: './dashboard.html',
 })
 export class Dashboard {

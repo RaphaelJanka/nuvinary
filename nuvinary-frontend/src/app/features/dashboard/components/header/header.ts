@@ -8,9 +8,9 @@ import { AuthService } from '../../../../core/auth/auth.service';
 @Component({
   selector: 'app-main-header',
   imports: [LucideAngularModule, UserMenu],
-  templateUrl: './main-header.html',
+  templateUrl: './header.html',
 })
-export class MainHeader {
+export class Header {
   private sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
   readonly menuIcon = Menu;
