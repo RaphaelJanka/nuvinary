@@ -31,10 +31,10 @@ export class UserMenu {
   closeMenu = output<void>();
 
   menuItems: MenuItem[] = [
-    { label: 'Profile Settings', icon: CircleUserRound, route: '/profile' },
-    { label: 'Account Overview', icon: ChartLine, route: '/settings' },
-    { label: 'Security & Password', icon: LockOpen, route: '/security' },
-    { label: 'Preferences', icon: Settings, route: '/preferences' },
+    { label: 'Profile Settings', icon: CircleUserRound, route: '/dashboard/settings/profile' },
+    { label: 'Account Overview', icon: ChartLine, route: '/dashboard/settings/overview' },
+    { label: 'Security & Password', icon: LockOpen, route: '/dashboard/settings/security' },
+    { label: 'Preferences', icon: Settings, route: '/dashboard/settings/preferences' },
   ];
 
   handleAction(item: MenuItem) {

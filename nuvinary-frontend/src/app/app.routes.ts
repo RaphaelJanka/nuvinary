@@ -30,6 +30,37 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/dashboard/visionboard/visionboard').then((m) => m.VisionBoard),
       },
+      {
+        path: 'settings',
+        children: [
+          {
+            path: 'profile',
+            title: 'Profile Settings',
+            loadComponent: () =>
+              import('./components/dashboard/settings/profile/profile').then((m) => m.Profile),
+          },
+          {
+            path: 'overview',
+            title: 'Account Overview',
+            loadComponent: () =>
+              import('./components/dashboard/settings/overview/overview').then((m) => m.Overview),
+          },
+          {
+            path: 'security',
+            title: 'Security',
+            loadComponent: () =>
+              import('./components/dashboard/settings/security/security').then((m) => m.Security),
+          },
+          {
+            path: 'preferences',
+            title: 'Preferences',
+            loadComponent: () =>
+              import('./components/dashboard/settings/preferences/preferences').then(
+                (m) => m.Preferences,
+              ),
+          },
+        ],
+      },
     ],
   },
   { path: '**', redirectTo: '' },
