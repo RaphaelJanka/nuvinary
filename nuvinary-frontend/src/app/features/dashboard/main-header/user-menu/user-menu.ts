@@ -7,16 +7,9 @@ import {
   LucideAngularModule,
   Settings,
 } from 'lucide-angular';
-
 import { Router } from '@angular/router';
-import { LucideIconData } from 'lucide-angular/src/icons';
 import { AuthService } from '../../../../core/auth/auth.service';
-
-interface MenuItem {
-  label: string;
-  icon: LucideIconData;
-  route: string;
-}
+import { MenuItem } from '../../../../shared/interfaces/menu-item.interface';
 
 @Component({
   selector: 'app-user-menu',

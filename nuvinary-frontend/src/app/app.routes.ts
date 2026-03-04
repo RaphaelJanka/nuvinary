@@ -5,30 +5,29 @@ export const routes: Routes = [
   {
     path: '',
     title: 'Welcome',
-    loadComponent: () => import('./components/hero/hero').then((m) => m.Hero),
+    loadComponent: () => import('./features/hero/hero').then((m) => m.Hero),
   },
   {
     path: 'login',
     title: 'Login',
-    loadComponent: () => import('./components/login/login').then((m) => m.Login),
+    loadComponent: () => import('./features/login/login').then((m) => m.Login),
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./components/dashboard/dashboard').then((m) => m.Dashboard),
+    loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
     canActivate: [authGuard],
     children: [
       { path: '', redirectTo: 'gallery', pathMatch: 'full' },
       {
         path: 'gallery',
         title: 'Gallery',
-        loadComponent: () =>
-          import('./components/dashboard/gallery/gallery').then((m) => m.Gallery),
+        loadComponent: () => import('./features/dashboard/gallery/gallery').then((m) => m.Gallery),
       },
       {
         path: 'visionboard',
         title: 'Vision Board',
         loadComponent: () =>
-          import('./components/dashboard/visionboard/visionboard').then((m) => m.VisionBoard),
+          import('./features/dashboard/visionboard/visionboard').then((m) => m.VisionBoard),
       },
       {
         path: 'settings',
@@ -37,25 +36,25 @@ export const routes: Routes = [
             path: 'profile',
             title: 'Profile Settings',
             loadComponent: () =>
-              import('./components/dashboard/settings/profile/profile').then((m) => m.Profile),
+              import('./features/dashboard/settings/profile/profile').then((m) => m.Profile),
           },
           {
             path: 'overview',
             title: 'Account Overview',
             loadComponent: () =>
-              import('./components/dashboard/settings/overview/overview').then((m) => m.Overview),
+              import('./features/dashboard/settings/overview/overview').then((m) => m.Overview),
           },
           {
             path: 'security',
             title: 'Security',
             loadComponent: () =>
-              import('./components/dashboard/settings/security/security').then((m) => m.Security),
+              import('./features/dashboard/settings/security/security').then((m) => m.Security),
           },
           {
             path: 'preferences',
             title: 'Preferences',
             loadComponent: () =>
-              import('./components/dashboard/settings/preferences/preferences').then(
+              import('./features/dashboard/settings/preferences/preferences').then(
                 (m) => m.Preferences,
               ),
           },
