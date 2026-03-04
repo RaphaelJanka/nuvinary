@@ -1,32 +1,18 @@
 import { Component, computed, inject } from '@angular/core';
 import { SidebarService } from '../services/sidebar-service';
-import {
-  ChartLine,
-  CircleUserRound,
-  LockOpen,
-  LogOut,
-  LucideAngularModule,
-  Menu,
-  Settings,
-} from 'lucide-angular';
+import { LucideAngularModule, Menu } from 'lucide-angular';
 import { AuthService } from '../../../auth/services/auth-service';
-import { Router } from '@angular/router';
+import { UserMenu } from './user-menu/user-menu';
 
 @Component({
   selector: 'app-main-header',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, UserMenu],
   templateUrl: './main-header.html',
 })
 export class MainHeader {
   private sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
-  private router = inject(Router);
   readonly menuIcon = Menu;
-  readonly circleUserRoundIcon = CircleUserRound;
-  readonly logOutIcon = LogOut;
-  readonly settingsIcon = Settings;
-  readonly lockOpenIcon = LockOpen;
-  readonly chartLineIcon = ChartLine;
 
   authUser = this.authService.authUser;
   isMenuOpen = false;
@@ -45,10 +31,5 @@ export class MainHeader {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  onLogOut() {
-    this.authService.logOut();
-    this.router.navigate(['/login']);
   }
 }

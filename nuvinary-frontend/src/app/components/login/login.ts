@@ -3,11 +3,11 @@ import { Footer } from '../footer/footer';
 import { email, form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
 import { LoginData } from '../../auth/interfaces/loginData';
 import { AuthService } from '../../auth/services/auth-service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [Footer, FormField],
+  imports: [Footer, FormField, RouterLink],
   templateUrl: './login.html',
 })
 export class Login {
