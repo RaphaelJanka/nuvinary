@@ -1,1 +1,48 @@
-<p>gallery works!</p>
+<div class="flex h-full w-full gap-4 p-2">
+  <div
+    class="flex-3 flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
+  >
+    <div class="p-4 border-b bg-white/80 flex gap-3">
+      <input
+        type="text"
+        placeholder="Search images..."
+        class="flex-1 px-3 py-2 bg-zinc-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#9b8fbc]/50"
+      />
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4">
+      <div class="flex flex-wrap gap-3">
+        @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+          <div
+            class="w-50 h-60 bg-zinc-200 rounded-lg hover:ring-2 hover:ring-[#9b8fbc] transition-all cursor-grab active:cursor-grabbing shadow-sm overflow-hidden"
+          ></div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex-1 min-w-75 flex flex-col bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
+  >
+    <div class="p-4 border-b bg-white/80 flex justify-between items-center">
+      <h3 class="font-bold text-zinc-700">My Albums</h3>
+      <button class="p-1 hover:bg-zinc-200 rounded-md transition-colors">
+        <lucide-icon [img]="plusIcon" class="w-5 h-5 text-[#7c6db2]"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-4 space-y-3">
+      @for (album of ['Vacation', 'Work', 'Inspiration']; track album) {
+        <div
+          class="group border border-zinc-200 bg-white rounded-lg p-3 hover:border-[#9b8fbc] transition-all"
+        >
+          <div class="flex items-center gap-3 cursor-pointer">
+            <lucide-icon [img]="folderIcon" class="w-5 h-5 text-[#9b8fbc]"></lucide-icon>
+            <span class="font-medium text-sm text-zinc-600">{{ album }}</span>
+            <span class="ml-auto text-xs text-zinc-400">12</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
