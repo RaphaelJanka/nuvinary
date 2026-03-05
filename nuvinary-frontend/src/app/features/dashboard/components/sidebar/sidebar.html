@@ -55,7 +55,7 @@
       @for (item of supportMenuItems; track $index) {
         <a
           [routerLink]="item.route"
-          class="flex items-center ml-1 gap-2 ps-4 h-8 transition-all duration-300 hover:text-[#7c6db2] hover:font-bold cursor-pointer"
+          class="flex items-center ml-1 gap-2 ps-4 h-8 transition-all duration-200 hover:text-[#7c6db2] hover:[text-shadow:0.5px_0_0_currentColor] cursor-pointer"
         >
           <span class="transition-all duration-300 whitespace-nowrap overflow-hidden">
             {{ item.label }}

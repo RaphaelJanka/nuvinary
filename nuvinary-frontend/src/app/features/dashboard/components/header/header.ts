@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { SidebarService } from '../../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
@@ -15,7 +15,7 @@ export class Header {
   private readonly authService = inject(AuthService);
   protected readonly isCollapsed = this.sidebarService.isCollapsed;
   protected readonly authUser = this.authService.authUser;
-  protected isMenuOpen = false;
+  protected isMenuOpen = signal(false);
   protected readonly menuIcon = Menu;
   protected readonly userInitials = computed<string>(() => {
     const user = this.authUser();
@@ -28,6 +28,6 @@ export class Header {
   }
 
   protected onToggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
+    this.isMenuOpen.update((v) => !v);
   }
 }

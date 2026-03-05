@@ -28,10 +28,17 @@ export class UserMenu {
   @HostListener('document:mousedown', ['$event'])
   @HostListener('document:touchstart', ['$event'])
   protected onGlobalClick(event: MouseEvent | TouchEvent): void {
-    const clickedInsiide = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInsiide) {
+    const target = event.target as HTMLElement;
+    const clickedInside = this.elementRef.nativeElement.contains(target);
+    const clickedOnButton = target.closest('#user-menu-button');
+    if (!clickedInside && !clickedOnButton) {
       this.closeMenu.emit();
     }
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    this.closeMenu.emit();
   }
 
   protected readonly menuItems: MenuItem[] = [

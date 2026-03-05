@@ -12,6 +12,7 @@
 
   <div class="relative">
     <button
+      id="user-menu-button"
       (click)="onToggleMenu()"
       class="w-10 h-10 rounded-full bg-brand border border-brand/20 flex items-center justify-center shadow-lg hover:bg-brand-light transition-all focus:outline-none"
     >
@@ -20,8 +21,8 @@
       </span>
     </button>
 
-    @if (isMenuOpen) {
-      <app-user-menu (closeMenu)="isMenuOpen = false"></app-user-menu>
+    @if (isMenuOpen()) {
+      <app-user-menu (closeMenu)="isMenuOpen.set(false)"></app-user-menu>
     }
   </div>
 </header>

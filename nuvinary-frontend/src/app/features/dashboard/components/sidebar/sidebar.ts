@@ -1,5 +1,5 @@
-import { Component, computed, inject } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   ArrowLeft,
   BookImage,
@@ -13,8 +13,7 @@ import {
   Sparkles,
 } from 'lucide-angular';
 import { SidebarService } from '../../services/sidebar-service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, map } from 'rxjs';
+
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
@@ -24,20 +23,9 @@ import { NgTemplateOutlet } from '@angular/common';
 })
 export class Sidebar {
   private readonly sideBarService = inject(SidebarService);
-  readonly isCollapsed = this.sideBarService.isCollapsed;
+  protected readonly isCollapsed = this.sideBarService.isCollapsed;
+  protected readonly showSettings = this.sideBarService.showSettings;
   protected readonly arrowLeftIcon = ArrowLeft;
-
-  private readonly router = inject(Router);
-  private readonly currentUrl = toSignal(
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      map((event) => (event as NavigationEnd).urlAfterRedirects),
-    ),
-    { initialValue: this.router.url },
-  );
-  protected readonly showSettings = computed(() =>
-    this.currentUrl().includes('/dashboard/settings'),
-  );
 
   protected readonly sideBarMenuItems = [
     { label: 'My Gallery', icon: BookImage, route: '/dashboard/gallery' },
