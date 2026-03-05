@@ -2,6 +2,6 @@ import { LucideIconData } from 'lucide-angular';
 
 export interface MenuItem {
   label: string;
-  icon: LucideIconData;
+  icon?: LucideIconData;
   route: string;
 }
