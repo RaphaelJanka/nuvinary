@@ -37,3 +37,21 @@ a {
 button:disabled {
   cursor: not-allowed;
 }
+
+/* Den Scroll-Container mit einer Klasse markieren, z.B. .custom-scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Schön schmal */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Versteckt den Hintergrund des Balkens */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #bbb2d8; /* Dein helleres Lila */
+  border-radius: 20px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #7c6db2; /* Dein Haupt-Lila beim Drüberfahren */
+}
