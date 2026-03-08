@@ -31,6 +31,18 @@ export const routes: Routes = [
           import('./features/dashboard/pages/visionboard/visionboard').then((m) => m.VisionBoard),
       },
       {
+        path: 'create',
+        title: 'Create',
+        loadComponent: () =>
+          import('./features/dashboard/pages/create/create').then((m) => m.Create),
+      },
+      {
+        path: 'community',
+        title: 'Community',
+        loadComponent: () =>
+          import('./features/dashboard/pages/community/community').then((m) => m.Community),
+      },
+      {
         path: 'settings',
         children: [
           {

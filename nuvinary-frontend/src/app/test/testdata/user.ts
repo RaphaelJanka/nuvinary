@@ -1,7 +1,7 @@
 import { User } from '../../core/auth/auth.interfaces';
 
 export const testUser: User = {
-  id: 1,
+  id: '101',
   email: 'test@example.com',
   password: 'password1234',
   firstName: 'Test',

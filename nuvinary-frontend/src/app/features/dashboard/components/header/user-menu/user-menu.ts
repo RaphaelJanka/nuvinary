@@ -9,7 +9,7 @@ import {
 } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../../core/auth/auth.service';
-import { MenuItem } from '../../../../../shared/interfaces/menu-item.interface';
+import { MenuItem } from '../../../../../shared/models/menu-item.model';
 
 @Component({
   selector: 'app-user-menu',
