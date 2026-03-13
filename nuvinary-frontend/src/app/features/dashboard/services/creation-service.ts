@@ -11,11 +11,11 @@ export class CreationService {
   private readonly currentUser = this.authService.authUser;
 
   // for mock data
-  private readonly creationList = signal<Creation[]>(mockCreationList);
+  private readonly _creationList = signal<Creation[]>(mockCreationList);
 
   readonly userCreationList = computed(() =>
-    this.creationList().filter((c) => c.createdBy.id === this.currentUser()?.id),
+    this._creationList().filter((c) => c.createdBy.id === this.currentUser()?.id),
   );
 
-  readonly communityCreationList = computed(() => this.creationList().filter((c) => c.isPublic));
+  readonly communityCreationList = computed(() => this._creationList().filter((c) => c.isPublic));
 }
