@@ -22,8 +22,9 @@ export class Gallery {
   };
 
   onOpenDetails(creation: Creation) {
+    const selectedCreation = this.creationService.getCreationForDialog(creation, this.creationList);
     this.dialog.open(CreationDetails, {
-      data: creation,
+      data: selectedCreation,
       maxWidth: '95vw',
     });
   }

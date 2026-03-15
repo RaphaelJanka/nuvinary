@@ -1,10 +1,10 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, Signal } from '@angular/core';
 import {
   Calendar,
   Cpu,
-  Droplet,
+  FileText,
   Globe,
   Layers,
   Lock,
@@ -12,8 +12,12 @@ import {
   Maximize,
   Pen,
   Trash,
+  User,
   X,
 } from 'lucide-angular';
+import { Creation } from '../../models/creation.model';
+import { CreationService } from '../../../features/dashboard/services/creation-service';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-creation-details',
@@ -21,19 +25,49 @@ import {
   templateUrl: './creation-details.html',
 })
 export class CreationDetails {
-  protected readonly creation = inject(DIALOG_DATA);
+  private readonly creationService = inject(CreationService);
   private readonly dialogRef = inject(DialogRef);
-  protected readonly layersIcon = Layers;
-  protected readonly cpuIcon = Cpu;
-  protected readonly lockIcon = Lock;
-  protected readonly globeIcon = Globe;
-  protected readonly trashIcon = Trash;
-  protected readonly editIcon = Pen;
-  protected readonly closeIcon = X;
-  protected readonly maximizeIcon = Maximize;
-  protected readonly dateIcon = Calendar;
-  protected readonly dropdownIcon = Droplet;
-  isDropdownOpen = false;
+  private readonly authService = inject(AuthService);
+  protected readonly currentUser = this.authService.authUser;
+  protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
+  protected isEditingTitle = signal(false);
+  protected editValue = signal('');
+
+  protected readonly icons = {
+    layersIcon: Layers,
+    cpuIcon: Cpu,
+    lockIcon: Lock,
+    globeIcon: Globe,
+    trashIcon: Trash,
+    editIcon: Pen,
+    closeIcon: X,
+    maximizeIcon: Maximize,
+    dateIcon: Calendar,
+    userIcon: User,
+    fileTextIcon: FileText,
+  };
+
+  onStartEditTitle() {
+    this.editValue.set(this.creation().title);
+    this.isEditingTitle.set(true);
+  }
+
+  onSaveTitle() {
+    const newTitle = this.editValue().trim();
+    if (newTitle && newTitle !== this.creation().title) {
+      // this.creationService.updateTitle(this.creation().id, newTitle);
+    }
+    this.isEditingTitle.set(false);
+  }
+
+  onCancelEdit() {
+    this.isEditingTitle.set(false);
+  }
+
+  onTogglePublic() {
+    const currentId = this.creation().id;
+    this.creationService.togglePublicStatus(currentId);
+  }
 
   onClose() {
     this.dialogRef.close();
