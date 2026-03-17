@@ -30,6 +30,12 @@ export class CreationService {
     return computed(() => listSignal().find((c) => c.id === creation.id) ?? creation);
   }
 
+  updateTitle(id: string, newTitle: string) {
+    this._creationList.update((list) =>
+      list.map((c) => (c.id === id ? { ...c, title: newTitle } : c)),
+    );
+  }
+
   togglePublicStatus(id: string) {
     this._creationList.update((list) =>
       list.map((c) => (c.id === id ? { ...c, isPublic: !c.isPublic } : c)),

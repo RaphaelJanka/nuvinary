@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal, Signal } from '@angular/core';
 import {
   Calendar,
+  Check,
   Cpu,
   FileText,
   Globe,
@@ -45,6 +46,7 @@ export class CreationDetails {
     dateIcon: Calendar,
     userIcon: User,
     fileTextIcon: FileText,
+    checkIcon: Check,
   };
 
   onStartEditTitle() {
@@ -55,7 +57,7 @@ export class CreationDetails {
   onSaveTitle() {
     const newTitle = this.editValue().trim();
     if (newTitle && newTitle !== this.creation().title) {
-      // this.creationService.updateTitle(this.creation().id, newTitle);
+      this.creationService.updateTitle(this.creation().id, newTitle);
     }
     this.isEditingTitle.set(false);
   }
