@@ -27,6 +27,7 @@
                 <input
                   #titleInput
                   [value]="editValue()"
+                  maxlength="50"
                   (input)="editValue.set(titleInput.value)"
                   class="text-3xl font-black text-[#7c6db2] tracking-tight leading-tight bg-zinc-100/80 border-none focus:ring-2 focus:ring-[#7c6db2]/20 py-2 pl-3 pr-24 rounded-2xl w-full outline-none transition-all"
                 />
