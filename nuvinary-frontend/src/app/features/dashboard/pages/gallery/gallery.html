@@ -2,57 +2,8 @@
   <section
     class="flex-3 flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
   >
-    <header class="h-16 px-6 border-b border-[#7c6db2]/20 bg-white flex items-center gap-4">
-      <div
-        class="flex items-center gap-2 px-3 py-1.5 bg-sheet-bg rounded-xl border border-[#7c6db2]/10"
-      >
-        <span class="text-[10px] font-black text-[#7c6db2] uppercase tracking-wider"
-          >My Gallery</span
-        >
-      </div>
-
-      <div
-        class="flex-1 flex items-center bg-[#f9f8fc] border border-zinc-200 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-[#7c6db2]/20 focus-within:border-[#7c6db2] transition-all"
-      >
-        <lucide-icon [img]="icons.searchIcon" class="w-4 h-4 text-zinc-400"></lucide-icon>
-        <input
-          #searchInput
-          type="text"
-          [value]="searchQuery()"
-          (input)="searchQuery.set(searchInput.value)"
-          placeholder="Search assets..."
-          class="ml-3 flex-1 bg-transparent border-none text-sm font-semibold text-zinc-700 placeholder-zinc-400 focus:outline-none"
-        />
-        @if (searchQuery()) {
-          <button
-            (click)="searchQuery.set('')"
-            class="cursor-pointer text-zinc-400 hover:text-[#7c6db2]"
-          >
-            <lucide-icon [img]="icons.closeIcon" class="w-4 h-4"></lucide-icon>
-          </button>
-        }
-      </div>
-    </header>
-
-    <main class="flex-1 select-none overflow-y-auto px-6 py-4 custom-scrollbar">
-      <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
-        @for (creation of filteredCreations(); track creation.id) {
-          <app-creation-card
-            [creation]="creation"
-            (openDetails)="onOpenDetails($event)"
-          ></app-creation-card>
-        } @empty {
-          <div class="col-span-full py-20 flex flex-col items-center justify-center text-zinc-400">
-            <lucide-icon [img]="icons.searchIcon" class="w-12 h-12 opacity-20 mb-4"></lucide-icon>
-            <p class="font-bold uppercase tracking-widest text-xs">
-              No assets found for "{{ searchQuery() }}"
-            </p>
-          </div>
-        }
-      </div>
-    </main>
+    <app-creation-grid [creationList]="creationList()" [title]="'My Gallery'"></app-creation-grid>
   </section>
-
   <section
     class="flex-1 min-w-75 flex flex-col bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
   >

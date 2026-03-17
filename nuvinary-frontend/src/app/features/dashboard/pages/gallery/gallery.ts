@@ -1,43 +1,14 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { LucideAngularModule, Search, X } from 'lucide-angular';
+import { Component, inject } from '@angular/core';
 import { CreationService } from '../../services/creation-service';
-import { Creation } from '../../../../shared/models/creation.model';
-import { CreationCard } from '../../../../shared/components/creation-card/creation-card';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CreationDetails } from '../../../../shared/components/creation-details/creation-details';
 import { Collections } from './collections/collections';
+import { CreationGrid } from '../../../../shared/components/creation-grid/creation-grid';
 
 @Component({
   selector: 'app-gallery',
-  imports: [LucideAngularModule, CreationCard, DialogModule, Collections],
+  imports: [Collections, CreationGrid],
   templateUrl: './gallery.html',
 })
 export class Gallery {
   private readonly creationService = inject(CreationService);
-  private readonly creationList = this.creationService.userCreationList;
-  private readonly dialog = inject(Dialog);
-  protected readonly icons = {
-    searchIcon: Search,
-    closeIcon: X,
-  };
-  protected searchQuery = signal('');
-  protected readonly filteredCreations = computed(() => {
-    const query = this.searchQuery().toLowerCase().trim();
-    const list = this.creationList();
-    if (!query) {
-      return list;
-    }
-    return list.filter(
-      (c) =>
-        c.title.toLowerCase().includes(query) || c.aiMetadata.prompt.toLowerCase().includes(query),
-    );
-  });
-
-  onOpenDetails(creation: Creation) {
-    const selectedCreation = this.creationService.getCreationForDialog(creation, this.creationList);
-    this.dialog.open(CreationDetails, {
-      data: selectedCreation,
-      maxWidth: '95vw',
-    });
-  }
+  readonly creationList = this.creationService.userCreationList;
 }
