@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { LucideAngularModule, Search } from 'lucide-angular';
+import { Component, computed, inject, signal } from '@angular/core';
+import { LucideAngularModule, Search, X } from 'lucide-angular';
 import { CreationService } from '../../services/creation-service';
 import { Creation } from '../../../../shared/models/creation.model';
 import { CreationCard } from '../../../../shared/components/creation-card/creation-card';
@@ -14,12 +14,24 @@ import { Collections } from './collections/collections';
 })
 export class Gallery {
   private readonly creationService = inject(CreationService);
-  protected readonly creationList = this.creationService.userCreationList;
+  private readonly creationList = this.creationService.userCreationList;
   private readonly dialog = inject(Dialog);
-
   protected readonly icons = {
     searchIcon: Search,
+    closeIcon: X,
   };
+  protected searchQuery = signal('');
+  protected readonly filteredCreations = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const list = this.creationList();
+    if (!query) {
+      return list;
+    }
+    return list.filter(
+      (c) =>
+        c.title.toLowerCase().includes(query) || c.aiMetadata.prompt.toLowerCase().includes(query),
+    );
+  });
 
   onOpenDetails(creation: Creation) {
     const selectedCreation = this.creationService.getCreationForDialog(creation, this.creationList);
