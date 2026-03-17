@@ -75,7 +75,7 @@
         <span class="text-xs font-bold uppercase tracking-wider">
           Created on {{ creation().createdAt | date: 'longDate' }}
         </span>
-        @if (currentUser()?.id === creation().createdBy.id) {
+        @if (currentUser()?.id === creation().createdBy.id && canEdit()) {
           <span class="text-zinc-400">|</span>
           <button
             class="text-xs font-black uppercase tracking-wider text-zinc-400 transition-colors hover:text-[#7c6db2]"
@@ -130,7 +130,7 @@
             </p>
           </div>
         </div>
-        @if (creation().createdBy.id === currentUser()?.id) {
+        @if (creation().createdBy.id === currentUser()?.id && canEdit()) {
           <button
             type="button"
             (click)="onTogglePublic()"

@@ -1,6 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal, Signal } from '@angular/core';
+import { Component, computed, inject, signal, Signal } from '@angular/core';
 import {
   Calendar,
   Check,
@@ -19,6 +19,7 @@ import {
 import { Creation } from '../../models/creation.model';
 import { CreationService } from '../../../features/dashboard/services/creation-service';
 import { AuthService } from '../../../core/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-creation-details',
@@ -30,6 +31,10 @@ export class CreationDetails {
   private readonly dialogRef = inject(DialogRef);
   private readonly authService = inject(AuthService);
   protected readonly currentUser = this.authService.authUser;
+  private readonly router = inject(Router);
+  protected readonly canEdit = computed(() => {
+    return this.router.url.includes('/gallery');
+  });
   protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
   protected isEditingTitle = signal(false);
   protected editValue = signal('');
