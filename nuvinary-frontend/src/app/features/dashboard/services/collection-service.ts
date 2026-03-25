@@ -12,7 +12,7 @@ export class CollectionService {
   getDefaultCollection = (): Collection => ({
     id: '',
     createdBy: '',
-    name: '',
+    title: '',
     createdAt: new Date(),
     creations: [],
   });
@@ -25,13 +25,13 @@ export class CollectionService {
     this._mockCollections.update((list) => [...list, newEntry]);
   }
 
-  updateCollection(id: string, newTitle: string) {
+  updateCollectionTitle(id: string, newTitle: string) {
     this._mockCollections.update((collections) =>
-      collections.map((c) => (c.id === id ? { ...c, name: newTitle } : c)),
+      collections.map((c) => (c.id === id ? { ...c, title: newTitle } : c)),
     );
   }
 
-  // deleteCollection(id: string) {
-  //   this._mockCollections.update(collections => collections.find())
-  // }
+  deleteCollection(id: string | null) {
+    this._mockCollections.update((collections) => collections.filter((c) => c.id !== id));
+  }
 }

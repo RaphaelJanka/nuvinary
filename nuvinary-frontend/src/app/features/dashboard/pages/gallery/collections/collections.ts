@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { Folder, LucideAngularModule, Plus } from 'lucide-angular';
+import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
 import { CollectionService } from '../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
@@ -15,32 +15,49 @@ export class Collections {
   protected readonly icons = {
     plusIcon: Plus,
     folderIcon: Folder,
+    trashIcon: Trash,
+    penIcon: Pen,
+    checkIcon: Check,
+    cancelIcon: X,
   };
-  protected isCreating = false;
+
+  protected readonly expandedCollectionId = signal<string | null>(null);
+  protected readonly deleteCollectionId = signal<string | null>(null);
+  protected readonly editingCollectionId = signal<string | null>(null);
+  protected readonly isCreating = signal(false);
+
   private readonly collectionModel = signal<Collection>(
     this.collectionService.getDefaultCollection(),
   );
 
   protected readonly collectionForm = form(this.collectionModel, (fieldPath) => {
-    required(fieldPath.name, { message: 'Title is required' });
-    maxLength(fieldPath.name, 20, { message: 'Title must be at most 20 characters long' });
+    required(fieldPath.title, { message: 'Title is required' });
+    maxLength(fieldPath.title, 20);
   });
 
-  protected onCreate() {
-    this.isCreating = !this.isCreating;
-    if (!this.isCreating) {
-      this.resetForm();
+  // ----------   Actions ------------
+
+  protected onToggleExpand(id: string) {
+    this.expandedCollectionId.update((current) => (current === id ? null : id));
+    if (this.deleteCollectionId()) {
+      this.resetDeletion();
     }
   }
 
-  protected onSubmit(event: Event) {
-    event.preventDefault();
-    submit(this.collectionForm, async () => {
-      const collection = this.collectionModel();
-      this.collectionService.addCollection(collection);
-      this.isCreating = false;
-      this.resetForm();
-    });
+  // Creation of new collection
+
+  protected onCreate() {
+    if (this.editingCollectionId()) return;
+    this.isCreating.update((v) => !v);
+    this.resetForm();
+    if (this.deleteCollectionId()) {
+      this.resetDeletion();
+    }
+  }
+
+  protected onCancel() {
+    this.resetForm();
+    this.isCreating.set(false);
   }
 
   private resetForm() {
@@ -48,8 +65,46 @@ export class Collections {
     this.collectionForm().reset();
   }
 
-  protected onCancel() {
-    this.isCreating = false;
-    this.resetForm();
+  protected onSubmit(event: Event) {
+    event.preventDefault();
+    submit(this.collectionForm, async () => {
+      const collection = this.collectionModel();
+      const editId = this.editingCollectionId();
+      if (editId) {
+        this.collectionService.updateCollectionTitle(editId, collection.title);
+      } else {
+        this.collectionService.addCollection(collection);
+      }
+      this.isCreating.set(false);
+      this.editingCollectionId.set(null);
+      this.resetForm();
+    });
+  }
+
+  // Edit of collection title
+
+  protected onEdit(collection: Collection) {
+    this.collectionModel.set({ ...collection });
+    this.editingCollectionId.set(collection.id);
+  }
+
+  // Deletion of collection
+
+  protected confirmDelete(id: string) {
+    this.deleteCollectionId.set(id);
+  }
+
+  protected cancelDelete() {
+    this.resetDeletion();
+  }
+
+  protected executeDelete(id: string) {
+    this.collectionService.deleteCollection(id);
+    this.expandedCollectionId.set(null);
+    this.resetDeletion();
+  }
+
+  private resetDeletion() {
+    this.deleteCollectionId.set(null);
   }
 }

@@ -6,43 +6,165 @@
   <button
     class="w-9 h-9 flex items-center justify-center bg-white/20 hover:bg-white text-white hover:text-[#7c6db2] rounded-xl transition-all duration-300"
     (click)="onCreate()"
-    [class.rotate-45]="isCreating"
-    [class.bg-white]="isCreating"
+    [class.rotate-45]="isCreating()"
+    [class.bg-white]="isCreating()"
+    [class.opacity-50]="editingCollectionId()"
+    [disabled]="editingCollectionId()"
   >
     <lucide-icon [img]="icons.plusIcon" class="w-5 h-5"></lucide-icon>
   </button>
 </header>
 
-<main class="flex-1 overflow-y-auto p-4 space-y-3">
-  @if (!isCreating) {
+<main class="flex-1 overflow-y-auto p-4 space-y-3 h-full">
+  @if (!isCreating()) {
     <section class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
       @for (collection of collections(); track collection.id) {
-        <div
-          class="group border border-zinc-100 shadow-xs bg-white rounded-2xl p-4 hover:border-[#7c6db2]/30 hover:shadow-md hover:shadow-[#7c6db2]/5 transition-all cursor-pointer"
-        >
-          <div class="flex items-center gap-3">
-            <div
-              class="w-9 h-9 flex items-center justify-center bg-[#f9f8fc] rounded-xl text-[#9b8fbc] group-hover:bg-[#7c6db2]/10 group-hover:text-[#7c6db2] transition-colors"
-            >
-              <lucide-icon [img]="icons.folderIcon" class="w-4 h-4"></lucide-icon>
-            </div>
-            <div class="flex flex-col min-w-0">
-              <span
-                class="font-bold text-sm text-zinc-700 group-hover:text-[#7c6db2] transition-colors truncate"
-              >
-                {{ collection.name }}
-              </span>
-              <span class="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
-                {{ collection.creations.length }} Assets
-              </span>
-            </div>
+        <div class="flex flex-col relative">
+          <div
+            class="group border z-1 border-zinc-100 shadow-xs bg-white rounded-2xl p-4 hover:border-[#7c6db2]/30 hover:shadow-md hover:shadow-[#7c6db2]/5 transition-all"
+          >
+            @if (editingCollectionId() === collection.id) {
+              <form (submit)="onSubmit($event)">
+                <div class="flex items-center gap-4">
+                  <input
+                    [formField]="collectionForm.title"
+                    class="w-full bg-zinc-50 border border-[#7c6db2]/40 rounded-lg px-2 py-0.5 text-sm font-bold text-zinc-700 focus:outline-none focus:ring-2 focus:ring-[#7c6db2]/20 animate-in fade-in slide-in-from-left-1 duration-200"
+                  />
+
+                  <div class="flex items-center">
+                    <button type="submit">
+                      <lucide-icon [img]="icons.checkIcon"></lucide-icon>
+                    </button>
+                    <button (click)="onCancel()">
+                      <lucide-icon [img]="icons.cancelIcon"></lucide-icon>
+                    </button>
+                  </div>
+                </div>
+
+                @if (
+                  collectionForm.title().touched() &&
+                  collectionForm.title().invalid() &&
+                  collectionForm.title().dirty()
+                ) {
+                  <div class="mt-2 px-1">
+                    @for (error of collectionForm.title().errors(); track error.message) {
+                      <p
+                        class="text-red-500 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1"
+                      >
+                        <span class="w-1 h-1 bg-red-500 rounded-full"></span>
+                        {{ error.message }}
+                      </p>
+                    }
+                  </div>
+                }
+              </form>
+            } @else {
+              <div class="flex justify-between items-center">
+                <button
+                  class="flex flex-1 items-center gap-3"
+                  (click)="onToggleExpand(collection.id)"
+                >
+                  <div
+                    class="w-9 h-9 flex items-center justify-center bg-[#f9f8fc] rounded-xl text-[#9b8fbc] group-hover:bg-[#7c6db2]/10 group-hover:text-[#7c6db2] transition-colors"
+                  >
+                    <lucide-icon
+                      [img]="icons.folderIcon"
+                      class="w-4 h-4 transition-transform duration-300"
+                      [class.rotate-12]="expandedCollectionId() === collection.id"
+                    ></lucide-icon>
+                  </div>
+                  <div class="flex flex-col items-start min-w-0">
+                    <span
+                      class="font-bold text-sm text-zinc-700 group-hover:text-[#7c6db2] transition-colors truncate"
+                    >
+                      {{ collection.title }}
+                    </span>
+                    <span class="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
+                      {{ collection.creations.length }}
+                      {{ collection.creations.length > 0 ? 'Assets' : 'Asset' }}
+                    </span>
+                  </div>
+                </button>
+                @if (expandedCollectionId() === collection.id) {
+                  <div
+                    class="flex items-center animate-in slide-in-from-top-2 fade-in duration-300"
+                  >
+                    <button
+                      (click)="onEdit(collection)"
+                      class="p-2 text-zinc-400 hover:text-[#7c6db2] hover:bg-[#7c6db2]/10 rounded-xl"
+                    >
+                      <lucide-icon [img]="icons.penIcon" class="w-4 h-4"></lucide-icon>
+                    </button>
+                    <button
+                      (click)="confirmDelete(collection.id)"
+                      class="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-xl"
+                    >
+                      <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
+                    </button>
+                  </div>
+                }
+              </div>
+            }
           </div>
+
+          @if (expandedCollectionId() === collection.id) {
+            <div
+              class="grid grid-cols-4 gap-2 px-2 pb-4 pt-8 animate-in slide-in-from-top-2 fade-in min-h-50 -mt-4 bg-white rounded-bl-xl rounded-br-xl duration-300 shadow-xs border-zinc-100 border"
+            >
+              @for (creation of collection.creations; track creation.id) {
+                <div class="rounded-lg aspect-square overflow-hidden border border-zinc-200">
+                  <img
+                    [src]="creation.url"
+                    [alt]="creation.title"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              } @empty {
+                <div
+                  class="py-6 flex col-span-4 items-center justify-center bg-zinc-50 rounded-xl border border-dashed border-zinc-200"
+                >
+                  <p class="text-[9px] font-bold text-zinc-400 uppercase tracking-widest">
+                    No assets in this collection
+                  </p>
+                </div>
+              }
+            </div>
+          }
+          @if (deleteCollectionId() === collection.id) {
+            <div
+              class="absolute inset-0 bg-red-50 shadow-sm rounded-xl flex flex-col items-center pt-10 gap-6 px-4 animate-in fade-in zoom-in-95 duration-200 z-10"
+            >
+              <div class="flex flex-col">
+                <span class="text-[10px] font-bold text-red-600 uppercase tracking-tight"
+                  >Delete this?</span
+                >
+                <span class="text-[9px] text-red-400 font-medium leading-tight"
+                  >All assets stay safe.</span
+                >
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button
+                  (click)="cancelDelete()"
+                  class="px-3 py-1.5 text-[11px] font-bold text-zinc-500 hover:bg-white rounded-lg transition-colors"
+                >
+                  No
+                </button>
+                <button
+                  (click)="executeDelete(collection.id)"
+                  class="px-3 py-1.5 text-[11px] font-bold bg-red-500 text-white hover:bg-red-600 rounded-lg shadow-sm shadow-red-200 transition-all active:scale-95"
+                >
+                  Yes, delete
+                </button>
+              </div>
+            </div>
+          }
         </div>
       }
     </section>
   }
 
-  @if (isCreating) {
+  @if (isCreating()) {
     <section class="animate-in zoom-in-95 fade-in duration-200">
       <h4 class="px-1 mb-4 text-[10px] font-black text-zinc-400 uppercase tracking-[0.15em]">
         New Collection
@@ -53,17 +175,17 @@
           <input
             type="text"
             placeholder="Collection Name..."
-            [formField]="collectionForm.name"
+            [formField]="collectionForm.title"
             class="w-full bg-white border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-semibold text-zinc-700 placeholder:text-zinc-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-[#7c6db2]/20 focus:border-[#7c6db2] transition-all"
           />
 
           @if (
-            collectionForm.name().touched() &&
-            collectionForm.name().invalid() &&
-            collectionForm.name().dirty()
+            collectionForm.title().touched() &&
+            collectionForm.title().invalid() &&
+            collectionForm.title().dirty()
           ) {
             <div class="mt-2 px-1">
-              @for (error of collectionForm.name().errors(); track error.message) {
+              @for (error of collectionForm.title().errors(); track error.message) {
                 <p
                   class="text-red-500 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1"
                 >
