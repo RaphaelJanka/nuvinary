@@ -5,21 +5,95 @@
 
   <button
     class="w-9 h-9 flex items-center justify-center bg-white/20 hover:bg-white text-white hover:text-[#7c6db2] rounded-xl transition-all duration-300"
+    (click)="onCreate()"
+    [class.rotate-45]="isCreating"
+    [class.bg-white]="isCreating"
   >
     <lucide-icon [img]="icons.plusIcon" class="w-5 h-5"></lucide-icon>
   </button>
 </header>
 
 <main class="flex-1 overflow-y-auto p-4 space-y-3">
-  @for (album of ['Vacation', 'Work', 'Inspiration']; track album) {
-    <div
-      class="group border border-zinc-200 bg-white rounded-lg p-3 hover:border-[#7c6db2] transition-all"
-    >
-      <div class="flex items-center gap-3 cursor-pointer">
-        <lucide-icon [img]="icons.folderIcon" class="w-5 h-5 text-[#9b8fbc]"></lucide-icon>
-        <span class="font-medium text-sm text-zinc-600">{{ album }}</span>
-        <span class="ml-auto text-xs text-zinc-400">12</span>
-      </div>
-    </div>
+  @if (!isCreating) {
+    <section class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      @for (collection of collections(); track collection.id) {
+        <div
+          class="group border border-zinc-100 shadow-xs bg-white rounded-2xl p-4 hover:border-[#7c6db2]/30 hover:shadow-md hover:shadow-[#7c6db2]/5 transition-all cursor-pointer"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-9 h-9 flex items-center justify-center bg-[#f9f8fc] rounded-xl text-[#9b8fbc] group-hover:bg-[#7c6db2]/10 group-hover:text-[#7c6db2] transition-colors"
+            >
+              <lucide-icon [img]="icons.folderIcon" class="w-4 h-4"></lucide-icon>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span
+                class="font-bold text-sm text-zinc-700 group-hover:text-[#7c6db2] transition-colors truncate"
+              >
+                {{ collection.name }}
+              </span>
+              <span class="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">
+                {{ collection.creations.length }} Assets
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  @if (isCreating) {
+    <section class="animate-in zoom-in-95 fade-in duration-200">
+      <h4 class="px-1 mb-4 text-[10px] font-black text-zinc-400 uppercase tracking-[0.15em]">
+        New Collection
+      </h4>
+
+      <form (submit)="onSubmit($event)" class="space-y-4">
+        <div class="relative group">
+          <input
+            type="text"
+            placeholder="Collection Name..."
+            [formField]="collectionForm.name"
+            class="w-full bg-white border border-zinc-200 rounded-2xl px-4 py-3 text-sm font-semibold text-zinc-700 placeholder:text-zinc-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-[#7c6db2]/20 focus:border-[#7c6db2] transition-all"
+          />
+
+          @if (
+            collectionForm.name().touched() &&
+            collectionForm.name().invalid() &&
+            collectionForm.name().dirty()
+          ) {
+            <div class="mt-2 px-1">
+              @for (error of collectionForm.name().errors(); track error.message) {
+                <p
+                  class="text-red-500 text-[10px] font-bold uppercase tracking-wide flex items-center gap-1"
+                >
+                  <span class="w-1 h-1 bg-red-500 rounded-full"></span>
+                  {{ error.message }}
+                </p>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="flex flex-col gap-2 pt-2">
+          <button
+            type="submit"
+            [disabled]="collectionForm().invalid()"
+            class="w-full py-3 bg-[#7c6db2] hover:bg-[#6a5ca1] disabled:bg-zinc-200 disabled:text-zinc-400 text-white rounded-2xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-[#7c6db2]/20 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]"
+          >
+            <lucide-icon [img]="icons.plusIcon" class="w-4 h-4"></lucide-icon>
+            Create Collection
+          </button>
+
+          <button
+            type="button"
+            (click)="onCancel()"
+            class="w-full py-3 text-zinc-400 hover:text-zinc-600 font-bold text-xs uppercase tracking-widest transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
   }
 </main>
