@@ -19,9 +19,16 @@
   @if (!isCreating()) {
     <section class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
       @for (collection of collections(); track collection.id) {
-        <div class="flex flex-col relative">
+        <div
+          class="flex flex-col relative"
+          (dragover)="$event.preventDefault(); onDragOver(collection.id)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop(collection.id)"
+        >
           <div
             class="group border z-1 border-zinc-100 shadow-xs bg-white rounded-2xl p-4 hover:border-[#7c6db2]/30 hover:shadow-md hover:shadow-[#7c6db2]/5 transition-all"
+            [class.border-[#7c6db2]/50]="dragOverId() === collection.id"
+            [class.shadow-lg]="dragOverId() === collection.id"
           >
             @if (editingCollectionId() === collection.id) {
               <!-- Editing collection  -->
@@ -125,7 +132,7 @@
             <!-- All creations within collection on expand -->
 
             <div
-              class="sidebar-grid grid grid-cols-4 gap-2 px-2 pb-4 pt-8 animate-in slide-in-from-top-2 fade-in min-h-50 -mt-4 bg-white rounded-bl-xl rounded-br-xl duration-300 shadow-xs border-zinc-100 border"
+              class="grid grid-cols-4 gap-2 px-2 pb-4 pt-8 animate-in slide-in-from-top-2 fade-in min-h-50 -mt-4 bg-white rounded-bl-xl rounded-br-xl duration-300 shadow-xs border-zinc-100 border"
             >
               @for (creation of collection.creations; track creation.id) {
                 <div class="rounded-lg aspect-square overflow-hidden border border-zinc-200">
@@ -135,7 +142,19 @@
                     class="w-full h-full object-cover"
                   />
                 </div>
-              } @empty {
+              }
+
+              <!-- placeholder for drag & drop -->
+
+              @if (dragOverId() === collection.id && isDragging()) {
+                <div
+                  class="aspect-square bg-[#7c6db2]/10 border-2 border-dashed border-[#7c6db2]/30 rounded-lg animate-pulse flex items-center justify-center"
+                >
+                  <div class="w-1.5 h-1.5 bg-[#7c6db2]/40 rounded-full"></div>
+                </div>
+              }
+
+              @if (collection.creations.length === 0 && dragOverId() !== collection.id) {
                 <div
                   class="py-6 flex col-span-4 items-center justify-center bg-zinc-50 rounded-xl border border-dashed border-zinc-200"
                 >

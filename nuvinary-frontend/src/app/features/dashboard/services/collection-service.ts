@@ -1,11 +1,14 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { mockCollections } from '../../../test/testdata/collections';
 import { Collection } from '../pages/models/collection.model';
+import { CreationService } from './creation-service';
+import { Creation } from '../../../shared/models/creation.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollectionService {
+  private readonly creationService = inject(CreationService);
   private _mockCollections = signal<Collection[]>(mockCollections);
   readonly collections = this._mockCollections.asReadonly();
 
@@ -33,5 +36,22 @@ export class CollectionService {
 
   deleteCollection(id: string | null) {
     this._mockCollections.update((collections) => collections.filter((c) => c.id !== id));
+  }
+
+  addCreationToCollection(collectionId: string, newCreation: Creation) {
+    this._mockCollections.update((collections) =>
+      collections.map((coll) => {
+        if (coll.id !== collectionId) return coll;
+        const isDuplicate = coll.creations.some((c) => c.id === newCreation.id);
+
+        if (isDuplicate) {
+          return coll;
+        }
+        return {
+          ...coll,
+          creations: [...coll.creations, newCreation],
+        };
+      }),
+    );
   }
 }

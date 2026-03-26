@@ -32,11 +32,30 @@
 
 <main class="flex-1 select-none overflow-y-auto px-6 py-4 custom-scrollbar">
   <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
-    @for (creation of filteredCreations(); track creation.id) {
-      <app-creation-card
-        [creation]="creation"
-        (openDetails)="onOpenDetails($event)"
-      ></app-creation-card>
+    @for (creation of filteredCreations(); track creation.id; let i = $index) {
+      <div
+        draggable="true"
+        (dragstart)="onDragStart($event, creation, i)"
+        (dragend)="onDragEnd()"
+        class="cursor-grab active:cursor-grabbing hover:scale-105 transition-transform"
+        [class.opacity-40]="activeCreation()?.id === creation.id"
+      >
+        <app-creation-card
+          [creation]="creation"
+          (openDetails)="onOpenDetails($event)"
+        ></app-creation-card>
+
+        <div
+          #dragElement
+          class="fixed -top-250 w-20 h-20 rounded-xl overflow-hidden border-2 border-[#7c6db2] z-[-1]"
+        >
+          <img
+            [src]="creation.url"
+            [alt]="creation.title"
+            class="w-full h-full object-cover opacity-80"
+          />
+        </div>
+      </div>
     } @empty {
       <div class="col-span-full py-20 flex flex-col items-center justify-center text-zinc-400">
         <lucide-icon [img]="icons.searchIcon" class="w-12 h-12 opacity-20 mb-4"></lucide-icon>

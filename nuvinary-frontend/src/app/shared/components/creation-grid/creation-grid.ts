@@ -1,10 +1,19 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  viewChildren,
+} from '@angular/core';
 import { LucideAngularModule, Search, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationService } from '../../../features/dashboard/services/creation-service';
 import { CreationCard } from '../creation-card/creation-card';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { CreationDetails } from '../creation-details/creation-details';
+import { DragService } from '../../../features/dashboard/services/drag-service';
 
 @Component({
   selector: 'app-creation-grid',
@@ -15,6 +24,9 @@ export class CreationGrid {
   readonly creationList = input.required<Creation[]>();
   readonly title = input<string>('Gallery');
   private readonly creationService = inject(CreationService);
+  private readonly dragService = inject(DragService);
+  protected readonly activeCreation = this.dragService.activeCreation;
+  private readonly dragElements = viewChildren<ElementRef<HTMLElement>>('dragElement');
   private readonly dialog = inject(Dialog);
   protected readonly icons = {
     searchIcon: Search,
@@ -40,5 +52,19 @@ export class CreationGrid {
       data: selectedCreation,
       maxWidth: '95vw',
     });
+  }
+
+  protected onDragStart(event: DragEvent, creation: Creation, index: number) {
+    this.dragService.startDrag(creation);
+    const dragEl = this.dragElements()[index]?.nativeElement;
+
+    if (dragEl && event.dataTransfer) {
+      event.dataTransfer.setDragImage(dragEl, 32, 32);
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  onDragEnd() {
+    this.dragService.stopDrag();
   }
 }

@@ -3,6 +3,7 @@ import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-
 import { CollectionService } from '../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
+import { DragService } from '../../../services/drag-service';
 
 @Component({
   selector: 'app-collections',
@@ -11,6 +12,7 @@ import { form, FormField, maxLength, required, submit } from '@angular/forms/sig
 })
 export class Collections {
   private readonly collectionService = inject(CollectionService);
+  private readonly dragService = inject(DragService);
   protected readonly collections = this.collectionService.collections;
   protected readonly icons = {
     plusIcon: Plus,
@@ -34,6 +36,10 @@ export class Collections {
     required(fieldPath.title, { message: 'Title is required' });
     maxLength(fieldPath.title, 20);
   });
+
+  protected readonly dragOverId = signal<string | null>(null);
+  protected readonly isDragging = this.dragService.isDragging;
+  private leaveTimer: ReturnType<typeof setTimeout> | null = null;
 
   // ----------   Actions ------------
 
@@ -95,5 +101,40 @@ export class Collections {
     this.collectionService.deleteCollection(id);
     this.expandedCollectionId.set(null);
     this.resetAll();
+  }
+
+  // Drag & Drop logic
+
+  protected onDragOver(id: string) {
+    if (this.leaveTimer) {
+      clearTimeout(this.leaveTimer);
+      this.leaveTimer = null;
+    }
+    this.dragOverId.set(id);
+    if (this.expandedCollectionId() !== id) {
+      this.expandedCollectionId.set(id);
+    }
+  }
+
+  protected onDragLeave() {
+    if (this.leaveTimer) clearTimeout(this.leaveTimer);
+
+    this.leaveTimer = setTimeout(() => {
+      this.dragOverId.set(null);
+      this.leaveTimer = null;
+    }, 300);
+  }
+
+  protected onDrop(collectionId: string) {
+    if (this.leaveTimer) {
+      clearTimeout(this.leaveTimer);
+      this.leaveTimer = null;
+    }
+    const creation = this.dragService.activeCreation();
+    if (creation) {
+      this.collectionService.addCreationToCollection(collectionId, creation);
+    }
+    this.dragOverId.set(null);
+    this.dragService.stopDrag();
   }
 }
