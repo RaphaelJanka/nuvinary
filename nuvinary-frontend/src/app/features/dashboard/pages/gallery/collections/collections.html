@@ -24,19 +24,30 @@
             class="group border z-1 border-zinc-100 shadow-xs bg-white rounded-2xl p-4 hover:border-[#7c6db2]/30 hover:shadow-md hover:shadow-[#7c6db2]/5 transition-all"
           >
             @if (editingCollectionId() === collection.id) {
+              <!-- Editing collection  -->
+
               <form (submit)="onSubmit($event)">
                 <div class="flex items-center gap-4">
                   <input
                     [formField]="collectionForm.title"
-                    class="w-full bg-zinc-50 border border-[#7c6db2]/40 rounded-lg px-2 py-0.5 text-sm font-bold text-zinc-700 focus:outline-none focus:ring-2 focus:ring-[#7c6db2]/20 animate-in fade-in slide-in-from-left-1 duration-200"
+                    class="w-full bg-zinc-50 border border-[#7c6db2]/40 rounded-lg px-2 py-0.5 text-sm font-bold text-zinc-700 focus:outline-none focus:ring-2 placeholder:text-zinc-400 placeholder:font-normal focus:ring-[#7c6db2]/20 animate-in fade-in slide-in-from-left-1 duration-200"
+                    placeholder="Collection name..."
                   />
 
-                  <div class="flex items-center">
-                    <button type="submit">
-                      <lucide-icon [img]="icons.checkIcon"></lucide-icon>
+                  <div class="flex">
+                    <button
+                      type="submit"
+                      class="p-2 text-zinc-400 hover:text-[#7c6db2] hover:bg-[#7c6db2]/10 rounded-xl"
+                      [disabled]="collectionForm().invalid()"
+                      [class.opacity-30]="collectionForm().invalid()"
+                    >
+                      <lucide-icon [img]="icons.checkIcon" class="w-4 h-4"></lucide-icon>
                     </button>
-                    <button (click)="onCancel()">
-                      <lucide-icon [img]="icons.cancelIcon"></lucide-icon>
+                    <button
+                      (click)="onCancel()"
+                      class="p-2 text-zinc-400 hover:text-[#7c6db2] hover:bg-[#7c6db2]/10 rounded-xl"
+                    >
+                      <lucide-icon [img]="icons.cancelIcon" class="w-4 h-4"></lucide-icon>
                     </button>
                   </div>
                 </div>
@@ -85,7 +96,10 @@
                     </span>
                   </div>
                 </button>
+
                 @if (expandedCollectionId() === collection.id) {
+                  <!-- Expanded collection  -->
+
                   <div
                     class="flex items-center animate-in slide-in-from-top-2 fade-in duration-300"
                   >
@@ -108,8 +122,10 @@
           </div>
 
           @if (expandedCollectionId() === collection.id) {
+            <!-- All creations within collection on expand -->
+
             <div
-              class="grid grid-cols-4 gap-2 px-2 pb-4 pt-8 animate-in slide-in-from-top-2 fade-in min-h-50 -mt-4 bg-white rounded-bl-xl rounded-br-xl duration-300 shadow-xs border-zinc-100 border"
+              class="sidebar-grid grid grid-cols-4 gap-2 px-2 pb-4 pt-8 animate-in slide-in-from-top-2 fade-in min-h-50 -mt-4 bg-white rounded-bl-xl rounded-br-xl duration-300 shadow-xs border-zinc-100 border"
             >
               @for (creation of collection.creations; track creation.id) {
                 <div class="rounded-lg aspect-square overflow-hidden border border-zinc-200">
@@ -130,7 +146,9 @@
               }
             </div>
           }
+
           @if (deleteCollectionId() === collection.id) {
+            <!-- Deletion overlay  -->
             <div
               class="absolute inset-0 bg-red-50 shadow-sm rounded-xl flex flex-col items-center pt-10 gap-6 px-4 animate-in fade-in zoom-in-95 duration-200 z-10"
             >
@@ -145,7 +163,7 @@
 
               <div class="flex items-center gap-2">
                 <button
-                  (click)="cancelDelete()"
+                  (click)="onCancel()"
                   class="px-3 py-1.5 text-[11px] font-bold text-zinc-500 hover:bg-white rounded-lg transition-colors"
                 >
                   No
@@ -162,9 +180,9 @@
         </div>
       }
     </section>
-  }
+  } @else {
+    <!-- Create new collection -->
 
-  @if (isCreating()) {
     <section class="animate-in zoom-in-95 fade-in duration-200">
       <h4 class="px-1 mb-4 text-[10px] font-black text-zinc-400 uppercase tracking-[0.15em]">
         New Collection

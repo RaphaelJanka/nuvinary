@@ -37,32 +37,29 @@ export class Collections {
 
   // ----------   Actions ------------
 
+  private resetAll() {
+    this.isCreating.set(false);
+    this.editingCollectionId.set(null);
+    this.deleteCollectionId.set(null);
+    this.collectionModel.set(this.collectionService.getDefaultCollection());
+    this.collectionForm().reset();
+  }
+
   protected onToggleExpand(id: string) {
+    this.resetAll();
     this.expandedCollectionId.update((current) => (current === id ? null : id));
-    if (this.deleteCollectionId()) {
-      this.resetDeletion();
-    }
   }
 
   // Creation of new collection
 
   protected onCreate() {
-    if (this.editingCollectionId()) return;
-    this.isCreating.update((v) => !v);
-    this.resetForm();
-    if (this.deleteCollectionId()) {
-      this.resetDeletion();
-    }
+    const wasCreating = this.isCreating();
+    this.resetAll();
+    this.isCreating.set(!wasCreating);
   }
 
   protected onCancel() {
-    this.resetForm();
-    this.isCreating.set(false);
-  }
-
-  private resetForm() {
-    this.collectionModel.set(this.collectionService.getDefaultCollection());
-    this.collectionForm().reset();
+    this.resetAll();
   }
 
   protected onSubmit(event: Event) {
@@ -75,15 +72,14 @@ export class Collections {
       } else {
         this.collectionService.addCollection(collection);
       }
-      this.isCreating.set(false);
-      this.editingCollectionId.set(null);
-      this.resetForm();
+      this.resetAll();
     });
   }
 
   // Edit of collection title
 
   protected onEdit(collection: Collection) {
+    this.resetAll();
     this.collectionModel.set({ ...collection });
     this.editingCollectionId.set(collection.id);
   }
@@ -91,20 +87,13 @@ export class Collections {
   // Deletion of collection
 
   protected confirmDelete(id: string) {
+    this.resetAll();
     this.deleteCollectionId.set(id);
-  }
-
-  protected cancelDelete() {
-    this.resetDeletion();
   }
 
   protected executeDelete(id: string) {
     this.collectionService.deleteCollection(id);
     this.expandedCollectionId.set(null);
-    this.resetDeletion();
-  }
-
-  private resetDeletion() {
-    this.deleteCollectionId.set(null);
+    this.resetAll();
   }
 }
