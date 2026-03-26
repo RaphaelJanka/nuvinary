@@ -54,4 +54,17 @@ export class CollectionService {
       }),
     );
   }
+
+  removeCreationFromAllCollections(creationId: string) {
+    this._mockCollections.update((collections) =>
+      collections.map((coll) => {
+        const hasCreation = coll.creations.some((c) => c.id === creationId);
+        if (!hasCreation) return coll;
+        return {
+          ...coll,
+          creations: coll.creations.filter((c) => c.id !== creationId),
+        };
+      }),
+    );
+  }
 }

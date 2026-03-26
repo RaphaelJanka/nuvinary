@@ -41,4 +41,8 @@ export class CreationService {
       list.map((c) => (c.id === id ? { ...c, isPublic: !c.isPublic } : c)),
     );
   }
+
+  deleteCreation(creation: Creation) {
+    this._creationList.update((list) => list.filter((c) => c.id !== creation.id));
+  }
 }
