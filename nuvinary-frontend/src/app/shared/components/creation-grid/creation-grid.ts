@@ -59,8 +59,7 @@ export class CreationGrid {
     const dragEl = this.dragElements()[index]?.nativeElement;
 
     if (dragEl && event.dataTransfer) {
-      event.dataTransfer.setDragImage(dragEl, 32, 32);
-      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.setDragImage(dragEl, 40, 40);
     }
   }
 
