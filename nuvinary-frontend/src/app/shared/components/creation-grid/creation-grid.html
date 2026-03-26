@@ -34,11 +34,14 @@
   <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
     @for (creation of filteredCreations(); track creation.id; let i = $index) {
       <div
-        draggable="true"
+        [draggable]="allowDrag()"
         (dragstart)="onDragStart($event, creation, i)"
         (dragend)="onDragEnd()"
-        class="cursor-grab active:cursor-grabbing hover:scale-105 transition-transform"
+        class="transition-transform"
         [class.opacity-40]="activeCreation()?.id === creation.id"
+        [class.active:cursor-grabbing]="allowDrag()"
+        [class.hover:scale-105]="allowDrag()"
+        [class.cursor-grab]="allowDrag()"
       >
         <app-creation-card
           [creation]="creation"

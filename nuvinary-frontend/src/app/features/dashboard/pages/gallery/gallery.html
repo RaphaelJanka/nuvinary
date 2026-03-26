@@ -2,7 +2,12 @@
   <section
     class="flex-3 flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
   >
-    <app-creation-grid [creationList]="creationList()" [title]="'My Gallery'"></app-creation-grid>
+    <app-creation-grid
+      [creationList]="creationList()"
+      [title]="'My Gallery'"
+      [allowDrag]="true"
+      [showBulkActions]="true"
+    ></app-creation-grid>
   </section>
   <section
     class="flex-1 min-w-75 flex flex-col bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"

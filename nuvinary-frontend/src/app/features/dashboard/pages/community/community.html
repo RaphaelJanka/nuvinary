@@ -1,5 +1,10 @@
 <section
   class="h-full flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
 >
-  <app-creation-grid [creationList]="creationList()" [title]="'Community'"></app-creation-grid>
+  <app-creation-grid
+    [creationList]="creationList()"
+    [title]="'Community'"
+    [allowDrag]="false"
+    [showBulkActions]="false"
+  ></app-creation-grid>
 </section>

@@ -23,6 +23,8 @@ import { DragService } from '../../../features/dashboard/services/drag-service';
 export class CreationGrid {
   readonly creationList = input.required<Creation[]>();
   readonly title = input<string>('Gallery');
+  readonly allowDrag = input<boolean>(false);
+  readonly showBulkActions = input<boolean>(false);
   private readonly creationService = inject(CreationService);
   private readonly dragService = inject(DragService);
   protected readonly activeCreation = this.dragService.activeCreation;
@@ -55,6 +57,8 @@ export class CreationGrid {
   }
 
   protected onDragStart(event: DragEvent, creation: Creation, index: number) {
+    if (!this.allowDrag()) return;
+
     this.dragService.startDrag(creation);
     const dragEl = this.dragElements()[index]?.nativeElement;
 
