@@ -52,10 +52,7 @@
           </button>
         }
 
-        <app-creation-card
-          [creation]="creation"
-          (openDetails)="onOpenDetails($event)"
-        ></app-creation-card>
+        <app-creation-card [creation]="creation"></app-creation-card>
 
         @if (allowDrag()) {
           <div

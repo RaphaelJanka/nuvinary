@@ -28,17 +28,17 @@ import { Router } from '@angular/router';
 })
 export class CreationDetails {
   private readonly creationService = inject(CreationService);
-  private readonly dialogRef = inject(DialogRef);
   private readonly authService = inject(AuthService);
-  protected readonly currentUser = this.authService.authUser;
   private readonly router = inject(Router);
-  protected readonly canEdit = computed(() => {
-    return this.router.url.includes('/gallery');
-  });
+  private readonly dialogRef = inject(DialogRef);
+
+  protected readonly currentUser = this.authService.authUser;
   protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
   protected isEditingTitle = signal(false);
   protected editValue = signal('');
-
+  protected readonly canEdit = computed(() => {
+    return this.router.url.includes('/gallery');
+  });
   protected readonly icons = {
     layersIcon: Layers,
     cpuIcon: Cpu,

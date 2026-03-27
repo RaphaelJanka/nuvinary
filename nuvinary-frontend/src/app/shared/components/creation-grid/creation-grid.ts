@@ -9,30 +9,25 @@ import {
 } from '@angular/core';
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
-import { CreationService } from '../../../features/dashboard/services/creation-service';
 import { CreationCard } from '../creation-card/creation-card';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CreationDetails } from '../creation-details/creation-details';
 import { DragService } from '../../../features/dashboard/services/drag-service';
-import { DeleteConfirmDialog } from '../confirmation-dialog/delete-confirmation-dialog';
-import { CollectionService } from '../../../features/dashboard/services/collection-service';
+import { DialogService } from '../../../features/dashboard/services/dialog-service';
 
 @Component({
   selector: 'app-creation-grid',
-  imports: [LucideAngularModule, CreationCard, DialogModule],
+  imports: [LucideAngularModule, CreationCard],
   templateUrl: './creation-grid.html',
 })
 export class CreationGrid {
+  private readonly dragService = inject(DragService);
+  private readonly dialogService = inject(DialogService);
+  private readonly dragElements = viewChildren<ElementRef<HTMLElement>>('dragElement');
+
   readonly creationList = input.required<Creation[]>();
   readonly title = input<string>('Gallery');
   readonly allowDrag = input<boolean>(false);
   readonly allowDelete = input<boolean>(false);
-  private readonly creationService = inject(CreationService);
-  private readonly dragService = inject(DragService);
-  private readonly collectionService = inject(CollectionService);
   protected readonly activeCreation = this.dragService.activeCreation;
-  private readonly dragElements = viewChildren<ElementRef<HTMLElement>>('dragElement');
-  private readonly dialog = inject(Dialog);
   protected readonly icons = {
     searchIcon: Search,
     closeIcon: X,
@@ -52,14 +47,6 @@ export class CreationGrid {
     );
   });
 
-  onOpenDetails(creation: Creation) {
-    const selectedCreation = this.creationService.getCreationForDialog(creation, this.creationList);
-    this.dialog.open(CreationDetails, {
-      data: selectedCreation,
-      maxWidth: '95vw',
-    });
-  }
-
   protected onDragStart(event: DragEvent, creation: Creation, index: number) {
     if (!this.allowDrag()) return;
 
@@ -76,27 +63,6 @@ export class CreationGrid {
   }
 
   onDeleteCreation(creation: Creation) {
-    const dialogRef = this.dialog.open<boolean>(DeleteConfirmDialog, {
-      width: '500px',
-      disableClose: true,
-      height: '350px',
-      data: {
-        title: `Delete "${creation.title}"?`,
-        message: `Are you sure? This action is permanent. Since your account is limited to 10 credits, this credit will be gone forever.`,
-      },
-    });
-
-    // 2. Auf das Ergebnis warten
-    dialogRef.closed.subscribe((result) => {
-      if (result === true) {
-        this.executeFinalDelete(creation);
-      }
-    });
-  }
-
-  private executeFinalDelete(creation: Creation) {
-    this.creationService.deleteCreation(creation);
-
-    this.collectionService.removeCreationFromAllCollections(creation.id);
+    this.dialogService.openConfirmDialogToDeleteCreation(creation);
   }
 }

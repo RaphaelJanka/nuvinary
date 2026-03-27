@@ -4,6 +4,7 @@ import { CollectionService } from '../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
 import { DragService } from '../../../services/drag-service';
+import { DialogService } from '../../../services/dialog-service';
 
 @Component({
   selector: 'app-collections',
@@ -13,6 +14,7 @@ import { DragService } from '../../../services/drag-service';
 export class Collections {
   private readonly collectionService = inject(CollectionService);
   private readonly dragService = inject(DragService);
+  private readonly dialogService = inject(DialogService);
   protected readonly collections = this.collectionService.collections;
   protected readonly icons = {
     plusIcon: Plus,
@@ -24,7 +26,6 @@ export class Collections {
   };
 
   protected readonly expandedCollectionId = signal<string | null>(null);
-  protected readonly deleteCollectionId = signal<string | null>(null);
   protected readonly editingCollectionId = signal<string | null>(null);
   protected readonly isCreating = signal(false);
 
@@ -46,7 +47,6 @@ export class Collections {
   private resetAll() {
     this.isCreating.set(false);
     this.editingCollectionId.set(null);
-    this.deleteCollectionId.set(null);
     this.collectionModel.set(this.collectionService.getDefaultCollection());
     this.collectionForm().reset();
   }
@@ -92,15 +92,18 @@ export class Collections {
 
   // Deletion of collection
 
-  protected confirmDelete(id: string) {
+  protected onDeleteCollection(collection: Collection) {
     this.resetAll();
-    this.deleteCollectionId.set(id);
-  }
-
-  protected executeDelete(id: string) {
-    this.collectionService.deleteCollection(id);
-    this.expandedCollectionId.set(null);
-    this.resetAll();
+    this.dialogService
+      .openConfirmDialogToDeleteCollection(collection)
+      .closed.subscribe((confirmed) => {
+        if (confirmed) {
+          this.collectionService.deleteCollection(collection.id);
+          if (this.expandedCollectionId() === collection.id) {
+            this.expandedCollectionId.set(null);
+          }
+        }
+      });
   }
 
   // Drag & Drop logic

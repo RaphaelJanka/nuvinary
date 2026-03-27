@@ -117,7 +117,7 @@
                       <lucide-icon [img]="icons.penIcon" class="w-4 h-4"></lucide-icon>
                     </button>
                     <button
-                      (click)="confirmDelete(collection.id)"
+                      (click)="onDeleteCollection(collection)"
                       class="p-2 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-xl"
                     >
                       <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
@@ -163,37 +163,6 @@
                   </p>
                 </div>
               }
-            </div>
-          }
-
-          @if (deleteCollectionId() === collection.id) {
-            <!-- Deletion overlay  -->
-            <div
-              class="absolute inset-0 bg-red-50 shadow-sm rounded-xl flex flex-col items-center pt-10 gap-6 px-4 animate-in fade-in zoom-in-95 duration-200 z-10"
-            >
-              <div class="flex flex-col">
-                <span class="text-[10px] font-bold text-red-600 uppercase tracking-tight"
-                  >Delete this?</span
-                >
-                <span class="text-[9px] text-red-400 font-medium leading-tight"
-                  >All assets stay safe.</span
-                >
-              </div>
-
-              <div class="flex items-center gap-2">
-                <button
-                  (click)="onCancel()"
-                  class="px-3 py-1.5 text-[11px] font-bold text-zinc-500 hover:bg-white rounded-lg transition-colors"
-                >
-                  No
-                </button>
-                <button
-                  (click)="executeDelete(collection.id)"
-                  class="px-3 py-1.5 text-[11px] font-bold bg-red-500 text-white hover:bg-red-600 rounded-lg shadow-sm shadow-red-200 transition-all active:scale-95"
-                >
-                  Yes, delete
-                </button>
-              </div>
             </div>
           }
         </div>

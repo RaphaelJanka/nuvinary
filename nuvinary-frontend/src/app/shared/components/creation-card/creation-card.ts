@@ -1,5 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Creation } from '../../models/creation.model';
+import { DialogService } from '../../../features/dashboard/services/dialog-service';
 
 @Component({
   selector: 'app-creation-card',
@@ -7,12 +8,12 @@ import { Creation } from '../../models/creation.model';
   templateUrl: './creation-card.html',
 })
 export class CreationCard {
+  private readonly dialogService = inject(DialogService);
   readonly creation = input.required<Creation>();
-  openDetails = output<Creation>();
 
-  onOpenDetails() {
+  protected onOpenDetailsDialog() {
     if (this.creation().status === 'completed') {
-      this.openDetails.emit(this.creation());
+      this.dialogService.openCreationDetails(this.creation());
     }
   }
 }

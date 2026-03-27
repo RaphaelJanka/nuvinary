@@ -19,15 +19,10 @@ export class CreationService {
 
   readonly communityCreationList = computed(() => this._creationList().filter((c) => c.isPublic));
 
-  /**
-   * Creates a computed signal for a single asset from a list.
-   *
-   * @param creation The creation object used for ID lookup and as a stable fallback.
-   * @param listSignal The source list signal to monitor for reactive changes.
-   * @returns A readonly signal that always emits the most recent creation.
-   */
-  getCreationForDialog(creation: Creation, listSignal: Signal<Creation[]>): Signal<Creation> {
-    return computed(() => listSignal().find((c) => c.id === creation.id) ?? creation);
+  getCreationSignalById(initialCreation: Creation): Signal<Creation> {
+    return computed(
+      () => this._creationList().find((c) => c.id === initialCreation.id) ?? initialCreation,
+    );
   }
 
   updateTitle(id: string, newTitle: string) {
