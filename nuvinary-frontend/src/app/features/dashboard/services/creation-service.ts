@@ -2,6 +2,7 @@ import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Creation } from '../../../shared/models/creation.model';
 import { mockCreationList } from '../../../test/testdata/creations';
+import { NotificationService } from '../../../shared/services/notification-service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { mockCreationList } from '../../../test/testdata/creations';
 export class CreationService {
   private readonly authService = inject(AuthService);
   private readonly currentUser = this.authService.authUser;
+  private readonly notificationService = inject(NotificationService);
 
   // for mock data
   private readonly _creationList = signal<Creation[]>(mockCreationList);
@@ -39,5 +41,6 @@ export class CreationService {
 
   deleteCreation(creation: Creation) {
     this._creationList.update((list) => list.filter((c) => c.id !== creation.id));
+    this.notificationService.show('Creation permanently deleted', 'success');
   }
 }

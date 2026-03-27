@@ -11,7 +11,7 @@ import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
 import { DragService } from '../../../features/dashboard/services/drag-service';
-import { DialogService } from '../../../features/dashboard/services/dialog-service';
+import { DialogService } from '../../services/dialog-service';
 
 @Component({
   selector: 'app-creation-grid',

@@ -4,7 +4,7 @@ import { CollectionService } from '../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
 import { DragService } from '../../../services/drag-service';
-import { DialogService } from '../../../services/dialog-service';
+import { DialogService } from '../../../../../shared/services/dialog-service';
 
 @Component({
   selector: 'app-collections',

@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { Creation } from '../../models/creation.model';
-import { DialogService } from '../../../features/dashboard/services/dialog-service';
+import { DialogService } from '../../services/dialog-service';
 
 @Component({
   selector: 'app-creation-card',

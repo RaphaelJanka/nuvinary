@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
-import { Creation } from '../../../shared/models/creation.model';
-import { ConfirmDialog } from '../../../shared/components/dialogs/confirmation-dialog/confirmation-dialog';
+import { Creation } from '../models/creation.model';
+import { ConfirmDialog } from '../components/dialogs/confirmation-dialog/confirmation-dialog';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
-import { CreationService } from './creation-service';
-import { CollectionService } from './collection-service';
-import { Collection } from '../pages/models/collection.model';
-import { CreationDetails } from '../../../shared/components/creation-details/creation-details';
+import { CreationService } from '../../features/dashboard/services/creation-service';
+import { CollectionService } from '../../features/dashboard/services/collection-service';
+import { Collection } from '../../features/dashboard/pages/models/collection.model';
+import { CreationDetails } from '../components/creation-details/creation-details';
 
 export type ConfirmType = 'delete' | 'warning' | 'info';
 
