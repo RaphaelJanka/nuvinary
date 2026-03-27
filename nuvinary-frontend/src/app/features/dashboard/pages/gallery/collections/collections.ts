@@ -128,6 +128,8 @@ export class Collections {
     }, 300);
   }
 
+  // add new Creation to Collection
+
   protected onDrop(collectionId: string) {
     if (this.leaveTimer) {
       clearTimeout(this.leaveTimer);
@@ -139,5 +141,11 @@ export class Collections {
     }
     this.dragOverId.set(null);
     this.dragService.stopDrag();
+  }
+
+  // remove creation from collection
+
+  protected onRemoveCreationFromCollection(collectionId: string, creationId: string) {
+    this.collectionService.removeCreationFromCollection(collectionId, creationId);
   }
 }

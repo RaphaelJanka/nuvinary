@@ -55,6 +55,18 @@ export class CollectionService {
     );
   }
 
+  removeCreationFromCollection(collectionId: string, creationId: string) {
+    this._mockCollections.update((collections) =>
+      collections.map((coll) => {
+        if (coll.id !== collectionId) return coll;
+        return {
+          ...coll,
+          creations: coll.creations.filter((c) => c.id !== creationId),
+        };
+      }),
+    );
+  }
+
   removeCreationFromAllCollections(creationId: string) {
     this._mockCollections.update((collections) =>
       collections.map((coll) => {
