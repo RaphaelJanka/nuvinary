@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { DragService } from './drag-service';
+import { DragAndDropService } from './drag-and-drop-service';
 
-describe('DragService', () => {
-  let service: DragService;
+describe('DragAndDropService', () => {
+  let service: DragAndDropService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(DragService);
+    service = TestBed.inject(DragAndDropService);
   });
 
   it('should be created', () => {

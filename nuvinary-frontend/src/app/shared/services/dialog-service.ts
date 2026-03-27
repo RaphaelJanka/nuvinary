@@ -6,14 +6,7 @@ import { CreationService } from '../../features/dashboard/services/creation-serv
 import { CollectionService } from '../../features/dashboard/services/collection-service';
 import { Collection } from '../../features/dashboard/pages/models/collection.model';
 import { CreationDetails } from '../components/creation-details/creation-details';
-
-export type ConfirmType = 'delete' | 'warning' | 'info';
-
-export interface ConfirmDialogData {
-  title: string;
-  message: string;
-  type: ConfirmType;
-}
+import { ConfirmDialogData } from '../models/dialog-data.model';
 
 @Injectable({
   providedIn: 'root',

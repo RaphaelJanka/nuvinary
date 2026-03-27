@@ -3,7 +3,7 @@ import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-
 import { CollectionService } from '../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
-import { DragService } from '../../../services/drag-service';
+import { DragAndDropService } from '../../../services/drag-and-drop-service';
 import { DialogService } from '../../../../../shared/services/dialog-service';
 
 @Component({
@@ -13,7 +13,7 @@ import { DialogService } from '../../../../../shared/services/dialog-service';
 })
 export class Collections {
   private readonly collectionService = inject(CollectionService);
-  private readonly dragService = inject(DragService);
+  private readonly dragService = inject(DragAndDropService);
   private readonly dialogService = inject(DialogService);
   protected readonly collections = this.collectionService.collections;
   protected readonly icons = {
@@ -38,9 +38,8 @@ export class Collections {
     maxLength(fieldPath.title, 20);
   });
 
-  protected readonly dragOverId = signal<string | null>(null);
+  protected readonly dragOverId = this.dragService.dragOverId;
   protected readonly isDragging = this.dragService.isDragging;
-  private leaveTimer: ReturnType<typeof setTimeout> | null = null;
 
   // ----------   Actions ------------
 
@@ -109,37 +108,24 @@ export class Collections {
   // Drag & Drop logic
 
   protected onDragOver(id: string) {
-    if (this.leaveTimer) {
-      clearTimeout(this.leaveTimer);
-      this.leaveTimer = null;
-    }
-    this.dragOverId.set(id);
-    if (this.expandedCollectionId() !== id) {
-      this.expandedCollectionId.set(id);
-    }
+    this.dragService.notifyDragOver(id, (expandedId) => {
+      if (this.expandedCollectionId() !== expandedId) {
+        this.onToggleExpand(expandedId);
+      }
+    });
   }
 
   protected onDragLeave() {
-    if (this.leaveTimer) clearTimeout(this.leaveTimer);
-
-    this.leaveTimer = setTimeout(() => {
-      this.dragOverId.set(null);
-      this.leaveTimer = null;
-    }, 300);
+    this.dragService.notifyDragLeave();
   }
 
   // add new Creation to Collection
 
   protected onDrop(collectionId: string) {
-    if (this.leaveTimer) {
-      clearTimeout(this.leaveTimer);
-      this.leaveTimer = null;
-    }
     const creation = this.dragService.activeCreation();
     if (creation) {
       this.collectionService.addCreationToCollection(collectionId, creation);
     }
-    this.dragOverId.set(null);
     this.dragService.stopDrag();
   }
 

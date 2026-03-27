@@ -10,7 +10,7 @@ import {
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
-import { DragService } from '../../../features/dashboard/services/drag-service';
+import { DragService } from '../../../features/dashboard/services/drag-and-drop-service';
 import { DialogService } from '../../services/dialog-service';
 
 @Component({

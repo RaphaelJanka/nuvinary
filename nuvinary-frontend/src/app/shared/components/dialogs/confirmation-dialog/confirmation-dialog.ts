@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { LucideAngularModule, Trash2, TriangleAlert } from 'lucide-angular';
-import { ConfirmDialogData } from '../../../services/dialog-service';
+import { ConfirmDialogData } from '../../../models/dialog-data.model';
 
 @Component({
   selector: 'app-confirm-dialog',
