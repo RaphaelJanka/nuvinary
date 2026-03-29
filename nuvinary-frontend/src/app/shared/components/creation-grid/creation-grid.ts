@@ -10,7 +10,7 @@ import {
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
-import { DragService } from '../../../features/dashboard/services/drag-and-drop-service';
+import { DragAndDropService } from '../../../features/dashboard/services/drag-and-drop-service';
 import { DialogService } from '../../services/dialog-service';
 
 @Component({
@@ -19,7 +19,7 @@ import { DialogService } from '../../services/dialog-service';
   templateUrl: './creation-grid.html',
 })
 export class CreationGrid {
-  private readonly dragService = inject(DragService);
+  private readonly dragService = inject(DragAndDropService);
   private readonly dialogService = inject(DialogService);
   private readonly dragElements = viewChildren<ElementRef<HTMLElement>>('dragElement');
 

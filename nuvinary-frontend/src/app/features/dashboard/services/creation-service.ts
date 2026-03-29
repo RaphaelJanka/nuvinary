@@ -4,6 +4,11 @@ import { Creation } from '../../../shared/models/creation.model';
 import { mockCreationList } from '../../../test/testdata/creations';
 import { NotificationService } from '../../../shared/services/notification-service';
 
+export interface CreationModel {
+  prompt: string;
+  title: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,10 +26,31 @@ export class CreationService {
 
   readonly communityCreationList = computed(() => this._creationList().filter((c) => c.isPublic));
 
+  getDefaultCreationModel = (): CreationModel => ({
+    prompt: '',
+    title: '',
+  });
+
   getCreationSignalById(initialCreation: Creation): Signal<Creation> {
     return computed(
       () => this._creationList().find((c) => c.id === initialCreation.id) ?? initialCreation,
     );
+  }
+
+  addCreation(creationModel: CreationModel) {
+    console.log(creationModel);
+
+    // for later:
+
+    // Bevor wir das teure Bildmodell anfragen, schicken wir den Prompt an ein günstiges Text-Modell.
+
+    // Die Logik dahinter:
+
+    // Check: "Ist dieser Text ein beschreibender Bild-Prompt?"
+
+    // Reaktion: Wenn ja -> Weiter zur Bildgenerierung.
+
+    // Reaktion: Wenn nein -> Die KI antwortet im Dialog: "Hmm, that sounds a bit cryptic. Could you describe your vision with a few more details so I can create something amazing?"
   }
 
   updateTitle(id: string, newTitle: string) {

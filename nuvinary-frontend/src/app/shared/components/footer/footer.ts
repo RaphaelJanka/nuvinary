@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `
     <footer class="py-6 px-4 shrink-0">
       <div
-        class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-medium text-text-main/40 uppercase tracking-widest"
+        class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-medium text-text/40 uppercase tracking-widest"
       >
         <a href="#" class="hover:text-brand transition-colors">Privacy Policy</a>
         <a href="#" class="hover:text-brand transition-colors">Terms of Service</a>

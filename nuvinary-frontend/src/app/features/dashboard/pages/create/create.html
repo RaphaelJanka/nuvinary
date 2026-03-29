@@ -1,1 +1,93 @@
-<p>create works!</p>
+<section
+  class="h-full flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
+>
+  <header class="h-16 px-6 border-b border-text-main/20 bg-white flex items-center gap-4">
+    <div
+      class="flex items-center gap-2 px-3 py-1.5 bg-sheet-bg rounded-xl border border-text-main/10"
+    >
+      <span class="text-[10px] font-black text-text-main uppercase tracking-wider"> Create </span>
+    </div>
+  </header>
+
+  <main class="flex justify-center mt-20">
+    <form (submit)="onSubmit($event)" class="w-full flex flex-col max-w-2xl gap-16">
+      <div class="flex flex-col gap-6 min-h-40">
+        <h1 class="text-5xl font-bold text-gradient-brand leading-relaxed font-mono">
+          {{ displayedUserGreeting() }}
+        </h1>
+        <h2 class="text-3xl font-bold font-mono leading-tight">
+          @if (isThinking()) {
+            <span class="flex gap-1 text-[#94afd1]">
+              <span class="animate-dot">.</span>
+              <span class="animate-dot dot-2">.</span>
+              <span class="animate-dot dot-3">.</span>
+            </span>
+          } @else {
+            <span class="text-gradient">
+              {{ displayedText() }}
+            </span>
+
+            @if (isTyping()) {
+              <span
+                class="inline-block w-0.75 h-[0.9em] bg-[#94afd1] ml-1 translate-y-[0.1em] animate-pulse"
+              ></span>
+            }
+          }
+        </h2>
+      </div>
+
+      @if (currentStep() === 'prompt') {
+        <div class="animate-in fade-in slide-in-from-bottom-4 duration-1200">
+          <textarea
+            [formField]="creationForm.prompt"
+            class="w-full p-6 text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm focus:ring-4 focus:ring-text-main/10 outline-none transition-all placeholder:text-zinc-300 resize-none block"
+            rows="4"
+            placeholder="e.g. A cybernetic owl with glowing blue eyes in a dark forest..."
+          >
+          </textarea>
+
+          <div class="flex justify-end mt-4">
+            <button
+              (click)="onSetTitle()"
+              type="button"
+              [disabled]="creationForm.prompt().invalid() || isTyping()"
+              class="px-8 py-3 bg-text-main text-white font-bold rounded-2xl hover:bg-[#6a5aa3] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-text-main/20 flex items-center gap-2"
+            >
+              Next
+              <lucide-icon [img]="icons.arrowRightIcon" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
+        </div>
+      }
+
+      @if (currentStep() === 'title') {
+        <div class="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <input
+            type="text"
+            [formField]="creationForm.title"
+            class="w-full p-6 text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm focus:ring-4 focus:ring-text-main/10 outline-none transition-all placeholder:text-zinc-300"
+            placeholder="Enter a title (or leave blank for magic)..."
+          />
+          <div class="flex justify-between mt-4">
+            <button
+              (click)="onBack()"
+              type="button"
+              class="disabled:opacity-30 px-6 py-3 text-zinc-400 font-bold hover:text-zinc-600 transition-colors"
+              [disabled]="isTyping()"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              [disabled]="creationForm().invalid() || isTyping()"
+              class="px-6 py-3 bg-text-main text-white font-bold rounded-2xl hover:bg-[#6a5aa3] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-text-main/20 flex items-center gap-2"
+            >
+              <lucide-icon [img]="icons.cloudUploadIcon" class="w-4 h-4"></lucide-icon>
+              Generate Image
+            </button>
+          </div>
+        </div>
+      }
+    </form>
+  </main>
+</section>
