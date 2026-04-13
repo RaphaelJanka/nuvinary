@@ -1,10 +1,8 @@
-<section
-  class="h-full flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
->
+<app-page-layout [title]="'Community'">
+  <app-search-input header [(query)]="searchQuery" class="flex-1"></app-search-input>
   <app-creation-grid
-    [creationList]="creationList()"
-    [title]="'Community'"
+    [creationList]="filteredCreations()"
     [allowDrag]="false"
     [allowDelete]="false"
   ></app-creation-grid>
-</section>
+</app-page-layout>

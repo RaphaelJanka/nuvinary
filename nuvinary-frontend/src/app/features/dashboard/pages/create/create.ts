@@ -4,10 +4,11 @@ import { ArrowRight, CloudUpload, LucideAngularModule } from 'lucide-angular';
 import { CreationModel, CreationService } from '../../services/creation-service';
 import { form, maxLength, required, submit, FormField } from '@angular/forms/signals';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 
 @Component({
   selector: 'app-create',
-  imports: [LucideAngularModule, FormField],
+  imports: [LucideAngularModule, FormField, PageLayout],
   templateUrl: './create.html',
   styleUrl: './create.css',
 })

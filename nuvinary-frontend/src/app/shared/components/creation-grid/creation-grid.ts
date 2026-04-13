@@ -1,12 +1,4 @@
-import {
-  Component,
-  computed,
-  ElementRef,
-  inject,
-  input,
-  signal,
-  viewChildren,
-} from '@angular/core';
+import { Component, ElementRef, inject, input, viewChildren } from '@angular/core';
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
@@ -24,7 +16,6 @@ export class CreationGrid {
   private readonly dragElements = viewChildren<ElementRef<HTMLElement>>('dragElement');
 
   readonly creationList = input.required<Creation[]>();
-  readonly title = input<string>('Gallery');
   readonly allowDrag = input<boolean>(false);
   readonly allowDelete = input<boolean>(false);
   protected readonly activeCreation = this.dragService.activeCreation;
@@ -33,19 +24,6 @@ export class CreationGrid {
     closeIcon: X,
     trashIcon: Trash2Icon,
   };
-
-  protected searchQuery = signal('');
-  protected readonly filteredCreations = computed(() => {
-    const query = this.searchQuery().toLowerCase().trim();
-    const list = this.creationList();
-    if (!query) {
-      return list;
-    }
-    return list.filter(
-      (c) =>
-        c.title.toLowerCase().includes(query) || c.aiMetadata.prompt.toLowerCase().includes(query),
-    );
-  });
 
   protected onDragStart(event: DragEvent, creation: Creation, index: number) {
     if (!this.allowDrag()) return;

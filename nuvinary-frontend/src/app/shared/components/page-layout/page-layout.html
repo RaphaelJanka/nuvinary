@@ -1,0 +1,21 @@
+<section
+  class="flex flex-col h-full min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
+>
+  <header class="h-16 px-6 border-b border-text-main/20 bg-white flex items-center gap-4">
+    <div
+      class="flex items-center gap-2 px-3 py-1.5 bg-sheet-bg rounded-xl border border-text-main/10"
+    >
+      <span class="text-[10px] font-black text-text-main uppercase tracking-wider">
+        {{ title() }}
+      </span>
+    </div>
+
+    <div class="flex-1 flex items-center gap-4 max-w-xl">
+      <ng-content select="[header]"></ng-content>
+    </div>
+  </header>
+
+  <div class="flex-1 overflow-hidden">
+    <ng-content></ng-content>
+  </div>
+</section>

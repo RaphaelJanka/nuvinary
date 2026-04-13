@@ -1,14 +1,15 @@
 <div class="flex h-full w-full gap-4">
-  <section
-    class="flex-3 flex flex-col min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
-  >
-    <app-creation-grid
-      [creationList]="creationList()"
-      [title]="'My Gallery'"
-      [allowDrag]="true"
-      [allowDelete]="true"
-    ></app-creation-grid>
+  <section class="flex-3">
+    <app-page-layout [title]="'My Gallery'">
+      <app-search-input header [(query)]="searchQuery" class="flex-1"></app-search-input>
+      <app-creation-grid
+        [creationList]="filteredCreations()"
+        [allowDrag]="true"
+        [allowDelete]="true"
+      ></app-creation-grid>
+    </app-page-layout>
   </section>
+
   <section
     class="flex-1 min-w-75 flex flex-col bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
   >
