@@ -1,0 +1,34 @@
+<div
+  class="z-50 absolute right-0 w-60 mt-3 rounded-lg shadow-2xl border bg-white border-indigo-100 animate-in fade-in origin-top-right zoom-in-95 duration-200 slide-in-from-top-2"
+>
+  <div class="p-1 border-b border-gray-200">
+    <div
+      class="flex flex-col items-start justify-center w-full h-14 ps-2 font-bold text-indigo-950"
+    >
+      {{ authUser()?.firstName }} {{ authUser()?.lastName }}
+      <span class="text-xs text-slate-500">{{ authUser()?.email }}</span>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-1 p-1 border-b border-gray-200">
+    @for (item of menuItems; track $index) {
+      <button
+        class="flex items-center gap-2 w-full h-10 ps-2 text-sm rounded-md text-slate-600 hover:bg-slate-100 transition-colors"
+        (click)="handleAction(item)"
+      >
+        <lucide-icon [img]="item.icon" class="w-4 h-4 stroke-[1.5px]"></lucide-icon>
+        {{ item.label }}
+      </button>
+    }
+  </div>
+
+  <div class="p-1">
+    <button
+      class="flex items-center gap-2 w-full h-10 ps-2 text-sm rounded-md text-red-500 hover:bg-red-50 transition-colors"
+      (click)="onLogOut()"
+    >
+      <lucide-icon [img]="logOutIcon" class="w-4 h-4 stroke-[1.5px]"></lucide-icon>
+      Log Out
+    </button>
+  </div>
+</div>

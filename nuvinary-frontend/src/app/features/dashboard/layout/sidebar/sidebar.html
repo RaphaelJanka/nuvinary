@@ -1,15 +1,15 @@
-<section class="flex flex-col h-full justify-between">
+<section class="flex flex-col justify-between h-full">
   <div class="flex flex-col gap-1 text-lg text-zinc-500">
     @if (showSettings()) {
       <a
         routerLink="/dashboard/gallery"
-        class="flex items-center gap-3 h-12 transition-all duration-300 hover:text-[#7c6db2]"
+        class="flex items-center gap-3 h-12 hover:text-text-main transition-all duration-300"
         [class.ps-4]="!isCollapsed()"
         [class.justify-center]="isCollapsed()"
       >
         <lucide-icon class="w-5 h-5" [img]="arrowLeftIcon"></lucide-icon>
         @if (!isCollapsed()) {
-          <span class="tracking-tight text-sm font-bold whitespace-nowrap overflow-hidden"
+          <span class="overflow-hidden text-sm tracking-tight whitespace-nowrap font-bold"
             >Back to Dashboard</span
           >
         }
@@ -28,21 +28,21 @@
   <ng-template #navLink let-item="item">
     <a
       [routerLink]="item.route"
-      routerLinkActive="bg-[#9b8fbc] font-bold text-white !border-[#7c6db2]"
+      routerLinkActive="bg-sidebar-main font-bold text-white !border-text-main"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="group flex items-center gap-3 h-12 transition-all duration-300 rounded-e-4xl border-transparent hover:bg-[#bbb2d8] hover:text-white cursor-pointer"
+      class="group flex items-center gap-3 h-12 cursor-pointer rounded-e-4xl border-transparent hover:bg-sidebar-hover hover:text-white transition-all duration-300"
       [class.ps-4]="!isCollapsed()"
       [class.justify-center]="isCollapsed()"
       [class.border-l-4]="!isCollapsed()"
     >
       <lucide-icon
-        class="w-5 h-5 transition-transform duration-200 group-hover:scale-110 shrink-0"
+        class="shrink-0 w-5 h-5 group-hover:scale-110 transition-transform duration-200"
         [img]="item.icon"
       ></lucide-icon>
 
       @if (!isCollapsed()) {
         <span
-          class="transition-transform duration-300 group-hover:translate-x-2 whitespace-nowrap overflow-hidden"
+          class="overflow-hidden whitespace-nowrap group-hover:translate-x-2 transition-transform duration-300"
         >
           {{ item.label }}
         </span>
@@ -51,19 +51,19 @@
   </ng-template>
 
   @if (!isCollapsed()) {
-    <div class="flex flex-col gap-1 text-zinc-500 font-medium text-sm">
+    <div class="flex flex-col gap-1 text-sm font-medium text-zinc-500">
       @for (item of supportMenuItems; track $index) {
         <a
           [routerLink]="item.route"
-          class="flex items-center ml-1 gap-2 ps-4 h-8 transition-all duration-200 hover:text-[#7c6db2] hover:[text-shadow:0.5px_0_0_currentColor] cursor-pointer"
+          class="flex items-center gap-2 h-8 ml-1 ps-4 cursor-pointer [text-shadow:0.5px_0_0_currentColor] hover:text-text-main transition-all duration-200"
         >
-          <span class="transition-all duration-300 whitespace-nowrap overflow-hidden">
+          <span class="overflow-hidden whitespace-nowrap transition-all duration-300">
             {{ item.label }}
           </span>
         </a>
       }
-      <div class="border-t p-4 mt-3 text-xs border-[#9b8fbc]">
-        <p class="ml-1 whitespace-nowrap overflow-hidden">© 2023 Nuvinary</p>
+      <div class="mt-3 p-4 text-xs border-t border-sidebar-main">
+        <p class="overflow-hidden ml-1 whitespace-nowrap">© 2023 Nuvinary</p>
       </div>
     </div>
   }

@@ -5,9 +5,6 @@
 @plugin 'tailwindcss-animate';
 
 @theme {
-  /* Hier definierst du deine Marken-Farben direkt */
-
-  /* Die Hauptfarben deiner App */
   --color-brand: #6366f1; /* Indigo-500 */
   --color-brand-light: #818cf8; /* Indigo-400 (Hover) */
   --color-brand-dark: #4f46e5; /* Indigo-600 (Pressed) */
@@ -21,9 +18,12 @@
   --color-text-main: #7c6db2;
 
   --spacing-app-max-width: 1920px;
+
+  /* sidebar variables */
+  --color-sidebar-main: #9b8fbc;
+  --color-sidebar-hover: #bbb2d8;
 }
 
-/* Restliches globales CSS */
 body {
   background-color: var(--color-page-bg);
   color: var(--color-text);

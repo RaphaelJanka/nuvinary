@@ -1,0 +1,28 @@
+<header class="flex items-center justify-between h-16 px-6">
+  <div>
+    <button
+      (click)="onToggleSidebar()"
+      class="p-2 rounded-lg text-zinc-400 transition-colors hover:text-white hover:bg-white/10"
+    >
+      <lucide-icon [img]="menuIcon" class="w-6 h-6 stroke-[1.5px]"></lucide-icon>
+    </button>
+
+    <span class="ms-4 text-xl tracking-tight font-bold text-white">Nuvinary</span>
+  </div>
+
+  <div class="relative">
+    <button
+      id="user-menu-button"
+      (click)="onToggleMenu()"
+      class="flex items-center justify-center w-10 h-10 rounded-full shadow-lg bg-brand transition-all hover:bg-brand-light focus:outline-none"
+    >
+      <span class="mt-0.5 text-md tracking-widest font-bold text-white">
+        {{ userInitials() }}
+      </span>
+    </button>
+
+    @if (isMenuOpen()) {
+      <app-user-menu (closeMenu)="isMenuOpen.set(false)"></app-user-menu>
+    }
+  </div>
+</header>
