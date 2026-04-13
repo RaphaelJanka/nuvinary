@@ -1,5 +1,5 @@
 <app-page-layout [title]="'Community'">
-  <app-search-input header [(query)]="searchQuery" class="flex-1"></app-search-input>
+  <app-search-input searchHeader [(query)]="searchQuery" class="flex-1"></app-search-input>
   <app-creation-grid
     [creationList]="filteredCreations()"
     [allowDrag]="false"

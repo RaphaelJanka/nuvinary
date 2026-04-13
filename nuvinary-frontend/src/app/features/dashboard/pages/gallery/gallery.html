@@ -1,7 +1,7 @@
 <div class="flex h-full w-full gap-4">
   <section class="flex-3">
     <app-page-layout [title]="'My Gallery'">
-      <app-search-input header [(query)]="searchQuery" class="flex-1"></app-search-input>
+      <app-search-input searchHeader [(query)]="searchQuery" class="flex-1"></app-search-input>
       <app-creation-grid
         [creationList]="filteredCreations()"
         [allowDrag]="true"
