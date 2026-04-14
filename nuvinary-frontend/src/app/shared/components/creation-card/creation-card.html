@@ -1,7 +1,7 @@
 <button
   (click)="onOpenDetailsDialog()"
   [disabled]="creation().status !== 'completed'"
-  class="group relative w-full aspect-4/5 bg-zinc-100 rounded-3xl border border-zinc-200 shadow-sm shadow-[#bbb2d8]/20 hover:shadow-2xl hover:shadow-[#7c6db2]/30 transition-all duration-500 overflow-hidden"
+  class="group relative overflow-hidden w-full aspect-4/5 rounded-3xl border border-zinc-200 bg-zinc-100 shadow-sm shadow-sidebar-hover/20 transition-all duration-500 hover:shadow-2xl hover:shadow-text-main/30"
 >
   @if (creation().status === 'completed') {
     <img
@@ -11,23 +11,25 @@
     />
   } @else {
     <div
-      class="w-full h-full bg-zinc-200 flex items-center justify-center italic text-zinc-400 text-[10px] uppercase"
+      class="flex items-center justify-center w-full h-full italic text-[10px] text-zinc-400 uppercase bg-zinc-200"
     >
       {{ creation().status }}...
     </div>
   }
+
   @if (creation().status === 'completed') {
     <div
-      class="absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5"
+      class="absolute inset-0 flex flex-col justify-end p-5 opacity-0 bg-linear-to-t from-black/60 via-black/0 to-transparent transition-all duration-300 group-hover:opacity-100"
     >
-      <div class="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-        <h4 class="text-white font-bold text-sm tracking-tight">
+      <div class="transition-transform duration-300 translate-y-4 group-hover:translate-y-0">
+        <h4 class="font-bold text-sm text-white tracking-tight">
           {{ creation().title }}
         </h4>
       </div>
     </div>
   }
+
   <div
-    class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity scale-75 group-hover:scale-100 duration-300"
+    class="absolute top-4 right-4 opacity-0 scale-75 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100"
   ></div>
 </button>

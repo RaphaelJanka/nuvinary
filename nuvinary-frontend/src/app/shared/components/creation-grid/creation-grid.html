@@ -1,20 +1,20 @@
-<div class="flex-1 select-none overflow-y-auto px-6 py-4 custom-scrollbar">
+<div class="flex-1 overflow-y-auto px-6 py-4 select-none custom-scrollbar">
   <div class="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-6">
     @for (creation of creationList(); track creation.id; let i = $index) {
       <div
         [draggable]="allowDrag()"
         (dragstart)="onDragStart($event, creation, i)"
         (dragend)="onDragEnd()"
-        class="transition-transform relative group"
+        class="relative group transition-transform"
         [class.opacity-40]="activeCreation()?.id === creation.id"
+        [class.cursor-grab]="allowDrag()"
         [class.active:cursor-grabbing]="allowDrag()"
         [class.hover:scale-105]="allowDrag()"
-        [class.cursor-grab]="allowDrag()"
       >
         @if (allowDelete()) {
           <button
             (click)="onDeleteCreation(creation)"
-            class="absolute top-3 right-3 z-30 p-2 rounded-xl bg-zinc-900/10 backdrop-blur-md border border-white/20 text-zinc-100 shadow-inner opacity-0 group-hover:opacity-100 transition-all duration-300 hover:text-red-500 hover:border-red-100 hover:bg-red-50 active:scale-90"
+            class="absolute top-3 right-3 z-30 p-2 rounded-xl border border-white/20 bg-zinc-900/10 text-zinc-100 shadow-inner backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100 hover:border-red-100 hover:bg-red-50 hover:text-red-500 active:scale-90"
           >
             <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
           </button>
@@ -25,7 +25,7 @@
         @if (allowDrag()) {
           <div
             #dragElement
-            class="fixed -top-250 w-20 h-20 rounded-xl overflow-hidden border-2 border-[#7c6db2] z-[-1]"
+            class="fixed -top-250 z-[-1] overflow-hidden w-20 h-20 rounded-xl border-2 border-text-main"
           >
             <img
               [src]="creation.url"
@@ -36,9 +36,9 @@
         }
       </div>
     } @empty {
-      <div class="col-span-full py-20 flex flex-col items-center justify-center text-zinc-400">
-        <lucide-icon [img]="icons.searchIcon" class="w-12 h-12 opacity-20 mb-4"></lucide-icon>
-        <p class="font-bold uppercase tracking-widest text-xs">No assets found</p>
+      <div class="flex flex-col items-center justify-center col-span-full py-20 text-zinc-400">
+        <lucide-icon [img]="icons.searchIcon" class="w-12 h-12 mb-4 opacity-20"></lucide-icon>
+        <p class="font-bold text-xs uppercase tracking-widest">No assets found</p>
       </div>
     }
   </div>

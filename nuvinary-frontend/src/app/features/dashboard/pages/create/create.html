@@ -1,11 +1,12 @@
 <app-page-layout title="Create">
   <main class="flex justify-center mt-20">
-    <form (submit)="onSubmit($event)" class="w-full flex flex-col max-w-2xl gap-16">
+    <form (submit)="onSubmit($event)" class="flex flex-col gap-16 w-full max-w-2xl">
       <div class="flex flex-col gap-6 min-h-40">
-        <h1 class="text-5xl font-bold text-gradient-brand leading-relaxed font-mono">
+        <h1 class="font-mono font-bold text-5xl leading-relaxed text-gradient-brand">
           {{ displayedUserGreeting() }}
         </h1>
-        <h2 class="text-3xl font-bold font-mono leading-tight">
+
+        <h2 class="font-mono font-bold text-3xl leading-tight">
           @if (isThinking()) {
             <span class="flex gap-1 text-[#94afd1]">
               <span class="animate-dot">.</span>
@@ -19,7 +20,7 @@
 
             @if (isTyping()) {
               <span
-                class="inline-block w-0.75 h-[0.9em] bg-[#94afd1] ml-1 translate-y-[0.1em] animate-pulse"
+                class="inline-block w-0.75 h-[0.9em] ml-1 translate-y-[0.1em] bg-[#94afd1] animate-pulse"
               ></span>
             }
           }
@@ -30,7 +31,7 @@
         <div class="animate-in fade-in slide-in-from-bottom-4 duration-1200">
           <textarea
             [formField]="creationForm.prompt"
-            class="w-full p-6 text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm focus:ring-4 focus:ring-text-main/10 outline-none transition-all placeholder:text-zinc-300 resize-none block"
+            class="block w-full p-6 font-semibold text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm resize-none outline-none placeholder:text-zinc-300 focus:ring-4 focus:ring-text-main/10 transition-all"
             rows="4"
             placeholder="e.g. A cybernetic owl with glowing blue eyes in a dark forest..."
           >
@@ -41,7 +42,7 @@
               (click)="onSetTitle()"
               type="button"
               [disabled]="creationForm.prompt().invalid() || isTyping()"
-              class="px-8 py-3 bg-text-main text-white font-bold rounded-2xl hover:bg-[#6a5aa3] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-text-main/20 flex items-center gap-2"
+              class="flex items-center gap-2 px-8 py-3 font-bold rounded-2xl bg-text-main text-white shadow-lg shadow-text-main/20 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#6a5aa3] transition-all"
             >
               Next
               <lucide-icon [img]="icons.arrowRightIcon" class="w-4 h-4"></lucide-icon>
@@ -55,22 +56,24 @@
           <input
             type="text"
             [formField]="creationForm.title"
-            class="w-full p-6 text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm focus:ring-4 focus:ring-text-main/10 outline-none transition-all placeholder:text-zinc-300"
+            class="w-full p-6 font-semibold text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm outline-none placeholder:text-zinc-300 focus:ring-4 focus:ring-text-main/10 transition-all"
             placeholder="Enter a title (or leave blank for magic)..."
           />
+
           <div class="flex justify-between mt-4">
             <button
               (click)="onBack()"
               type="button"
-              class="disabled:opacity-30 px-6 py-3 text-zinc-400 font-bold hover:text-zinc-600 transition-colors"
+              class="px-6 py-3 font-bold text-zinc-400 disabled:opacity-30 hover:text-zinc-600 transition-colors"
               [disabled]="isTyping()"
             >
               Back
             </button>
+
             <button
               type="submit"
               [disabled]="creationForm().invalid() || isTyping()"
-              class="px-6 py-3 bg-text-main text-white font-bold rounded-2xl hover:bg-[#6a5aa3] disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-text-main/20 flex items-center gap-2"
+              class="flex items-center gap-2 px-6 py-3 font-bold rounded-2xl bg-text-main text-white shadow-lg shadow-text-main/20 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#6a5aa3] transition-all"
             >
               <lucide-icon [img]="icons.cloudUploadIcon" class="w-4 h-4"></lucide-icon>
               Generate Image

@@ -7,25 +7,25 @@ import { CircleAlert, CircleCheck, Info, LucideAngularModule, X } from 'lucide-a
   imports: [LucideAngularModule],
   template: `
     <div
-      class="fixed bottom-8 right-8 z-9999 flex flex-col gap-3 pointer-events-none w-full max-w-sm"
+      class="fixed right-8 bottom-8 z-9999 flex flex-col gap-3 w-full max-w-sm pointer-events-none"
     >
       @for (note of notifications(); track note.id) {
         <div [class]="getClasses(note.type)">
           <lucide-icon
             [img]="icons[note.type]"
+            class="w-5 h-5"
             [class.text-blue-500]="note.type === 'info'"
             [class.text-green-500]="note.type === 'success'"
             [class.text-red-500]="note.type === 'error'"
-            class="w-5 h-5"
           ></lucide-icon>
 
-          <p class="text-sm font-semibold tracking-tight flex-1">
+          <p class="flex-1 font-semibold text-sm tracking-tight">
             {{ note.message }}
           </p>
 
           <button
             (click)="onRemove(note.id)"
-            class="p-1 hover:bg-black/5 rounded-lg transition-colors text-zinc-400 hover:text-zinc-600"
+            class="p-1 rounded-lg text-zinc-400 transition-colors hover:bg-black/5 hover:text-zinc-600"
           >
             <lucide-icon [img]="icons.close" class="w-4 h-4"></lucide-icon>
           </button>

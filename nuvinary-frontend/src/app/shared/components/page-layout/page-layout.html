@@ -1,16 +1,16 @@
 <section
-  class="flex flex-col h-full min-w-0 bg-white/50 rounded-xl border border-zinc-200 overflow-hidden"
+  class="flex flex-col overflow-hidden h-full min-w-0 rounded-xl border border-zinc-200 bg-white/50"
 >
-  <header class="h-16 px-6 border-b border-text-main/20 bg-white flex items-center gap-4">
+  <header class="flex items-center gap-4 h-16 px-6 border-b border-text-main/20 bg-white">
     <div
-      class="flex items-center gap-2 px-3 py-1.5 bg-sheet-bg rounded-xl border border-text-main/10"
+      class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-text-main/10 bg-sheet-bg"
     >
-      <span class="text-[10px] font-black text-text-main uppercase tracking-wider">
+      <span class="font-black text-[10px] text-text-main uppercase tracking-wider">
         {{ title() }}
       </span>
     </div>
 
-    <div class="flex-1 flex items-center gap-4 max-w-xl">
+    <div class="flex flex-1 items-center gap-4 max-w-xl">
       <ng-content select="[searchHeader]"></ng-content>
     </div>
   </header>
