@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Creation } from '../models/creation.model';
 import { ConfirmDialog } from '../components/dialogs/confirmation-dialog/confirmation-dialog';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
@@ -7,6 +7,7 @@ import { CollectionService } from '../../features/dashboard/services/collection-
 import { Collection } from '../../features/dashboard/pages/models/collection.model';
 import { CreationDetails } from '../components/creation-details/creation-details';
 import { ConfirmDialogData } from '../models/dialog-data.model';
+import { StudioDialog } from '../components/dialogs/studio-dialog/studio-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,13 @@ export class DialogService {
   private readonly creationService = inject(CreationService);
   private readonly collectionService = inject(CollectionService);
 
-  createDialog(dialogData: ConfirmDialogData): DialogRef<boolean, unknown> {
+  private readonly _selectedCreation = signal<Creation | null>(null);
+  readonly selectedCreation = this._selectedCreation.asReadonly();
+
+  private readonly _studioCardBackground = signal<string>('');
+  readonly studioCardBackground = this._studioCardBackground.asReadonly();
+
+  private createDialog(dialogData: ConfirmDialogData): DialogRef<boolean, unknown> {
     return this.dialog.open<boolean>(ConfirmDialog, {
       width: '500px',
       disableClose: true,
@@ -60,5 +67,36 @@ export class DialogService {
       type: 'delete',
     };
     return this.createDialog(data);
+  }
+
+  openStudioDialog() {
+    const dialogRef = this.dialog.open<Creation | null>(StudioDialog, {
+      disableClose: true,
+      maxWidth: '95vw',
+      data: this.creationService.userCreationList,
+    });
+
+    dialogRef.closed.subscribe((creation) => {
+      if (creation) {
+        this._selectedCreation.set(creation);
+      }
+    });
+  }
+
+  openStudioDialogBackground() {
+    const dialogRef = this.dialog.open<string>(StudioDialog, {
+      disableClose: true,
+      maxWidth: '95vw',
+    });
+
+    dialogRef.closed.subscribe((result) => {
+      if (result !== undefined) {
+        this._studioCardBackground.set(result);
+      }
+    });
+  }
+
+  clearSelectedCreation() {
+    this._selectedCreation.set(null);
   }
 }

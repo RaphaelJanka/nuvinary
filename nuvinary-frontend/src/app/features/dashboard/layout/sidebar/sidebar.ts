@@ -30,7 +30,7 @@ export class Sidebar {
   protected readonly sideBarMenuItems = [
     { label: 'My Gallery', icon: BookImage, route: '/dashboard/gallery' },
     { label: 'Create', icon: PencilRuler, route: '/dashboard/create' },
-    { label: 'My Visionboard', icon: Sparkles, route: '/dashboard/visionboard' },
+    { label: 'Studio', icon: Sparkles, route: '/dashboard/studio' },
     { label: 'Community', icon: Earth, route: '/dashboard/community' },
   ];
 

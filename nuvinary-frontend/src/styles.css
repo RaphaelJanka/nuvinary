@@ -39,6 +39,11 @@ a {
 button:disabled {
   cursor: not-allowed;
 }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: none;
+}
 
 /* Den Scroll-Container mit einer Klasse markieren, z.B. .custom-scrollbar */
 .custom-scrollbar::-webkit-scrollbar {

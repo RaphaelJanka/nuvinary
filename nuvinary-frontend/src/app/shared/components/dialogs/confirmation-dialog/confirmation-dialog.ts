@@ -76,7 +76,7 @@ import { ConfirmDialogData } from '../../../models/dialog-data.model';
   `,
 })
 export class ConfirmDialog {
-  readonly dialogRef = inject(DialogRef<boolean>);
-  readonly data = inject<ConfirmDialogData>(DIALOG_DATA);
+  protected readonly dialogRef = inject(DialogRef<boolean>);
+  protected readonly data = inject<ConfirmDialogData>(DIALOG_DATA);
   protected readonly icons = { trashIcon: Trash2, alertIcon: TriangleAlert };
 }

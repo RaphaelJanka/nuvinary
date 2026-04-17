@@ -25,10 +25,10 @@ export const routes: Routes = [
           import('./features/dashboard/pages/gallery/gallery').then((m) => m.Gallery),
       },
       {
-        path: 'visionboard',
-        title: 'Vision Board',
+        path: 'studio',
+        title: 'Studio',
         loadComponent: () =>
-          import('./features/dashboard/pages/visionboard/visionboard').then((m) => m.VisionBoard),
+          import('./features/dashboard/pages/studio/studio').then((m) => m.Studio),
       },
       {
         path: 'create',
