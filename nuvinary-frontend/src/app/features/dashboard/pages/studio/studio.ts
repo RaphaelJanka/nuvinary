@@ -24,11 +24,13 @@ export class Studio {
   protected isEditing = false;
   protected storyTitle = signal('');
   protected readonly orientation = signal<'portrait' | 'landscape'>('portrait');
+  protected readonly cardBackground = signal('images/paisley.webp');
+  private readonly iconRotation = signal(0);
 
   protected readonly toolbarButtons = [
     {
       icon: () => Plus,
-      action: () => this.dialogService.openStudioDialogBackground(),
+      action: () => this.dialogService.openStudioDialog(),
       className: () => 'bg-brand text-black shadow-lg hover:bg-brand/80',
     },
     {
@@ -43,7 +45,9 @@ export class Studio {
     },
     {
       icon: () => SwatchBook,
-      action: () => this.clearStudio(),
+      action: () => this.switchBackground(),
+      iconClass: () => `transition-transform duration-500 ease-in-out`,
+      iconStyle: () => `transform: rotate(${this.iconRotation()}deg)`,
     },
     {
       icon: () => BadgeX,
@@ -65,6 +69,25 @@ export class Studio {
     'bottom-0 left-0 border-b-2 border-l-2 rounded-bl-lg',
     'bottom-0 right-0 border-b-2 border-r-2 rounded-br-lg',
   ];
+
+  private readonly cardBackgrounds = [
+    'images/paisley.webp',
+    'images/geometric-leaves.webp',
+    'images/circles-and-roundabouts.webp',
+    'images/intersection.webp',
+    'images/regal.webp',
+    'images/sun-pattern.png',
+    'images/swirl_pattern.png',
+  ];
+
+  switchBackground() {
+    const current = this.cardBackground();
+    const currentIndex = this.cardBackgrounds.indexOf(current);
+    const nextIndex = (currentIndex + 1) % this.cardBackgrounds.length;
+    this.cardBackground.set(this.cardBackgrounds[nextIndex]);
+
+    this.iconRotation.update((v) => v + 360 / this.cardBackgrounds.length);
+  }
 
   toggleOrientation() {
     this.orientation.update((current) => (current === 'portrait' ? 'landscape' : 'portrait'));

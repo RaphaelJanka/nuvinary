@@ -10,26 +10,35 @@
           class="p-3 rounded-2xl text-white hover:bg-brand/60 hover:shadow-lg transition-all"
           [disabled]="btn.disabled ? btn.disabled() : false"
         >
-          <lucide-icon [img]="btn.icon()" class="w-6 h-6"></lucide-icon>
+          <span
+            [class]="btn.iconClass ? btn.iconClass() : ''"
+            [style]="btn.iconStyle ? btn.iconStyle() : ''"
+            class="flex justify-center items-center"
+          >
+            <lucide-icon [img]="btn.icon()" class="w-6 h-6"></lucide-icon>
+          </span>
         </button>
       }
     </aside>
-    <main class="flex-1 flex items-center justify-center p-12 bg-zinc-900/60 overflow-hidden">
+    <main class="flex-1 flex items-center justify-center p-12 bg-zinc-900/50 overflow-hidden">
       <div
         id="exportCard"
-        class="relative transition-all duration-700 ease-in-out bg-text-main rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex justify-between group border border-white/5 p-8"
+        class="relative transition-all duration-700 ease-in-out bg-studio-main rounded-[2.5rem] overflow-hidden flex justify-between group border border-text-main shadow-2xl p-8"
         [ngClass]="{
           'w-120 flex-col h-full max-h-200': orientation() === 'portrait',
           'w-250 aspect-video flex-row gap-8': orientation() === 'landscape',
         }"
       >
         <div
-          class="relative rounded-[2.2rem] overflow-hidden bg-zinc-900/40 shadow-inner transition-all duration-700 flex items-center justify-center"
+          class="relative rounded-4xl overflow-hidden bg-zinc-800/70 z-1 transition-all duration-700 flex items-center justify-center"
           [ngClass]="{
             'h-full max-h-110': orientation() === 'portrait',
             'w-100': orientation() === 'landscape',
           }"
         >
+          <div
+            class="absolute inset-0 border-4 border-studio-border rounded-4xl z-10 pointer-events-none"
+          ></div>
           @if (selectedCreation(); as creation) {
             <img
               [src]="creation.url"
@@ -53,62 +62,57 @@
           class="flex flex-col transition-all duration-700"
           [ngClass]="{
             'pt-6 gap-6 pb-2 px-3': orientation() === 'portrait',
-            'w-100 py-4 justify-between': orientation() === 'landscape',
+            'w-100 py-4 justify-between mt-10': orientation() === 'landscape',
           }"
         >
           <div class="flex flex-col gap-5">
-            <span class="text-[9px] font-black text-zinc-900/30 uppercase tracking-[0.3em]"
-              >Nuvinary Archive</span
-            >
+            <span class="text-[9px] font-black uppercase tracking-[0.3em]">Nuvinary Archive</span>
 
             @if (isEditing) {
               <input
                 [value]="storyTitle()"
                 (input)="storyTitle.set(t.value)"
                 #t
-                maxlength="20"
+                maxlength="30"
                 (keyup.enter)="isEditing = false"
                 (blur)="isEditing = false"
                 autoFocus
-                class="bg-transparent border-b border-zinc-950/10 p-0 font-black text-zinc-950 focus:ring-0 w-full leading-tight tracking-tighter"
-                [ngClass]="orientation() === 'portrait' ? 'text-3xl' : 'text-5xl'"
+                class="bg-black/30 border-b font-black border-zinc-950/10 p-0 focus:ring-0 text-4xl w-full leading-tight tracking-tighter"
               />
             } @else {
               <h2
-                class="font-black text-zinc-950 leading-[0.85] tracking-tighter wrap-break-word transition-all text-4xl select-none"
+                class="z-1 font-black bg-linear-to-r from-studio-primary via-studio-secondary to-studio-light bg-clip-text text-transparent tracking-tighter wrap-break-word transition-all text-4xl select-none"
               >
                 {{ storyTitle() || 'Untitled' }}
               </h2>
             }
           </div>
 
-          <div class="flex items-end justify-between border-t border-zinc-950/10 pt-5">
+          <div class="flex items-end justify-between border-t border-text/50 pt-5">
             <div class="flex flex-col gap-0.5">
               <div class="flex items-center gap-1">
-                <div class="w-1.5 h-1.5 rounded-full bg-brand"></div>
-                <span class="text-[9px] font-black text-zinc-950 uppercase italic tracking-tight"
+                <div class="w-1.5 h-1.5 rounded-full bg-studio-primary"></div>
+                <span class="text-[9px] font-black uppercase italic tracking-tight"
                   >Verified AI</span
                 >
               </div>
-              <span class="text-[8px] text-zinc-950/40 font-mono italic">2026-Gen-Core</span>
+              <span class="text-[8px] font-mono italic">2026-Gen-Core</span>
             </div>
 
             <div class="text-right">
               <span
-                class="block font-black text-zinc-950 italic leading-none tracking-tighter transition-all"
+                class="block font-black italic leading-none tracking-tighter transition-all"
                 [ngClass]="orientation() === 'portrait' ? 'text-[16px]' : 'text-[24px]'"
                 >NUVINARY</span
               >
-              <span class="text-[7px] text-zinc-950/40 font-bold uppercase tracking-widest"
-                >Studio</span
-              >
+              <span class="text-[7px] font-bold uppercase tracking-widest">Studio</span>
             </div>
           </div>
         </div>
 
         <div
-          class="absolute inset-0 pointer-events-none mix-blend-overlay opacity-10"
-          style="background-image: url('https://www.transparenttextures.com/patterns/cubes.png')"
+          class="absolute inset-0 pointer-events-none mix-blend-multiply"
+          [style.backgroundImage]="'url(' + cardBackground() + ')'"
         ></div>
       </div>
     </main>
