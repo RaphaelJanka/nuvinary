@@ -24,11 +24,14 @@
   --color-sidebar-hover: #bbb2d8;
 
   /* studio */
-  --color-studio-main: #b395e8;
+  --color-studio-card: #b395e8;
   --color-studio-primary: #5052db;
   --color-studio-secondary: #812eb9;
+  --color-studio-main: #4a4266;
   --color-studio-light: #2184ee;
   --color-studio-border: #5c4270;
+  --color-studio-header: #766496;
+  --color-studio-frame: #5c4f7d;
 }
 
 body {
