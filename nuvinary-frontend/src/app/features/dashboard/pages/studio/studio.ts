@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import {
   BadgeX,
@@ -12,11 +12,13 @@ import {
 } from 'lucide-angular';
 import { DialogService } from '../../../../shared/services/dialog-service';
 import { NgClass } from '@angular/common';
+import { toPng } from 'html-to-image';
 
 @Component({
   selector: 'app-studio',
   imports: [PageLayout, LucideAngularModule, NgClass],
   templateUrl: './studio.html',
+  styleUrl: './studio.css',
 })
 export class Studio {
   private readonly dialogService = inject(DialogService);
@@ -26,6 +28,8 @@ export class Studio {
   protected readonly orientation = signal<'portrait' | 'landscape'>('portrait');
   protected readonly cardBackground = signal('images/paisley.webp');
   private readonly iconRotation = signal(0);
+  private readonly studioCard = viewChild<ElementRef<HTMLElement>>('studioCard');
+  protected readonly isGenerating = signal(false);
 
   protected readonly toolbarButtons = [
     {
@@ -57,7 +61,7 @@ export class Studio {
     },
     {
       icon: () => Download,
-      action: () => this.export(),
+      action: () => this.exportAsImage(),
       className: () => 'disabled:opacity-10',
       disabled: () => !this.selectedCreation() || this.storyTitle() === '',
     },
@@ -98,8 +102,33 @@ export class Studio {
     this.dialogService.clearSelectedCreation();
   }
 
-  async export() {
-    // Hier kommt die html-to-image Logik rein
-    console.log('Exporting Case Study...');
+  exportAsImage() {
+    if (!this.selectedCreation() || this.storyTitle() === '') return;
+
+    const node = this.studioCard()?.nativeElement;
+    if (!node) {
+      console.error('Studio card element not found!');
+      return;
+    }
+
+    this.isGenerating.set(true);
+
+    toPng(node, { quality: 1, pixelRatio: 2, cacheBust: true })
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `nuvinary-export-${this.storyTitle()}-${Date.now()}.png`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.error('Error exporting image:', error);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.isGenerating.set(false);
+          this.storyTitle.set('');
+          this.dialogService.clearSelectedCreation();
+        }, 600);
+      });
   }
 }

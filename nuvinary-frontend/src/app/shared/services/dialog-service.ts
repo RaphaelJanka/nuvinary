@@ -83,19 +83,6 @@ export class DialogService {
     });
   }
 
-  // openStudioDialogBackground() {
-  //   const dialogRef = this.dialog.open<string>(StudioDialog, {
-  //     disableClose: true,
-  //     maxWidth: '95vw',
-  //   });
-
-  //   dialogRef.closed.subscribe((result) => {
-  //     if (result !== undefined) {
-  //       this._studioCardBackground.set(result);
-  //     }
-  //   });
-  // }
-
   clearSelectedCreation() {
     this._selectedCreation.set(null);
   }
