@@ -1,13 +1,14 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { SidebarService } from '../../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
 import { UserMenu } from './user-menu/user-menu';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { UserInitialPipe } from '../../../../shared/pipes/user-initial.pipe';
 
 @Component({
   selector: 'app-main-header',
-  imports: [LucideAngularModule, UserMenu],
+  imports: [LucideAngularModule, UserMenu, UserInitialPipe],
   templateUrl: './header.html',
 })
 export class Header {
@@ -17,11 +18,6 @@ export class Header {
   protected readonly authUser = this.authService.authUser;
   protected isMenuOpen = signal(false);
   protected readonly menuIcon = Menu;
-  protected readonly userInitials = computed<string>(() => {
-    const user = this.authUser();
-    if (!user?.firstName || !user.lastName) return '';
-    return user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase();
-  });
 
   protected onToggleSidebar() {
     this.sidebarService.toggle();

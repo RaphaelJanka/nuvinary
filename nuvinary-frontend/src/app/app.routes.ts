@@ -67,14 +67,6 @@ export const routes: Routes = [
                 (m) => m.Security,
               ),
           },
-          {
-            path: 'preferences',
-            title: 'Preferences',
-            loadComponent: () =>
-              import('./features/dashboard/pages/settings/preferences/preferences').then(
-                (m) => m.Preferences,
-              ),
-          },
         ],
       },
     ],

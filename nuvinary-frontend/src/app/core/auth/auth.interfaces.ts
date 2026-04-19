@@ -4,10 +4,16 @@ export interface LoginData {
 }
 
 export interface User {
-  id: string;
+  uid: string;
   email: string;
   password: string;
   firstName: string;
   lastName: string;
   credits: number;
+  createdAt: string;
+  displayName?: string;
+  avatarConfig: {
+    type: 'image' | 'color';
+    value: string;
+  };
 }

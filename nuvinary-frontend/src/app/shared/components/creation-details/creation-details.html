@@ -76,10 +76,10 @@
         <span class="font-bold text-xs uppercase tracking-wider">
           Created on {{ creation().createdAt | date: 'longDate' }}
         </span>
-        @if (currentUser()?.id === creation().createdBy.id && canEdit()) {
+        @if (currentUser()?.uid === creation().createdBy.id && canEdit()) {
           <span class="text-zinc-400">|</span>
           <button
-            class="font-black text-xs text-zinc-400 uppercase tracking-wider transition-colors hover:text-[#7c6db2]"
+            class="font-black text-xs text-zinc-400 uppercase tracking-wider transition-colors hover:text-text-main"
             (click)="onStartEditTitle()"
           >
             Edit Title
@@ -132,7 +132,7 @@
           </div>
         </div>
 
-        @if (creation().createdBy.id === currentUser()?.id && canEdit()) {
+        @if (creation().createdBy.id === currentUser()?.uid && canEdit()) {
           <button
             type="button"
             (click)="onTogglePublic()"

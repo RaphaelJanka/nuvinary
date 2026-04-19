@@ -9,7 +9,6 @@ import {
   LockOpen,
   LucideAngularModule,
   PencilRuler,
-  Settings,
   Sparkles,
 } from 'lucide-angular';
 import { SidebarService } from '../../services/sidebar-service';
@@ -38,7 +37,6 @@ export class Sidebar {
     { label: 'Profile Settings', icon: CircleUserRound, route: '/dashboard/settings/profile' },
     { label: 'Account Overview', icon: ChartLine, route: '/dashboard/settings/overview' },
     { label: 'Security', icon: LockOpen, route: '/dashboard/settings/security' },
-    { label: 'Preferences', icon: Settings, route: '/dashboard/settings/preferences' },
   ];
 
   protected readonly supportMenuItems = [

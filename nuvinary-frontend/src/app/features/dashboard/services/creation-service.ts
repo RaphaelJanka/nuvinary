@@ -21,7 +21,7 @@ export class CreationService {
   private readonly _creationList = signal<Creation[]>(mockCreationList);
 
   readonly userCreationList = computed(() =>
-    this._creationList().filter((c) => c.createdBy.id === this.currentUser()?.id),
+    this._creationList().filter((c) => c.createdBy.id === this.currentUser()?.uid),
   );
 
   readonly communityCreationList = computed(() => this._creationList().filter((c) => c.isPublic));

@@ -1,12 +1,5 @@
 import { Component, ElementRef, HostListener, inject, output } from '@angular/core';
-import {
-  ChartLine,
-  CircleUserRound,
-  LockOpen,
-  LogOut,
-  LucideAngularModule,
-  Settings,
-} from 'lucide-angular';
+import { ChartLine, CircleUserRound, LockOpen, LogOut, LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { MenuItem } from '../../../../../shared/models/menu-item.model';
@@ -45,7 +38,6 @@ export class UserMenu {
     { label: 'Profile Settings', icon: CircleUserRound, route: '/dashboard/settings/profile' },
     { label: 'Account Overview', icon: ChartLine, route: '/dashboard/settings/overview' },
     { label: 'Security & Password', icon: LockOpen, route: '/dashboard/settings/security' },
-    { label: 'Preferences', icon: Settings, route: '/dashboard/settings/preferences' },
   ];
 
   protected handleAction(item: MenuItem): void {

@@ -14,10 +14,17 @@
     <button
       id="user-menu-button"
       (click)="onToggleMenu()"
-      class="flex items-center justify-center w-10 h-10 rounded-full shadow-lg bg-brand transition-all hover:bg-brand-light focus:outline-none"
+      class="group relative flex items-center justify-center w-10 h-10 rounded-full shadow-lg transition-all"
+      [style.background-color]="
+        authUser()?.avatarConfig?.type === 'color' ? authUser()?.avatarConfig?.value : 'transparent'
+      "
     >
+      <div
+        class="absolute inset-0 rounded-full bg-white/0 transition-colors group-hover:bg-white/15"
+      ></div>
+
       <span class="mt-0.5 text-md tracking-widest font-bold text-white">
-        {{ userInitials() }}
+        {{ authUser() | userInitial }}
       </span>
     </button>
 
