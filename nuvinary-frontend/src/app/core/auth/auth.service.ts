@@ -6,7 +6,7 @@ import { testUser } from '../../test/testdata/user';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly STORAGE_KEY = 'nuvinary_user';
+  readonly STORAGE_KEY = 'nuvinary_user';
 
   private readonly _authUserSignal = signal<User | null>(this.getUserFromLocalStorage());
   authUser = this._authUserSignal.asReadonly();
@@ -35,7 +35,7 @@ export class AuthService {
     });
   }
 
-  private getUserFromLocalStorage(): User | null {
+  getUserFromLocalStorage(): User | null {
     const userJson = localStorage.getItem(this.STORAGE_KEY);
     try {
       return userJson ? JSON.parse(userJson) : null;
@@ -45,11 +45,15 @@ export class AuthService {
     }
   }
 
+  setUser(user: User | null) {
+    this._authUserSignal.set(user);
+  }
+
   login(credentials: LoginData): boolean {
     this._authErrorSignal.set(null);
 
     if (credentials.email === testUser.email && credentials.password === testUser.password) {
-      this._authUserSignal.set(testUser);
+      this.setUser(testUser);
       return true;
     }
     console.error('Login failed');
