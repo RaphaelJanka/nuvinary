@@ -26,10 +26,7 @@ export class UserService {
         firstName: userData.firstName,
         lastName: userData.lastName,
         displayName: userData.displayName,
-        avatarConfig: {
-          ...user.avatarConfig,
-          value: userData.color,
-        },
+        avatarColor: userData.color,
       };
       console.log('Setting new user');
       localStorage.setItem(this.authService.STORAGE_KEY, JSON.stringify(updatedUser));

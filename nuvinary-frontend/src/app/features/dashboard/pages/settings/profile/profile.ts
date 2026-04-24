@@ -16,7 +16,7 @@ export class Profile {
   private readonly userService = inject(UserService);
   protected readonly user = this.authService.authUser;
   protected readonly avatarColors = this.authService.avatarColors;
-  protected readonly selectedAvatarColor = signal(this.user()?.avatarConfig?.value);
+  protected readonly selectedAvatarColor = signal(this.user()?.avatarColor);
   protected readonly icons = {
     checkIcon: Check,
     lockIcon: Lock,
@@ -39,7 +39,7 @@ export class Profile {
   protected isDisabled(): boolean {
     return (
       this.userCredentialsForm().invalid() ||
-      (this.selectedAvatarColor() === this.user()?.avatarConfig?.value &&
+      (this.selectedAvatarColor() === this.user()?.avatarColor &&
         this.userCredentialModel().firstName === this.user()?.firstName &&
         this.userCredentialModel().lastName === this.user()?.lastName &&
         this.userCredentialModel().displayName === this.user()?.displayName)
@@ -49,7 +49,6 @@ export class Profile {
   protected onColorSelect(color: string) {
     this.selectedAvatarColor.set(color);
     this.userCredentialModel.update((current) => ({ ...current, color }));
-    console.log('color', this.selectedAvatarColor());
   }
 
   protected onSubmit(event: Event) {

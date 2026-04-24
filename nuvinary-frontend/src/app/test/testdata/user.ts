@@ -9,8 +9,5 @@ export const testUser: User = {
   displayName: 'Test User',
   credits: 10,
   createdAt: new Date().toISOString(),
-  avatarConfig: {
-    type: 'color',
-    value: '#D97706',
-  },
+  avatarColor: '#D97706',
 };

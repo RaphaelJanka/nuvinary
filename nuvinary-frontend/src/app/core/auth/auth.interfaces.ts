@@ -12,8 +12,5 @@ export interface User {
   credits: number;
   createdAt: string;
   displayName?: string;
-  avatarConfig: {
-    type: 'image' | 'color';
-    value: string;
-  };
+  avatarColor: string;
 }

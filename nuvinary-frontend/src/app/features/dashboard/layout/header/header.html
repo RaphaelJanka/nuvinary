@@ -15,9 +15,7 @@
       id="user-menu-button"
       (click)="onToggleMenu()"
       class="group relative flex items-center justify-center w-10 h-10 rounded-full shadow-lg transition-all"
-      [style.background-color]="
-        authUser()?.avatarConfig?.type === 'color' ? authUser()?.avatarConfig?.value : 'transparent'
-      "
+      [style.background-color]="authUser()?.avatarColor || 'transparent'"
     >
       <div
         class="absolute inset-0 rounded-full bg-white/0 transition-colors group-hover:bg-white/15"
