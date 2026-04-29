@@ -1,0 +1,72 @@
+import { SchemaPath, validate } from '@angular/forms/signals';
+
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CODE_PATTERN = /^\d{6}$/;
+export const PASSWORD_PATTERN =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{8,}$/;
+
+export function verifyCode(path: SchemaPath<string>) {
+  validate(path, ({ value }) => {
+    if (!value()) {
+      return {
+        kind: 'code_empty',
+        message: 'Verification code is required.',
+      };
+    }
+    if (!CODE_PATTERN.test(value())) {
+      return {
+        kind: 'verification_code_pattern',
+        message: 'Verification code must be 6 digits long.',
+      };
+    }
+    return null;
+  });
+}
+
+export function password(path: SchemaPath<string>) {
+  validate(path, ({ value }) => {
+    if (!value()) {
+      return {
+        kind: 'password_empty',
+        message: 'Password is required.',
+      };
+    }
+
+    if (value().length < 8) {
+      return {
+        kind: 'password_too_short',
+        message: 'Password must be at least 8 characters long',
+      };
+    }
+
+    if (!PASSWORD_PATTERN.test(value())) {
+      return {
+        kind: 'password_pattern',
+        message: 'Must include uppercase, lowercase, number, and special character',
+      };
+    }
+    return null;
+  });
+}
+
+export function confirmPassword(path: SchemaPath<string>, matchingPath: SchemaPath<string>) {
+  validate(path, ({ value, valueOf }) => {
+    const confirmPassword = value();
+    const password = valueOf(matchingPath);
+
+    if (!confirmPassword) {
+      return {
+        kind: 'confirmPassword_empty',
+        message: 'Password is required',
+      };
+    }
+
+    if (confirmPassword !== password) {
+      return {
+        kind: 'confirmPassword_mismatch',
+        message: 'Passwords do not match.',
+      };
+    }
+    return null;
+  });
+}

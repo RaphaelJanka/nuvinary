@@ -36,7 +36,7 @@ export class Sidebar {
   protected readonly settingsMenuItems = [
     { label: 'Profile Settings', icon: CircleUserRound, route: '/dashboard/settings/profile' },
     { label: 'Account Overview', icon: ChartLine, route: '/dashboard/settings/overview' },
-    { label: 'Security', icon: LockOpen, route: '/dashboard/settings/security' },
+    { label: 'Security & Password', icon: LockOpen, route: '/dashboard/settings/security' },
   ];
 
   protected readonly supportMenuItems = [

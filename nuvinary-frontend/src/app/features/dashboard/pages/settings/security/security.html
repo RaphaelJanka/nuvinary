@@ -1,1 +1,197 @@
-<p>security works!</p>
+<app-page-layout [title]="'Security & Password'">
+  <section class="flex justify-center">
+    <div
+      class="flex-1 max-w-[75%] mt-6 sm:mt-12 max-h-200 bg-white border border-white/5 rounded-4xl shadow-2xl p-4"
+    >
+      <div class="flex flex-col gap-10 h-full p-8 sm:p-12 overflow-y-scroll custom-scrollbar">
+        <div>
+          <h2 class="text-xl font-bold text-text-main tracking-tight mb-6">E-mail Address</h2>
+          <div class="mb-6 bg-page-bg/30 max-w-[50%] font-medium rounded-xl p-3 ps-4">
+            {{ user()?.email }}
+          </div>
+          <div class="flex justify-between items-center">
+            <button
+              (click)="isChangingMailAddress.set(true)"
+              class="text-xs font-black text-zinc-400 hover:text-text-main uppercase tracking-widest transition-colors"
+            >
+              Change E-mail Address
+            </button>
+            @if (isChangingMailAddress()) {
+              <button
+                (click)="onCancel('email')"
+                class="text-xs font-bold text-zinc-400 hover:text-text-main transition-colors"
+              >
+                Cancel
+              </button>
+            }
+          </div>
+
+          @if (isChangingMailAddress()) {
+            <div
+              class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
+            >
+              <p class="text-xs mb-4">
+                To update your login credentials, please enter your **new email address** below.
+                You'll need to verify it in the next step.
+              </p>
+
+              <div class="flex flex-col sm:flex-row gap-4 items-end">
+                <div class="flex-1 w-full">
+                  <input
+                    type="email"
+                    [(ngModel)]="updatedEmail"
+                    placeholder="new-email@example.com"
+                    class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all outline-none"
+                  />
+                </div>
+                <button
+                  (click)="onUpdateMail()"
+                  [disabled]="!isValidEmail()"
+                  class="w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
+                >
+                  Update E-Mail
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="pt-8 border-t border-zinc-600/30">
+          <h2 class="text-xl font-bold text-text-main tracking-tight mb-6">Password</h2>
+          <div class="flex justify-between items-center">
+            <button
+              (click)="isSendingLink.set(true)"
+              class="text-xs font-black text-zinc-400 hover:text-text-main uppercase tracking-widest transition-colors"
+            >
+              Change Password
+            </button>
+            @if (isSendingLink()) {
+              <button
+                (click)="onCancel('link')"
+                class="text-xs font-bold text-zinc-400 hover:text-text-main transition-colors"
+              >
+                Cancel
+              </button>
+            }
+          </div>
+          @if (isSendingLink()) {
+            <div
+              class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
+            >
+              @if (!isChangingPassword()) {
+                <div class="flex justify-between items-center gap-6">
+                  <p class="text-xs flex-1">
+                    To change your password, please enter your **new email address** below. You'll
+                    need to verify it in the next step.
+                  </p>
+                  <button
+                    (click)="onResetPassword()"
+                    class="w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
+                  >
+                    Send Reset Link
+                  </button>
+                </div>
+              } @else {
+                <form (submit)="onSubmit($event)" class="max-w-[50%]">
+                  <div class="flex flex-col gap-4">
+                    @for (field of formFields; track field.id) {
+                      <div class="flex flex-col gap-2">
+                        <label
+                          [for]="field.id"
+                          class="ml-1 text-[10px] font-bold text-brand uppercase tracking-widest"
+                          >{{ field.label }}</label
+                        >
+                        <input
+                          [id]="field.id"
+                          [type]="field.type"
+                          [formField]="field.formField"
+                          [placeholder]="field.placeholder"
+                          class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all"
+                        />
+                        @if (field.formField().touched() && field.formField().invalid()) {
+                          <div class="ps-1">
+                            @for (error of field.formField().errors(); track error.message) {
+                              <p class="text-xs text-red-500">{{ error.message }}</p>
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
+                    <div
+                      class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-6 pt-6 border-t border-zinc-600/30"
+                    >
+                      <button
+                        type="submit"
+                        [disabled]="passwordForm().invalid()"
+                        class="px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
+                      >
+                        Change Password
+                      </button>
+                      <button
+                        type="button"
+                        [disabled]="!canResend()"
+                        (click)="onSendCode()"
+                        class="px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
+                      >
+                        {{ resendButtonLabel() }}
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="pt-10 border-t border-zinc-600/30">
+          <div class="flex items-center justify-between">
+            <button
+              (click)="isDeleting.set(true)"
+              class="text-xs font-black text-zinc-400 hover:text-red-500 uppercase tracking-widest transition-colors"
+            >
+              Delete my Account
+            </button>
+            @if (isDeleting()) {
+              <button
+                (click)="onCancel('account')"
+                class="text-xs font-bold text-zinc-400 hover:text-text-main transition-colors"
+              >
+                Cancel
+              </button>
+            }
+          </div>
+
+          @if (isDeleting()) {
+            <div
+              class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
+            >
+              <p class="text-xs mb-6">
+                To confirm, please type
+                <span class="font-bold italic">**{{ DELETE_PHRASE }}**</span> below. This will
+                permanently remove all your generated images and data.
+              </p>
+
+              <div class="flex flex-col sm:flex-row gap-4 items-end">
+                <div class="flex-1 w-full">
+                  <input
+                    type="text"
+                    [(ngModel)]="confirmText"
+                    placeholder="Type the phrase here..."
+                    class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all"
+                  />
+                </div>
+                <button
+                  (click)="onDeleteAccount()"
+                  [disabled]="!canDelete()"
+                  class="w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 disabled:cursor-not-allowed disabled:shadow-none bg-red-600 text-white hover:bg-red-500 active:scale-95 shadow-lg shadow-red-900/20"
+                >
+                  Delete Permanently
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</app-page-layout>

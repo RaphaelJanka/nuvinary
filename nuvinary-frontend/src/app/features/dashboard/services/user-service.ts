@@ -34,4 +34,33 @@ export class UserService {
       this.notificationService.show('Profile updated successfully', 'success');
     }
   }
+
+  updateEmail(email: string) {
+    const user = this.authService.authUser();
+    if (user) {
+      const updatedUser = {
+        ...user,
+        email,
+      };
+      console.log('Updating user', updatedUser);
+    }
+  }
+
+  updatePassword(password: string) {
+    const user = this.authService.authUser();
+    if (user) {
+      const updatedUser = {
+        ...user,
+        password,
+      };
+      console.log('Updating user', updatedUser);
+    }
+  }
+
+  deleteAccount() {
+    const user = this.authService.authUser();
+    if (user) {
+      console.log('Deleting account', user);
+    }
+  }
 }
