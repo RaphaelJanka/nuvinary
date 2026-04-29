@@ -1,13 +1,13 @@
 <header class="flex items-center justify-between h-16 px-6">
-  <div>
+  <div class="flex items-center gap-4">
     <button
       (click)="onToggleSidebar()"
-      class="p-2 rounded-lg text-zinc-400 transition-colors hover:text-white hover:bg-white/10"
+      class="rounded-lg text-zinc-400 transition-colors hover:text-white hover:bg-white/10"
     >
       <lucide-icon [img]="menuIcon" class="w-6 h-6 stroke-[1.5px]"></lucide-icon>
     </button>
 
-    <span class="ms-4 text-xl tracking-tight font-bold text-white">Nuvinary</span>
+    <span class="text-xl tracking-tight font-bold text-white">Nuvinary</span>
   </div>
 
   <div class="relative">
