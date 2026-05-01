@@ -40,8 +40,9 @@ export class Sidebar {
   ];
 
   protected readonly supportMenuItems = [
-    { label: 'Privacy Policy', route: '/dashboard/' },
-    { label: 'Terms of Service', route: '/dashboard/' },
-    { label: 'Contact Support', route: '/dashboard/' },
+    { label: 'Legal Notice', route: '/legal-notice' },
+    { label: 'Privacy Policy', route: '/privacy-policy' },
+    { label: 'Terms of Service', route: '/terms-of-service' },
+    { label: 'Contact Support', route: '/contact-support' },
   ];
 }

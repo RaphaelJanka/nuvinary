@@ -51,18 +51,18 @@
   </ng-template>
 
   @if (!isCollapsed()) {
-    <div class="flex flex-col gap-1 text-sm font-medium text-zinc-500">
+    <div class="flex flex-col gap-4 text-xs font-medium text-zinc-500">
       @for (item of supportMenuItems; track $index) {
         <a
           [routerLink]="item.route"
-          class="flex items-center gap-2 h-8 ml-1 ps-4 cursor-pointer [text-shadow:0.5px_0_0_currentColor] hover:text-text-main transition-all duration-200"
+          class="ps-5 [text-shadow:0.5px_0_0_currentColor] hover:text-text-main transition-all duration-200"
         >
-          <span class="overflow-hidden whitespace-nowrap transition-all duration-300">
+          <span class="whitespace-nowrap transition-all duration-300">
             {{ item.label }}
           </span>
         </a>
       }
-      <div class="mt-3 p-4 text-xs border-t border-sidebar-main">
+      <div class="mt-3 p-4 text-xs bg-sidebar-main text-white">
         <p class="overflow-hidden ml-1 whitespace-nowrap">© 2023 Nuvinary</p>
       </div>
     </div>
