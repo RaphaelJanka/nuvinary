@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { SafeHtml } from '@angular/platform-browser';
 import { TERMS_OF_SERVICE_CONTENT } from './terms-of-service.content';
+import { LegalService } from '../../dashboard/services/legal-service';
 
 @Component({
   selector: 'app-terms-of-service',
@@ -15,8 +16,8 @@ import { TERMS_OF_SERVICE_CONTENT } from './terms-of-service.content';
   `,
 })
 export class TermsOfService {
-  private readonly sanitizer = inject(DomSanitizer);
+  private readonly legalService = inject(LegalService);
   protected readonly termsHtml = signal<SafeHtml>(
-    this.sanitizer.bypassSecurityTrustHtml(TERMS_OF_SERVICE_CONTENT),
+    this.legalService.processContent(TERMS_OF_SERVICE_CONTENT),
   );
 }
