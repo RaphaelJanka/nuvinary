@@ -9,7 +9,7 @@ import {
   password,
   verifyCode,
 } from '../../../../../shared/utils/validation-functions';
-import { UserService } from '../../../services/user-service';
+import { UserService } from '../../../../services/user-service';
 
 type CancelActions = 'email' | 'link' | 'password' | 'account';
 

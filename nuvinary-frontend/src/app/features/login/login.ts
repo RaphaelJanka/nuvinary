@@ -5,10 +5,11 @@ import { email, form, FormField, maxLength, minLength, required } from '@angular
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { LoginData } from '../../core/auth/auth.interfaces';
+import { Header } from '../../shared/components/header/header';
 
 @Component({
   selector: 'app-login',
-  imports: [Footer, FormField, RouterLink],
+  imports: [Footer, FormField, RouterLink, Header],
   templateUrl: './login.html',
 })
 export class Login {

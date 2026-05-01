@@ -2,7 +2,7 @@ import { Component, ElementRef, inject, input, viewChildren } from '@angular/cor
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
-import { DragAndDropService } from '../../../features/dashboard/services/drag-and-drop-service';
+import { DragAndDropService } from '../../../features/services/drag-and-drop-service';
 import { DialogService } from '../../services/dialog-service';
 
 @Component({

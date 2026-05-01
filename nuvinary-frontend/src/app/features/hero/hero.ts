@@ -6,7 +6,7 @@ import {
   OnDestroy,
   viewChild,
 } from '@angular/core';
-import { Header } from './header/header';
+import { Header } from '../../shared/components/header/header';
 import * as THREE from 'three';
 import CLOUDS, { VantaEffect } from 'vanta/dist/vanta.clouds.min.js';
 

@@ -73,28 +73,36 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'terms-of-service',
-    title: 'Terms of Service',
-    loadComponent: () =>
-      import('./features/legal/terms-of-service/terms-of-service').then((c) => c.TermsOfService),
-  },
-  {
-    path: 'privacy-policy',
-    title: 'Privacy Policy',
-    loadComponent: () =>
-      import('./features/legal/privacy-policy/privacy-policy').then((c) => c.PrivacyPolicy),
-  },
-  {
-    path: 'legal-notice',
-    title: 'Legal Notice',
-    loadComponent: () =>
-      import('./features/legal/legal-notice/legal-notice').then((c) => c.LegalNotice),
-  },
-  {
-    path: 'contact-support',
-    title: 'Contact Support',
-    loadComponent: () =>
-      import('./features/legal/contact-support/contact-support').then((c) => c.ContactSupport),
+    path: 'legal',
+    loadComponent: () => import('./features/legal/legal').then((c) => c.LegalLayout),
+    children: [
+      {
+        path: 'terms-of-service',
+        title: 'Terms of Service',
+        loadComponent: () =>
+          import('./features/legal/terms-of-service/terms-of-service').then(
+            (c) => c.TermsOfService,
+          ),
+      },
+      {
+        path: 'privacy-policy',
+        title: 'Privacy Policy',
+        loadComponent: () =>
+          import('./features/legal/privacy-policy/privacy-policy').then((c) => c.PrivacyPolicy),
+      },
+      {
+        path: 'legal-notice',
+        title: 'Legal Notice',
+        loadComponent: () =>
+          import('./features/legal/legal-notice/legal-notice').then((c) => c.LegalNotice),
+      },
+      {
+        path: 'contact-support',
+        title: 'Contact Support',
+        loadComponent: () =>
+          import('./features/legal/contact-support/contact-support').then((c) => c.ContactSupport),
+      },
+    ],
   },
   { path: '**', redirectTo: '' },
 ];

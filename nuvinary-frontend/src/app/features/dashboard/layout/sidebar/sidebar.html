@@ -52,7 +52,7 @@
 
   @if (!isCollapsed()) {
     <div class="flex flex-col gap-4 text-xs font-medium text-zinc-500">
-      @for (item of supportMenuItems; track $index) {
+      @for (item of legalItems; track $index) {
         <a
           [routerLink]="item.route"
           class="ps-5 [text-shadow:0.5px_0_0_currentColor] hover:text-text-main transition-all duration-200"

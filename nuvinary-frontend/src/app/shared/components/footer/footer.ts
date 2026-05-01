@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  imports: [RouterLink],
   template: `
     <footer class="shrink-0 px-4 py-6">
       <div
         class="flex flex-wrap justify-center gap-x-8 gap-y-2 font-medium text-[10px] text-text/40 uppercase tracking-widest"
       >
-        <a href="#" class="transition-colors hover:text-brand"> Privacy Policy </a>
-        <a href="#" class="transition-colors hover:text-brand"> Terms of Service </a>
-        <a href="#" class="transition-colors hover:text-brand"> Contact Support </a>
-
+        @for (item of legalItems; track item.label) {
+          <a [routerLink]="item.route" class="transition-colors hover:text-brand">
+            {{ item.label }}
+          </a>
+        }
         <p class="font-bold">© {{ currentYear }} Nuvinary</p>
       </div>
     </footer>
@@ -19,4 +21,11 @@ import { Component } from '@angular/core';
 })
 export class Footer {
   currentYear = new Date().getFullYear();
+
+  protected readonly legalItems = [
+    { label: 'Legal Notice', route: '/legal/legal-notice' },
+    { label: 'Privacy Policy', route: '/legal/privacy-policy' },
+    { label: 'Terms of Service', route: '/legal/terms-of-service' },
+    { label: 'Contact Support', route: '/legal/contact-support' },
+  ];
 }

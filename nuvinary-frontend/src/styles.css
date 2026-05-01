@@ -18,6 +18,10 @@
 
   --spacing-app-max-width: 1920px;
 
+  /* header variables */
+  --color-header-bg: #8c84b4;
+  --color-header-border: #9b94bf;
+
   /* sidebar variables */
   --color-sidebar-main: #9b8fbc;
   --color-sidebar-hover: #bbb2d8;

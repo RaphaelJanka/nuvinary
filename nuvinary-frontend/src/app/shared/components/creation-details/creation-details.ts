@@ -17,7 +17,7 @@ import {
   X,
 } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
-import { CreationService } from '../../../features/dashboard/services/creation-service';
+import { CreationService } from '../../../features/services/creation-service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 

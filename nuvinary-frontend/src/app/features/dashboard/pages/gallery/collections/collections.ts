@@ -1,9 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
 import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
-import { CollectionService } from '../../../services/collection-service';
+import { CollectionService } from '../../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
-import { DragAndDropService } from '../../../services/drag-and-drop-service';
+import { DragAndDropService } from '../../../../services/drag-and-drop-service';
 import { DialogService } from '../../../../../shared/services/dialog-service';
 
 @Component({

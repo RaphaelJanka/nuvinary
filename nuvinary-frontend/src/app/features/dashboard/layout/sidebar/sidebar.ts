@@ -11,7 +11,7 @@ import {
   PencilRuler,
   Sparkles,
 } from 'lucide-angular';
-import { SidebarService } from '../../services/sidebar-service';
+import { SidebarService } from '../../../services/sidebar-service';
 
 import { NgTemplateOutlet } from '@angular/common';
 
@@ -39,10 +39,10 @@ export class Sidebar {
     { label: 'Security & Password', icon: LockOpen, route: '/dashboard/settings/security' },
   ];
 
-  protected readonly supportMenuItems = [
-    { label: 'Legal Notice', route: '/legal-notice' },
-    { label: 'Privacy Policy', route: '/privacy-policy' },
-    { label: 'Terms of Service', route: '/terms-of-service' },
-    { label: 'Contact Support', route: '/contact-support' },
+  protected readonly legalItems = [
+    { label: 'Legal Notice', route: '/legal/legal-notice' },
+    { label: 'Privacy Policy', route: '/legal/privacy-policy' },
+    { label: 'Terms of Service', route: '/legal/terms-of-service' },
+    { label: 'Contact Support', route: '/legal/contact-support' },
   ];
 }

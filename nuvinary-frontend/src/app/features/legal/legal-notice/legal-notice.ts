@@ -1,17 +1,15 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { LegalService } from '../../dashboard/services/legal-service';
+import { LegalService } from '../../services/legal-service';
 import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-legal-notice',
   imports: [],
   template: `
-    <div class="min-h-screen flex justify-center items-center">
-      <article
-        class="prose max-w-4xl rounded-xl p-8 shadow-md bg-white prose-slate prose-a:text-blue-500 prose-h1:text-text-main"
-        [innerHTML]="content()"
-      ></article>
-    </div>
+    <article
+      class="prose max-w-4xl prose-slate prose-a:text-blue-500 prose-h1:text-text-main"
+      [innerHTML]="content()"
+    ></article>
   `,
 })
 export class LegalNotice implements OnInit {

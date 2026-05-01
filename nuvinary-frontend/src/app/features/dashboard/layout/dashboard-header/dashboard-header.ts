@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { SidebarService } from '../../services/sidebar-service';
+import { SidebarService } from '../../../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
 import { UserMenu } from './user-menu/user-menu';
@@ -9,7 +9,7 @@ import { UserInitialPipe } from '../../../../shared/pipes/user-initial.pipe';
 @Component({
   selector: 'app-main-header',
   imports: [LucideAngularModule, UserMenu, UserInitialPipe],
-  templateUrl: './header.html',
+  templateUrl: './dashboard-header.html',
 })
 export class Header {
   private readonly sidebarService = inject(SidebarService);
