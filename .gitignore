@@ -25,3 +25,6 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/launch.json
 !.vscode/tasks.json
+
+# Private Configurations
+**/legal-privacy-data.ts
