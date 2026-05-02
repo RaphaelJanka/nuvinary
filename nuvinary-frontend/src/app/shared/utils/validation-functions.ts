@@ -70,3 +70,21 @@ export function confirmPassword(path: SchemaPath<string>, matchingPath: SchemaPa
     return null;
   });
 }
+
+export function email(path: SchemaPath<string>) {
+  validate(path, ({ value }) => {
+    if (!value()) {
+      return {
+        kind: 'email_empty',
+        message: 'Email is required.',
+      };
+    }
+    if (!EMAIL_PATTERN.test(value())) {
+      return {
+        kind: 'email_pattern',
+        message: 'Please enter a valid email address.',
+      };
+    }
+    return null;
+  });
+}
