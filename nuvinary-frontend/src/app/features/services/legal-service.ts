@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { PRIVATE_CONFIG } from '../../legal/legal-privacy-data';
+import { PRIVATE_CONFIG } from '../legal/legal-privacy-data';
 
 @Injectable({
   providedIn: 'root',

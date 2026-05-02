@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Creation } from '../../../shared/models/creation.model';
+import { Creation } from '../../shared/models/creation.model';
 
 @Injectable({ providedIn: 'root' })
 export class DragAndDropService {

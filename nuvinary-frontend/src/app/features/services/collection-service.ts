@@ -1,8 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { mockCollections } from '../../../test/testdata/collections';
-import { Collection } from '../pages/models/collection.model';
-import { Creation } from '../../../shared/models/creation.model';
-import { NotificationService } from '../../../shared/services/notification-service';
+import { mockCollections } from '../../test/testdata/collections';
+import { Collection } from '../dashboard/pages/models/collection.model';
+import { Creation } from '../../shared/models/creation.model';
+import { NotificationService } from '../../shared/services/notification-service';
 
 @Injectable({
   providedIn: 'root',

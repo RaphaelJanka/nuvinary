@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { AuthService } from '../../../core/auth/auth.service';
-import { Creation } from '../../../shared/models/creation.model';
-import { mockCreationList } from '../../../test/testdata/creations';
-import { NotificationService } from '../../../shared/services/notification-service';
+import { AuthService } from '../../core/auth/auth.service';
+import { Creation } from '../../shared/models/creation.model';
+import { mockCreationList } from '../../test/testdata/creations';
+import { NotificationService } from '../../shared/services/notification-service';
 
 export interface CreationModel {
   prompt: string;

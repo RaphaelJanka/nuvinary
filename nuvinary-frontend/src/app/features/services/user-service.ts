@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { AuthService } from '../../../core/auth/auth.service';
-import { NotificationService } from '../../../shared/services/notification-service';
+import { AuthService } from '../../core/auth/auth.service';
+import { NotificationService } from '../../shared/services/notification-service';
 
 export interface UserCredentialModel {
   firstName: string;
