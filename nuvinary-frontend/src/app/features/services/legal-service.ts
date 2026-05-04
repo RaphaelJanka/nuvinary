@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PRIVATE_CONFIG } from '../legal/legal-privacy-data';
-import { ContactSupportData } from '../legal/contact-support/contact-support-data.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,9 +29,5 @@ export class LegalService {
     });
 
     return this.sanitizer.bypassSecurityTrustHtml(processed);
-  }
-
-  sendContactMessage(data: ContactSupportData): void {
-    console.log('Kontaktanfrage gesendet:', data);
   }
 }

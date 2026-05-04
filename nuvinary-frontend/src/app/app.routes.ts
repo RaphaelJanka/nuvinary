@@ -96,12 +96,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/legal/legal-notice/legal-notice').then((c) => c.LegalNotice),
       },
-      {
-        path: 'contact-support',
-        title: 'Contact Support',
-        loadComponent: () =>
-          import('./features/legal/contact-support/contact-support').then((c) => c.ContactSupport),
-      },
     ],
   },
   { path: '**', redirectTo: '' },

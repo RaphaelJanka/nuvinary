@@ -43,6 +43,5 @@ export class Sidebar {
     { label: 'Legal Notice', route: '/legal/legal-notice' },
     { label: 'Privacy Policy', route: '/legal/privacy-policy' },
     { label: 'Terms of Service', route: '/legal/terms-of-service' },
-    { label: 'Contact Support', route: '/legal/contact-support' },
   ];
 }

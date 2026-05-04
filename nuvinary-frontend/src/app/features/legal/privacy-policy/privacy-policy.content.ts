@@ -388,28 +388,6 @@ export const PRIVACY_HTML_CONTENT = `
   of its website – for this purpose, the server log files must be recorded.
 </p>
 
-<h3>Contact Form</h3>
-<p>
-  If you send us inquiries via the contact form, your details from the inquiry form, 
-  including the contact data you provided there, will be stored by us for the purpose 
-  of processing the inquiry and in case of follow-up questions. We do not pass on 
-  this data without your consent.
-</p>
-<p>
-  The processing of this data is based on Art. 6 (1)(b) GDPR if your request is related 
-  to the fulfillment of a contract or is necessary for the implementation of 
-  pre-contractual measures. In all other cases, the processing is based on our 
-  legitimate interest in the effective processing of the inquiries addressed to us 
-  (Art. 6 (1)(f) GDPR) or on your consent (Art. 6 (1)(a) GDPR) if this was requested; 
-  the consent can be revoked at any time.
-</p>
-<p>
-  The data you enter in the contact form will remain with us until you request us 
-  to delete it, revoke your consent to storage, or the purpose for data storage 
-  no longer applies (e.g., after your request has been processed). Mandatory 
-  legal provisions – in particular retention periods – remain unaffected.
-</p>
-
 <h3>Inquiry by Email or Telephone</h3>
 <p>
   If you contact us by email or telephone, your inquiry including all 
