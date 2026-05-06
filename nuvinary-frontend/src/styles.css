@@ -14,7 +14,12 @@
   --color-sheet-bg: #f2eef5;
   --color-text: #1e1b4b;
 
+  /* form variables */
+  --color-form-success: #24dc13a3;
+  --color-form-focus: #6366f166;
+
   --color-text-main: #7c6db2;
+  --color-text-main-hover: #665992;
 
   --spacing-app-max-width: 1920px;
 

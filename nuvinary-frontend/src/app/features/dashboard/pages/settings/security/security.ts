@@ -4,10 +4,10 @@ import { PageLayout } from '../../../../../shared/components/page-layout/page-la
 import { FormsModule } from '@angular/forms';
 import { form, FormField, maxLength } from '@angular/forms/signals';
 import {
-  confirmPassword,
+  verifyConfirmPassword,
   EMAIL_PATTERN,
-  password,
   verifyCode,
+  verifyPassword,
 } from '../../../../../shared/utils/validation-functions';
 import { UserService } from '../../../../services/user-service';
 
@@ -42,9 +42,9 @@ export class Security {
   protected readonly passwordForm = form(this.passwordModel, (schema) => {
     verifyCode(schema.code);
     maxLength(schema.code, 6);
-    password(schema.password);
+    verifyPassword(schema.password);
     maxLength(schema.password, 20);
-    confirmPassword(schema.confirmPassword, schema.password);
+    verifyConfirmPassword(schema.confirmPassword, schema.password);
   });
 
   protected readonly formFields = [

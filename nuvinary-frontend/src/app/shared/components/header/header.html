@@ -6,7 +6,7 @@
   "
   class="flex items-center justify-between w-full max-w-app-max-width h-16 m-auto px-4 lg:px-8 border-b shadow-lg"
 >
-  <div class="flex items-center gap-2 cursor-pointer" routerLink="/">
+  <div class="flex items-center gap-2 cursor-pointer" [routerLink]="['/']">
     <div
       class="w-8 h-8 rounded-lg bg-linear-to-tr from-orange-500 to-yellow-400 shadow-inner"
     ></div>
@@ -15,13 +15,13 @@
   @if (isLandingPage()) {
     <div class="flex gap-4">
       <button
-        routerLink="/login"
+        [routerLink]="['/login']"
         class="px-6 py-3 rounded-xl border border-white/30 bg-white/5 font-bold text-sm text-white backdrop-blur-sm transition-all duration-75 ease-linear hover:scale-110 hover:border-brand-light hover:bg-brand-light hover:shadow-brand-light/50 hover:duration-[50] active:duration-0"
       >
         Sign in
       </button>
       <button
-        routerLink="/login"
+        [routerLink]="['/signup']"
         class="px-6 py-3 rounded-xl bg-brand font-bold text-sm text-white shadow-lg tracking-tighter transition-all duration-75 ease-linear hover:scale-110 hover:bg-brand-light hover:shadow-brand-light/50 hover:duration-[50] active:scale-95 active:duration-0"
       >
         Sign up

@@ -1,0 +1,90 @@
+<section class="flex flex-col min-h-screen">
+  <app-header></app-header>
+
+  <main class="flex flex-1 flex-col items-center justify-center p-10">
+    <div class="w-full max-w-xl p-8 rounded-4xl border border-zinc-200 bg-white shadow-2xl">
+      <h2 class="mb-6 font-black text-3xl text-center text-text-main tracking-tight">
+        Join the Community
+      </h2>
+      <p class="mb-8 text-center text-sm text-zinc-600">
+        Create your account and start your journey with us today.
+      </p>
+
+      <form (submit)="onSubmit($event)" class="flex flex-col gap-4">
+        <div class="grid grid-cols-2 gap-6">
+          <app-form-input
+            [field]="signUpForm.firstName"
+            label="First Name"
+            placeholder="Enter your first name"
+            type="text"
+          ></app-form-input>
+
+          <app-form-input
+            [field]="signUpForm.lastName"
+            label="Last Name"
+            placeholder="Enter your last name"
+            type="text"
+          ></app-form-input>
+        </div>
+
+        <app-form-input
+          [field]="signUpForm.email"
+          label="Email"
+          placeholder="Enter your email address"
+          type="email"
+        ></app-form-input>
+
+        <app-form-input
+          [field]="signUpForm.code"
+          label="Code"
+          placeholder="Enter 6-digit code"
+          type="text"
+        >
+          <button
+            type="button"
+            [disabled]="!canResend()"
+            (click)="onSendCode()"
+            class="px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-text-main-hover active:scale-95 shadow-lg"
+          >
+            {{ resendButtonLabel() }}
+          </button>
+        </app-form-input>
+
+        <app-form-input
+          [field]="signUpForm.password"
+          label="Password"
+          placeholder="Enter your password"
+          type="password"
+        ></app-form-input>
+
+        <app-form-input
+          [field]="signUpForm.confirmPassword"
+          label="Confirm Password"
+          placeholder="Confirm your password"
+          type="password"
+        ></app-form-input>
+
+        <div class="flex flex-col gap-3">
+          <button
+            type="submit"
+            [disabled]="signUpForm().invalid()"
+            class="mt-4 py-3 rounded-xl font-bold transition-all shadow-lg enabled:bg-brand enabled:text-white enabled:shadow-brand/20 enabled:hover:bg-brand-light enabled:active:scale-95 disabled:bg-gray-300 disabled:text-white disabled:shadow-none"
+          >
+            Sign In
+          </button>
+        </div>
+      </form>
+
+      <div class="mt-8 text-center">
+        <p class="text-sm text-text">
+          Back to
+          <a routerLink="login" class="font-bold text-brand hover:text-brand-light"> Sign In </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="flex-1"></div>
+  </main>
+
+  <app-footer></app-footer>
+</section>

@@ -1,16 +1,33 @@
-export interface LoginData {
+export interface BaseUser {
   email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface LoginData extends Pick<BaseUser, 'email'> {
   password: string;
 }
 
-export interface User {
+export interface UserRegistrationForm extends BaseUser {
+  password: string;
+  confirmPassword: string;
+  code: string;
+}
+
+export interface SignUpRequestDTO extends Omit<UserRegistrationForm, 'confirmPassword'> {
+  avatarColor: string;
+  displayName: string;
+}
+
+export interface User extends BaseUser {
   uid: string;
   email: string;
-  password: string;
   firstName: string;
   lastName: string;
   credits: number;
   createdAt: string;
-  displayName?: string;
+  displayName: string;
   avatarColor: string;
+  // Remove after AWS Cognito integration
+  password?: string;
 }

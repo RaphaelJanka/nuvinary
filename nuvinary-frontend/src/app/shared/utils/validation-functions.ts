@@ -5,6 +5,24 @@ const CODE_PATTERN = /^\d{6}$/;
 export const PASSWORD_PATTERN =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{8,}$/;
 
+export function verifyName(path: SchemaPath<string>, label: string) {
+  validate(path, ({ value }) => {
+    if (!value()) {
+      return {
+        kind: 'name_empty',
+        message: `${label} is required.`,
+      };
+    }
+    if (value().length < 3) {
+      return {
+        kind: 'name_too_short',
+        message: `${label} is too short.`,
+      };
+    }
+    return null;
+  });
+}
+
 export function verifyCode(path: SchemaPath<string>) {
   validate(path, ({ value }) => {
     if (!value()) {
@@ -23,7 +41,7 @@ export function verifyCode(path: SchemaPath<string>) {
   });
 }
 
-export function password(path: SchemaPath<string>) {
+export function verifyPassword(path: SchemaPath<string>) {
   validate(path, ({ value }) => {
     if (!value()) {
       return {
@@ -49,7 +67,7 @@ export function password(path: SchemaPath<string>) {
   });
 }
 
-export function confirmPassword(path: SchemaPath<string>, matchingPath: SchemaPath<string>) {
+export function verifyConfirmPassword(path: SchemaPath<string>, matchingPath: SchemaPath<string>) {
   validate(path, ({ value, valueOf }) => {
     const confirmPassword = value();
     const password = valueOf(matchingPath);
@@ -71,7 +89,7 @@ export function confirmPassword(path: SchemaPath<string>, matchingPath: SchemaPa
   });
 }
 
-export function email(path: SchemaPath<string>) {
+export function verifyEmail(path: SchemaPath<string>) {
   validate(path, ({ value }) => {
     if (!value()) {
       return {

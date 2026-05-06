@@ -1,12 +1,14 @@
-import { effect, Injectable, signal } from '@angular/core';
-import { LoginData, User } from './auth.interfaces';
+import { effect, inject, Injectable, signal } from '@angular/core';
+import { LoginData, SignUpRequestDTO, User, UserRegistrationForm } from './auth.interfaces';
 import { testUser } from '../../test/testdata/user';
+import { NotificationService } from '../../shared/services/notification-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   readonly STORAGE_KEY = 'nuvinary_user';
+  private readonly notificationService = inject(NotificationService);
 
   private readonly _authUserSignal = signal<User | null>(this.getUserFromLocalStorage());
   authUser = this._authUserSignal.asReadonly();
@@ -63,5 +65,17 @@ export class AuthService {
 
   logOut() {
     this._authUserSignal.set(null);
+  }
+
+  signUp(userData: UserRegistrationForm) {
+    const color = this.avatarColors[Math.floor(Math.random() * this.avatarColors.length)];
+    const newUser: SignUpRequestDTO = {
+      ...userData,
+      avatarColor: color,
+      displayName: `${userData.firstName} ${userData.lastName}`,
+    };
+    console.log('User created:', newUser);
+
+    this.notificationService.show('Sign-up successful!', 'success');
   }
 }
