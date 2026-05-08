@@ -13,10 +13,11 @@ import {
 } from '../../shared/utils/validation-functions';
 import { AuthService } from '../../core/auth/auth.service';
 import { FormInput } from '../../shared/components/form-input/form-input';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [Footer, Header, FormInput],
+  imports: [Footer, Header, FormInput, RouterLink],
   templateUrl: './sign-up.html',
 })
 export class SignUp {

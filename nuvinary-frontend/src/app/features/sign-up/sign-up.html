@@ -70,15 +70,17 @@
             [disabled]="signUpForm().invalid()"
             class="mt-4 py-3 rounded-xl font-bold transition-all shadow-lg enabled:bg-brand enabled:text-white enabled:shadow-brand/20 enabled:hover:bg-brand-light enabled:active:scale-95 disabled:bg-gray-300 disabled:text-white disabled:shadow-none"
           >
-            Sign In
+            Sign Up
           </button>
         </div>
       </form>
 
       <div class="mt-8 text-center">
         <p class="text-sm text-text">
-          Back to
-          <a routerLink="login" class="font-bold text-brand hover:text-brand-light"> Sign In </a>
+          Already have an account?
+          <a [routerLink]="['/signin']" class="font-bold text-brand hover:text-brand-light">
+            Sign In
+          </a>
         </p>
       </div>
     </div>

@@ -9,14 +9,20 @@ export const routes: Routes = [
     component: Hero,
   },
   {
-    path: 'login',
-    title: 'Login',
-    loadComponent: () => import('./features/login/login').then((c) => c.Login),
+    path: 'signin',
+    title: 'Sign In',
+    loadComponent: () => import('./features/sign-in/sign-in').then((c) => c.SignIn),
   },
   {
     path: 'signup',
     title: 'Sign Up',
     loadComponent: () => import('./features/sign-up/sign-up').then((c) => c.SignUp),
+  },
+  {
+    path: 'reset-password',
+    title: 'Reset Password',
+    loadComponent: () =>
+      import('./features/reset-password/reset-password').then((c) => c.ResetPassword),
   },
   {
     path: 'dashboard',

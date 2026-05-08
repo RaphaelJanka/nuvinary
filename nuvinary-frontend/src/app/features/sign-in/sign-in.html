@@ -1,0 +1,53 @@
+<section class="flex flex-col justify-between min-h-screen">
+  <app-header></app-header>
+  <main
+    class="mx-auto mb-50 w-full bg-white max-w-xl p-8 rounded-4xl border border-zinc-200 bg-card-bg shadow-2xl"
+  >
+    <h2 class="mb-6 font-black text-3xl text-center text-text-main tracking-tight">Welcome Back</h2>
+    <p class="mb-8 text-center text-sm text-zinc-600">
+      We're glad to see you again. Enter your credentials to get back into the action.
+    </p>
+
+    <form (submit)="onSubmit($event)" class="flex flex-col gap-4">
+      <app-form-input
+        [field]="loginForm.email"
+        label="Email"
+        placeholder="Enter your email address"
+        type="email"
+      ></app-form-input>
+      <app-form-input
+        [field]="loginForm.password"
+        label="Password"
+        placeholder="Enter your password"
+        type="password"
+      ></app-form-input>
+
+      <a
+        class="flex text-[11px] justify-end -mt-2 me-4 font-semibold text-zinc-600 hover:text-brand transition-colors"
+        [routerLink]="['/reset-password']"
+      >
+        Forgot Password?
+      </a>
+
+      <div class="flex">
+        <button
+          type="submit"
+          [disabled]="loginForm().invalid()"
+          class="flex-1 mt-4 py-3 rounded-xl font-bold transition-all shadow-lg enabled:bg-brand enabled:text-white enabled:shadow-brand/20 enabled:hover:bg-brand-light enabled:active:scale-95 disabled:bg-gray-300 disabled:text-white disabled:shadow-none"
+        >
+          Sign In
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-8 text-center">
+      <p class="text-sm text-text">
+        New to Nuvinary?
+        <a [routerLink]="['/signup']" class="ml-1 font-bold text-brand hover:text-brand-light">
+          Create Account
+        </a>
+      </p>
+    </div>
+  </main>
+  <app-footer></app-footer>
+</section>

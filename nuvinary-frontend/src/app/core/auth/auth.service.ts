@@ -78,4 +78,9 @@ export class AuthService {
 
     this.notificationService.show('Sign-up successful!', 'success');
   }
+
+  resetPassword(email: string) {
+    console.log('Password reset requested for email:', email);
+    this.notificationService.show('Password reset link sent to your email!', 'success');
+  }
 }

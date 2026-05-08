@@ -1,37 +1,32 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Footer } from '../../shared/components/footer/footer';
-import { email, form, FormField, maxLength, minLength, required } from '@angular/forms/signals';
-
+import { form, maxLength } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { LoginData } from '../../core/auth/auth.interfaces';
 import { Header } from '../../shared/components/header/header';
+import { FormInput } from '../../shared/components/form-input/form-input';
+import { verifyEmail, verifyPassword } from '../../shared/utils/validation-functions';
 
 @Component({
-  selector: 'app-login',
-  imports: [Footer, FormField, RouterLink, Header],
-  templateUrl: './login.html',
+  selector: 'app-sign-in',
+  imports: [Footer, RouterLink, Header, FormInput],
+  templateUrl: './sign-in.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Login {
+export class SignIn {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  protected readonly authError = this.authService.authError;
   private readonly loginModel = signal<LoginData>({
     email: '',
     password: '',
   });
 
   protected readonly loginForm = form(this.loginModel, (loginSchema) => {
-    required(loginSchema.email, { message: 'E-mail is required' });
-    required(loginSchema.password, { message: 'Password is required' });
-    email(loginSchema.email, { message: 'Please enter a valid e-mail address' });
-    minLength(loginSchema.password, 12, {
-      message: 'Password must be at least 12 characters long',
-    });
-    maxLength(loginSchema.password, 128, {
-      message: 'Password must be at most 128 characters long',
-    });
-    maxLength(loginSchema.email, 128, { message: 'E-mail must be at most 128 characters long' });
+    verifyEmail(loginSchema.email);
+    verifyPassword(loginSchema.password);
+    maxLength(loginSchema.password, 20);
+    maxLength(loginSchema.email, 40);
   });
 
   protected onSubmit(event: Event) {
