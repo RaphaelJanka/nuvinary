@@ -1,16 +1,16 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormInput } from '../../shared/components/form-input/form-input';
-import { Header } from '../../shared/components/header/header';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormInput } from '../../../shared/components/form-input/form-input';
 import { Router, RouterLink } from '@angular/router';
-import { Footer } from '../../shared/components/footer/footer';
-import { AuthService } from '../../core/auth/auth.service';
+import { AuthService } from '../../../core/auth/auth.service';
 import { form, maxLength } from '@angular/forms/signals';
-import { verifyCode, verifyPassword } from '../../shared/utils/validation-functions';
+import { verifyCode, verifyPassword } from '../../../shared/utils/validation-functions';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [Footer, RouterLink, Header, FormInput],
+  imports: [RouterLink, FormInput, NgClass],
   templateUrl: './reset-password.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPassword {
   private readonly authService = inject(AuthService);

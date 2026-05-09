@@ -1,16 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Footer } from '../../shared/components/footer/footer';
 import { form, maxLength } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../core/auth/auth.service';
-import { LoginData } from '../../core/auth/auth.interfaces';
-import { Header } from '../../shared/components/header/header';
-import { FormInput } from '../../shared/components/form-input/form-input';
-import { verifyEmail, verifyPassword } from '../../shared/utils/validation-functions';
+import { AuthService } from '../../../core/auth/auth.service';
+import { LoginData } from '../../../core/auth/auth.interfaces';
+import { FormInput } from '../../../shared/components/form-input/form-input';
+import { verifyEmail, verifyPassword } from '../../../shared/utils/validation-functions';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [Footer, RouterLink, Header, FormInput],
+  imports: [RouterLink, FormInput, NgClass],
   templateUrl: './sign-in.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

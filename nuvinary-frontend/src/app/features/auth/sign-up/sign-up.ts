@@ -1,24 +1,23 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { Footer } from '../../shared/components/footer/footer';
-import { Header } from '../../shared/components/header/header';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { form, maxLength } from '@angular/forms/signals';
-import { UserRegistrationForm } from '../../core/auth/auth.interfaces';
-
+import { UserRegistrationForm } from '../../../core/auth/auth.interfaces';
 import {
   verifyCode,
   verifyConfirmPassword,
   verifyEmail,
   verifyName,
   verifyPassword,
-} from '../../shared/utils/validation-functions';
-import { AuthService } from '../../core/auth/auth.service';
-import { FormInput } from '../../shared/components/form-input/form-input';
+} from '../../../shared/utils/validation-functions';
+import { AuthService } from '../../../core/auth/auth.service';
+import { FormInput } from '../../../shared/components/form-input/form-input';
 import { RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [Footer, Header, FormInput, RouterLink],
+  imports: [FormInput, RouterLink, NgClass],
   templateUrl: './sign-up.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUp {
   private readonly authService = inject(AuthService);

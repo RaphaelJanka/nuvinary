@@ -9,20 +9,26 @@ export const routes: Routes = [
     component: Hero,
   },
   {
-    path: 'signin',
-    title: 'Sign In',
-    loadComponent: () => import('./features/sign-in/sign-in').then((c) => c.SignIn),
-  },
-  {
-    path: 'signup',
-    title: 'Sign Up',
-    loadComponent: () => import('./features/sign-up/sign-up').then((c) => c.SignUp),
-  },
-  {
-    path: 'reset-password',
-    title: 'Reset Password',
-    loadComponent: () =>
-      import('./features/reset-password/reset-password').then((c) => c.ResetPassword),
+    path: 'auth',
+    loadComponent: () => import('./features/auth/auth').then((c) => c.Auth),
+    children: [
+      {
+        path: 'signin',
+        title: 'Sign In',
+        loadComponent: () => import('./features/auth/sign-in/sign-in').then((c) => c.SignIn),
+      },
+      {
+        path: 'signup',
+        title: 'Sign Up',
+        loadComponent: () => import('./features/auth/sign-up/sign-up').then((c) => c.SignUp),
+      },
+      {
+        path: 'reset-password',
+        title: 'Reset Password',
+        loadComponent: () =>
+          import('./features/auth/reset-password/reset-password').then((c) => c.ResetPassword),
+      },
+    ],
   },
   {
     path: 'dashboard',
