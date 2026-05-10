@@ -1,22 +1,24 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../../shared/components/page-layout/page-layout';
 import { FormsModule } from '@angular/forms';
-import { form, FormField, maxLength } from '@angular/forms/signals';
+import { FieldTree, form, maxLength } from '@angular/forms/signals';
 import {
   verifyConfirmPassword,
-  EMAIL_PATTERN,
   verifyCode,
   verifyPassword,
+  verifyEmail,
+  verifyAccountDeletion,
 } from '../../../../../shared/utils/validation-functions';
 import { UserService } from '../../../../services/user-service';
 import { Button } from '../../../../../shared/components/button/button';
+import { FormInput } from '../../../../../shared/components/form-input/form-input';
 
 type CancelActions = 'email' | 'link' | 'password' | 'account';
 
 @Component({
   selector: 'app-security',
-  imports: [PageLayout, FormsModule, FormField, Button],
+  imports: [PageLayout, FormsModule, Button, FormInput],
   templateUrl: './security.html',
 })
 export class Security {
@@ -25,11 +27,12 @@ export class Security {
   private readonly userService = inject(UserService);
 
   protected readonly isChangingMailAddress = signal(false);
-  protected readonly updatedEmail = signal('');
-  protected readonly isValidEmail = computed(() => {
-    const email = this.updatedEmail().trim();
-    const emailRegex = EMAIL_PATTERN;
-    return emailRegex.test(email);
+  private readonly emailModel = signal({
+    email: '',
+  });
+  protected emailUpdateForm = form(this.emailModel, (schema) => {
+    verifyEmail(schema.email);
+    maxLength(schema.email, 40);
   });
 
   protected readonly isSendingLink = signal(false);
@@ -48,48 +51,28 @@ export class Security {
     verifyConfirmPassword(schema.confirmPassword, schema.password);
   });
 
-  protected readonly formFields = [
-    {
-      id: 'code',
-      label: 'Verification Code',
-      type: 'text',
-      formField: this.passwordForm.code,
-      placeholder: 'Enter 6-digit code',
-    },
-    {
-      id: 'password',
-      label: 'Password',
-      type: 'password',
-      formField: this.passwordForm.password,
-      placeholder: 'Enter your new password',
-    },
-    {
-      id: 'confirmPassword',
-      label: 'Confirm Password',
-      type: 'password',
-      formField: this.passwordForm.confirmPassword,
-      placeholder: 'Confirm your new password',
-    },
-  ];
-
   private resendTimer = signal(0);
-
   protected readonly resendButtonLabel = computed(() => {
     if (this.resendTimer() > 0) return `Resend in ${this.resendTimer()}s`;
     return 'Resend Code';
   });
-
   protected readonly canResend = computed(() => this.resendTimer() === 0);
 
   protected readonly isDeleting = signal(false);
-  protected readonly confirmText = signal('');
-  protected readonly DELETE_PHRASE = 'Delete my account';
+  private readonly accountDeletionModel = signal({
+    phrase: '',
+  });
 
-  protected canDelete = computed(() => this.confirmText().trim() === this.DELETE_PHRASE);
+  protected accountDeletionForm = form(this.accountDeletionModel, (schema) => {
+    verifyAccountDeletion(schema.phrase);
+    maxLength(schema.phrase, 40);
+  });
 
-  protected onUpdateMail() {
-    console.log('Update Mail');
-    this.userService.updateEmail(this.updatedEmail());
+  protected onUpdateMail(event: Event) {
+    event.preventDefault();
+    if (this.emailUpdateForm().valid()) {
+      this.userService.updateEmail(this.emailModel().email);
+    }
   }
 
   protected onResetPassword() {
@@ -105,7 +88,7 @@ export class Security {
     }, 1000);
   }
 
-  protected onSubmit(event: Event) {
+  protected onChangePassword(event: Event) {
     event.preventDefault();
     if (this.passwordForm().valid()) {
       const updatedPassword = this.passwordModel().password;
@@ -114,38 +97,43 @@ export class Security {
     }
   }
 
-  protected onDeleteAccount() {
-    if (this.canDelete()) {
-      console.log('Deleting Account');
+  protected onDeleteAccount(event: Event) {
+    event.preventDefault();
+    if (this.accountDeletionForm().valid()) {
       this.userService.deleteAccount();
     }
   }
 
-  private resetForm() {
-    this.passwordForm().reset();
-    this.passwordModel.set({
-      code: '',
-      password: '',
-      confirmPassword: '',
-    });
+  private resetForm<T>(
+    form: FieldTree<T, string | number>,
+    model: WritableSignal<T>,
+    initialState: T,
+  ) {
+    form().reset();
+    model.set(initialState);
   }
 
   protected onCancel(actionType: CancelActions) {
     switch (actionType) {
       case 'email':
         this.isChangingMailAddress.set(false);
+        this.resetForm(this.emailUpdateForm, this.emailModel, { email: '' });
         break;
       case 'link':
         this.isSendingLink.set(false);
         if (this.isChangingPassword()) {
           this.isChangingPassword.set(false);
           this.resendTimer.set(0);
-          this.resetForm();
+          this.resetForm(this.passwordForm, this.passwordModel, {
+            code: '',
+            password: '',
+            confirmPassword: '',
+          });
         }
         break;
       case 'account':
         this.isDeleting.set(false);
-        this.confirmText.set('');
+        this.resetForm(this.accountDeletionForm, this.accountDeletionModel, { phrase: '' });
         break;
 
       default:

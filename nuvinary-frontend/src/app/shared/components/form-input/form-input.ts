@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { FieldState, FormField } from '@angular/forms/signals';
+import { INPUT_CONFIGS, InputTypes } from './form-input.model';
 
 let nextUniqueId = 0;
 
@@ -10,23 +11,29 @@ let nextUniqueId = 0;
     <div class="flex flex-col gap-2">
       <label
         [attr.for]="controlId"
-        class="ml-1 text-[10px] font-bold text-brand uppercase tracking-widest"
-        >{{ label() }}</label
+        [class.sr-only]="shouldHideLabel()"
+        [class.text-zinc-500]="purpose() === 'collection'"
+        class="ml-1 font-bold text-brand  text-[10px] uppercase tracking-[0.15em]"
+        >{{ displayLabel() }}</label
       >
 
-      <div class="grid grid-cols-[1fr_auto] items-center gap-4">
+      <div class="grid grid-cols-[1fr_auto] items-center" [class.gap-4]="hasContent()">
         <input
           [id]="controlId"
-          [type]="type()"
-          [placeholder]="placeholder()"
+          [type]="displayType()"
+          [placeholder]="displayPlaceholder()"
           [formField]="field()"
-          [class.ring-2]="state().valid()"
-          [class.ring-form-success]="state().valid()"
-          class="bg-page-bg/30 rounded-xl px-4 py-3 placeholder:text-sm focus:border-brand/40 focus:ring-2 focus:ring-form-focus transition-all"
+          [class.ring-2]="purpose() === 'collection'"
+          [class.bg-white]="purpose() === 'collection'"
+          [class.ring-zinc-200]="purpose() === 'collection'"
+          [class.ring-form-success]="isSuccessState()"
+          class=" rounded-xl bg-page-bg/30 px-4 py-3 placeholder:text-sm focus:border-brand/40 focus:ring-2 focus:ring-form-focus transition-all"
         />
-        <div class="col-start-2">
-          <ng-content></ng-content>
-        </div>
+        @if (hasContent()) {
+          <div class="col-start-2">
+            <ng-content></ng-content>
+          </div>
+        }
       </div>
       <div class="min-h-5 ps-1">
         @if (state().touched() && state().invalid()) {
@@ -42,10 +49,19 @@ let nextUniqueId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormInput {
-  field = input.required<() => FieldState<string>>();
-  state = computed(() => this.field()());
-  label = input.required<string>();
-  placeholder = input.required<string>();
-  type = input.required<string>();
-  readonly controlId = `form-input-${nextUniqueId++}`;
+  protected readonly controlId = `form-input-${nextUniqueId++}`;
+  readonly field = input.required<() => FieldState<string>>();
+  readonly state = computed(() => this.field()());
+  protected readonly isSuccessState = computed(() => this.state().valid() && this.state().dirty());
+
+  readonly purpose = input.required<InputTypes>();
+  protected readonly config = computed(() => {
+    const t = this.purpose();
+    return t ? INPUT_CONFIGS[t] : null;
+  });
+  protected readonly displayLabel = computed(() => this.config()?.label);
+  protected readonly displayPlaceholder = computed(() => this.config()?.placeholder);
+  protected readonly displayType = computed(() => this.config()?.type);
+  protected readonly shouldHideLabel = computed(() => this.config()?.hideLabelVisually);
+  protected readonly hasContent = computed(() => this.config()?.content);
 }

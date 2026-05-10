@@ -5,10 +5,12 @@ import { Collection } from '../../models/collection.model';
 import { form, FormField, maxLength, required, submit } from '@angular/forms/signals';
 import { DragAndDropService } from '../../../../services/drag-and-drop-service';
 import { DialogService } from '../../../../../shared/services/dialog-service';
+import { FormInput } from '../../../../../shared/components/form-input/form-input';
+import { Button } from '../../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-collections',
-  imports: [LucideAngularModule, FormField],
+  imports: [LucideAngularModule, FormField, FormInput, Button],
   templateUrl: './collections.html',
 })
 export class Collections {
@@ -33,9 +35,9 @@ export class Collections {
     this.collectionService.getDefaultCollection(),
   );
 
-  protected readonly collectionForm = form(this.collectionModel, (fieldPath) => {
-    required(fieldPath.title, { message: 'Title is required' });
-    maxLength(fieldPath.title, 20);
+  protected readonly collectionForm = form(this.collectionModel, (schema) => {
+    required(schema.title, { message: 'Title is required' });
+    maxLength(schema.title, 20);
   });
 
   protected readonly dragOverId = this.dragService.dragOverId;

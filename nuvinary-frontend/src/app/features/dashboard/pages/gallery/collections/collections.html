@@ -168,47 +168,22 @@
       }
     </section>
   } @else {
-    <section class="animate-in zoom-in-95 fade-in duration-200">
-      <h4 class="mb-4 px-1 font-black text-[10px] text-zinc-400 uppercase tracking-[0.15em]">
-        New Collection
-      </h4>
+    <section class="">
+      <form
+        (submit)="onSubmit($event)"
+        class="flex flex-col gap-4 pt-4 animate-in zoom-in-95 fade-in duration-200"
+      >
+        <app-form-input [field]="collectionForm.title" purpose="collection"> </app-form-input>
 
-      <form (submit)="onSubmit($event)" class="space-y-4">
-        <div class="relative group">
-          <input
-            type="text"
-            placeholder="Collection Name..."
-            [formField]="collectionForm.title"
-            class="w-full px-4 py-3 font-semibold text-sm text-zinc-700 rounded-2xl border border-zinc-200 bg-white outline-none placeholder:font-normal placeholder:text-zinc-400 focus:border-text-main focus:ring-2 focus:ring-text-main/20 transition-all"
-          />
-
-          @if (
-            collectionForm.title().touched() &&
-            collectionForm.title().invalid() &&
-            collectionForm.title().dirty()
-          ) {
-            <div class="mt-2 px-1">
-              @for (error of collectionForm.title().errors(); track error.message) {
-                <p
-                  class="flex items-center gap-1 font-bold text-[10px] text-red-500 uppercase tracking-wide"
-                >
-                  <span class="w-1 h-1 rounded-full bg-red-500"></span>
-                  {{ error.message }}
-                </p>
-              }
-            </div>
-          }
-        </div>
-
-        <div class="flex flex-col gap-2 pt-2">
-          <button
-            type="submit"
+        <div class="flex flex-col gap-2">
+          <app-button
+            label="Create Collection"
+            [icon]="icons.plusIcon"
             [disabled]="collectionForm().invalid()"
-            class="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-bold text-xs text-white uppercase tracking-widest bg-text-main shadow-lg shadow-text-main/20 cursor-pointer transition-all hover:bg-[#6a5ca1] active:scale-[0.98] disabled:bg-zinc-200 disabled:text-zinc-400"
-          >
-            <lucide-icon [img]="icons.plusIcon" class="w-4 h-4"></lucide-icon>
-            Create Collection
-          </button>
+            iconPosition="left"
+            variant="secondary"
+            type="submit"
+          ></app-button>
 
           <button
             type="button"

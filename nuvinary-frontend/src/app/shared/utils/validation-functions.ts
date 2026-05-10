@@ -1,9 +1,9 @@
 import { SchemaPath, validate } from '@angular/forms/signals';
 
-export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CODE_PATTERN = /^\d{6}$/;
-export const PASSWORD_PATTERN =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{8,}$/;
+const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{8,}$/;
+export const DELETE_PHRASE = 'Delete my account';
 
 export function verifyName(path: SchemaPath<string>, label: string) {
   validate(path, ({ value }) => {
@@ -101,6 +101,24 @@ export function verifyEmail(path: SchemaPath<string>) {
       return {
         kind: 'email_pattern',
         message: 'Please enter a valid email address.',
+      };
+    }
+    return null;
+  });
+}
+
+export function verifyAccountDeletion(path: SchemaPath<string>) {
+  validate(path, ({ value }) => {
+    if (!value()) {
+      return {
+        kind: 'delete_phrase_empty',
+        message: `Phrase "${DELETE_PHRASE}" is required`,
+      };
+    }
+    if (DELETE_PHRASE !== value()) {
+      return {
+        kind: 'delete_pattern',
+        message: 'Phrase does not match!',
       };
     }
     return null;

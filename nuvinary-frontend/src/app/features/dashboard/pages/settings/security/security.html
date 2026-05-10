@@ -35,20 +35,16 @@
                 You'll need to verify it in the next step.
               </p>
 
-              <div class="grid grid-cols-[1fr_auto] gap-4">
-                <input
-                  type="email"
-                  [(ngModel)]="updatedEmail"
-                  placeholder="new-email@example.com"
-                  class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all outline-none"
-                />
-                <app-button
-                  label="Update E-Mail"
-                  [disabled]="!isValidEmail()"
-                  (click)="onUpdateMail()"
-                  variant="secondary"
-                ></app-button>
-              </div>
+              <form (submit)="onUpdateMail($event)" class="grid grid-cols-[1fr_auto]">
+                <app-form-input [field]="emailUpdateForm.email" purpose="updateEmail">
+                  <app-button
+                    label="Update E-Mail"
+                    [disabled]="emailUpdateForm().invalid()"
+                    variant="secondary"
+                    type="submit"
+                  ></app-button>
+                </app-form-input>
+              </form>
             </div>
           }
         </div>
@@ -89,46 +85,30 @@
                   ></app-button>
                 </div>
               } @else {
-                <form (submit)="onSubmit($event)" class="max-w-[50%]">
+                <form (submit)="onChangePassword($event)" class="max-w-[50%]">
                   <div class="flex flex-col gap-4">
-                    @for (field of formFields; track field.id) {
-                      <div class="flex flex-col gap-2">
-                        <label
-                          [for]="field.id"
-                          class="ml-1 text-[10px] font-bold text-brand uppercase tracking-widest"
-                          >{{ field.label }}</label
-                        >
-                        <input
-                          [id]="field.id"
-                          [type]="field.type"
-                          [formField]="field.formField"
-                          [placeholder]="field.placeholder"
-                          class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all"
-                        />
-                        @if (field.formField().touched() && field.formField().invalid()) {
-                          <div class="ps-1">
-                            @for (error of field.formField().errors(); track error.message) {
-                              <p class="text-xs text-red-500">{{ error.message }}</p>
-                            }
-                          </div>
-                        }
-                      </div>
-                    }
-                    <div
-                      class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-6 pt-6 border-t border-zinc-600/30"
-                    >
+                    <app-form-input [field]="passwordForm.code" purpose="code">
+                      <app-button
+                        [label]="resendButtonLabel()"
+                        [disabled]="!canResend()"
+                        (click)="onSendCode()"
+                        variant="secondary"
+                      ></app-button>
+                    </app-form-input>
+                    <app-form-input
+                      [field]="passwordForm.password"
+                      purpose="password"
+                    ></app-form-input>
+                    <app-form-input
+                      [field]="passwordForm.confirmPassword"
+                      purpose="confirmPassword"
+                    ></app-form-input>
+                    <div class="flex pt-6 border-t border-zinc-600/30">
                       <app-button
                         label="Change Password"
                         [disabled]="passwordForm().invalid()"
                         (click)="onResetPassword()"
                         type="submit"
-                        variant="secondary"
-                      ></app-button>
-
-                      <app-button
-                        [label]="resendButtonLabel()"
-                        [disabled]="!canResend()"
-                        (click)="onSendCode()"
                         variant="secondary"
                       ></app-button>
                     </div>
@@ -163,25 +143,20 @@
             >
               <p class="text-xs mb-6">
                 To confirm, please type
-                <span class="font-bold italic">**{{ DELETE_PHRASE }}**</span> below. This will
-                permanently remove all your generated images and data.
+                <span class="font-bold italic">****</span> below. This will permanently remove all
+                your generated images and data.
               </p>
 
-              <div class="grid grid-cols-[1fr_auto] gap-4">
-                <input
-                  type="text"
-                  [(ngModel)]="confirmText"
-                  placeholder="Type the phrase here..."
-                  class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all"
-                />
-
-                <app-button
-                  label="Delete Permanently"
-                  [disabled]="!canDelete()"
-                  (click)="onDeleteAccount()"
-                  variant="danger"
-                ></app-button>
-              </div>
+              <form (submit)="onDeleteAccount($event)" class="grid grid-cols-[1fr_auto] gap-4">
+                <app-form-input [field]="accountDeletionForm.phrase" purpose="deleteAccount">
+                  <app-button
+                    label="Delete Permanently"
+                    [disabled]="accountDeletionForm().invalid()"
+                    variant="danger"
+                    type="submit"
+                  ></app-button>
+                </app-form-input>
+              </form>
             </div>
           }
         </div>

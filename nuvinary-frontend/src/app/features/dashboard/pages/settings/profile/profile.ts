@@ -3,13 +3,15 @@ import { PageLayout } from '../../../../../shared/components/page-layout/page-la
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { Check, Lock, LucideAngularModule } from 'lucide-angular';
 import { UserInitialPipe } from '../../../../../shared/pipes/user-initial.pipe';
-import { form, required, FormField, minLength } from '@angular/forms/signals';
+import { form, maxLength } from '@angular/forms/signals';
 import { UserCredentialModel, UserService } from '../../../../services/user-service';
 import { Button } from '../../../../../shared/components/button/button';
+import { FormInput } from '../../../../../shared/components/form-input/form-input';
+import { verifyName } from '../../../../../shared/utils/validation-functions';
 
 @Component({
   selector: 'app-profile',
-  imports: [PageLayout, LucideAngularModule, UserInitialPipe, FormField, Button],
+  imports: [PageLayout, LucideAngularModule, UserInitialPipe, Button, FormInput],
   templateUrl: './profile.html',
 })
 export class Profile {
@@ -31,10 +33,10 @@ export class Profile {
   });
 
   protected readonly userCredentialsForm = form(this.userCredentialModel, (schema) => {
-    required(schema.firstName, { message: 'First name is required' });
-    required(schema.lastName, { message: 'Last name is required' });
-    minLength(schema.firstName, 3, { message: 'First name must be at least 2 characters long' });
-    minLength(schema.lastName, 3, { message: 'Last name must be at least 2 characters long' });
+    verifyName(schema.firstName, 'First Name');
+    verifyName(schema.lastName, 'Last Name');
+    maxLength(schema.firstName, 20);
+    maxLength(schema.lastName, 20);
   });
 
   protected isDisabled(): boolean {
