@@ -35,22 +35,19 @@
                 You'll need to verify it in the next step.
               </p>
 
-              <div class="flex flex-col sm:flex-row gap-4 items-end">
-                <div class="flex-1 w-full">
-                  <input
-                    type="email"
-                    [(ngModel)]="updatedEmail"
-                    placeholder="new-email@example.com"
-                    class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all outline-none"
-                  />
-                </div>
-                <button
-                  (click)="onUpdateMail()"
+              <div class="grid grid-cols-[1fr_auto] gap-4">
+                <input
+                  type="email"
+                  [(ngModel)]="updatedEmail"
+                  placeholder="new-email@example.com"
+                  class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all outline-none"
+                />
+                <app-button
+                  label="Update E-Mail"
                   [disabled]="!isValidEmail()"
-                  class="w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
-                >
-                  Update E-Mail
-                </button>
+                  (click)="onUpdateMail()"
+                  variant="secondary"
+                ></app-button>
               </div>
             </div>
           }
@@ -79,17 +76,17 @@
               class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
             >
               @if (!isChangingPassword()) {
-                <div class="flex justify-between items-center gap-6">
-                  <p class="text-xs flex-1">
+                <div class="grid grid-cols-[1fr_auto] items-center gap-4">
+                  <p class="text-xs">
                     To change your password, please enter your **new email address** below. You'll
                     need to verify it in the next step.
                   </p>
-                  <button
+
+                  <app-button
+                    label="Send Reset Link"
                     (click)="onResetPassword()"
-                    class="w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
-                  >
-                    Send Reset Link
-                  </button>
+                    variant="secondary"
+                  ></app-button>
                 </div>
               } @else {
                 <form (submit)="onSubmit($event)" class="max-w-[50%]">
@@ -120,21 +117,20 @@
                     <div
                       class="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-6 pt-6 border-t border-zinc-600/30"
                     >
-                      <button
-                        type="submit"
+                      <app-button
+                        label="Change Password"
                         [disabled]="passwordForm().invalid()"
-                        class="px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
-                      >
-                        Change Password
-                      </button>
-                      <button
-                        type="button"
+                        (click)="onResetPassword()"
+                        type="submit"
+                        variant="secondary"
+                      ></app-button>
+
+                      <app-button
+                        [label]="resendButtonLabel()"
                         [disabled]="!canResend()"
                         (click)="onSendCode()"
-                        class="px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-brand active:scale-95 shadow-lg"
-                      >
-                        {{ resendButtonLabel() }}
-                      </button>
+                        variant="secondary"
+                      ></app-button>
                     </div>
                   </div>
                 </form>
@@ -171,22 +167,20 @@
                 permanently remove all your generated images and data.
               </p>
 
-              <div class="flex flex-col sm:flex-row gap-4 items-end">
-                <div class="flex-1 w-full">
-                  <input
-                    type="text"
-                    [(ngModel)]="confirmText"
-                    placeholder="Type the phrase here..."
-                    class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all"
-                  />
-                </div>
-                <button
-                  (click)="onDeleteAccount()"
+              <div class="grid grid-cols-[1fr_auto] gap-4">
+                <input
+                  type="text"
+                  [(ngModel)]="confirmText"
+                  placeholder="Type the phrase here..."
+                  class="w-full bg-page-bg/30 font-bold placeholder:font-medium rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-brand/40 transition-all"
+                />
+
+                <app-button
+                  label="Delete Permanently"
                   [disabled]="!canDelete()"
-                  class="w-full sm:w-auto px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 disabled:cursor-not-allowed disabled:shadow-none bg-red-600 text-white hover:bg-red-500 active:scale-95 shadow-lg shadow-red-900/20"
-                >
-                  Delete Permanently
-                </button>
+                  (click)="onDeleteAccount()"
+                  variant="danger"
+                ></app-button>
               </div>
             </div>
           }

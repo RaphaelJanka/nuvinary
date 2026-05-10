@@ -5,10 +5,11 @@ import { Check, Lock, LucideAngularModule } from 'lucide-angular';
 import { UserInitialPipe } from '../../../../../shared/pipes/user-initial.pipe';
 import { form, required, FormField, minLength } from '@angular/forms/signals';
 import { UserCredentialModel, UserService } from '../../../../services/user-service';
+import { Button } from '../../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-profile',
-  imports: [PageLayout, LucideAngularModule, UserInitialPipe, FormField],
+  imports: [PageLayout, LucideAngularModule, UserInitialPipe, FormField, Button],
   templateUrl: './profile.html',
 })
 export class Profile {

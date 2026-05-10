@@ -5,10 +5,11 @@ import { CreationModel, CreationService } from '../../../services/creation-servi
 import { form, maxLength, required, submit, FormField } from '@angular/forms/signals';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
+import { Button } from '../../../../shared/components/button/button';
 
 @Component({
   selector: 'app-create',
-  imports: [LucideAngularModule, FormField, PageLayout],
+  imports: [LucideAngularModule, FormField, PageLayout, Button],
   templateUrl: './create.html',
   styleUrl: './create.css',
 })

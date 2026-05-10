@@ -5,11 +5,11 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { LoginData } from '../../../core/auth/auth.interfaces';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { verifyEmail, verifyPassword } from '../../../shared/utils/validation-functions';
-import { NgClass } from '@angular/common';
+import { Button } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [RouterLink, FormInput, NgClass],
+  imports: [RouterLink, FormInput, Button],
   templateUrl: './sign-in.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -4,11 +4,11 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { form, maxLength } from '@angular/forms/signals';
 import { verifyCode, verifyPassword } from '../../../shared/utils/validation-functions';
-import { NgClass } from '@angular/common';
+import { Button } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-reset-password',
-  imports: [RouterLink, FormInput, NgClass],
+  imports: [RouterLink, FormInput, Button],
   templateUrl: './reset-password.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

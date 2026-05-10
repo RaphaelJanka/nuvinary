@@ -10,12 +10,13 @@ import {
   verifyPassword,
 } from '../../../../../shared/utils/validation-functions';
 import { UserService } from '../../../../services/user-service';
+import { Button } from '../../../../../shared/components/button/button';
 
 type CancelActions = 'email' | 'link' | 'password' | 'account';
 
 @Component({
   selector: 'app-security',
-  imports: [PageLayout, FormsModule, FormField],
+  imports: [PageLayout, FormsModule, FormField, Button],
   templateUrl: './security.html',
 })
 export class Security {

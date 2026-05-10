@@ -35,14 +35,13 @@
     placeholder="Enter 6-digit code"
     type="text"
   >
-    <button
-      type="button"
+    <app-button
       [disabled]="!canResend()"
       (click)="onSendCode()"
-      class="px-8 py-3 rounded-xl font-bold text-sm transition-all disabled:bg-gray-600/20 bg-text-main text-white hover:bg-text-main-hover active:scale-95 shadow-lg"
+      [label]="resendButtonLabel()"
+      variant="secondary"
     >
-      {{ resendButtonLabel() }}
-    </button>
+    </app-button>
   </app-form-input>
 
   <app-form-input
@@ -59,19 +58,7 @@
     type="password"
   ></app-form-input>
 
-  <div class="flex flex-col gap-3">
-    <button
-      type="submit"
-      [ngClass]="{
-        'bg-brand shadow-lg shadow-brand/20 hover:bg-brand-light active:scale-95 duration-300':
-          signUpForm().valid(),
-        'bg-gray-300 shadow-none duration-0': signUpForm().invalid(),
-      }"
-      class="flex-1 mt-4 py-3 rounded-xl font-bold text-white transition-all"
-    >
-      Sign Up
-    </button>
-  </div>
+  <app-button [disabled]="signUpForm().invalid()" type="submit" label="Sign Up"></app-button>
 </form>
 
 <div class="mt-8 text-center">

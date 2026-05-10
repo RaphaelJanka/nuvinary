@@ -11,11 +11,11 @@ import {
 import { AuthService } from '../../../core/auth/auth.service';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { Button } from '../../../shared/components/button/button';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [FormInput, RouterLink, NgClass],
+  imports: [FormInput, RouterLink, Button],
   templateUrl: './sign-up.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -37,16 +37,15 @@
           >
           </textarea>
 
-          <div class="flex justify-end mt-4">
-            <button
-              (click)="onSetTitle()"
-              type="button"
+          <div class="grid grid-cols-[1fr_auto] mt-4">
+            <div></div>
+            <app-button
+              label="Next"
               [disabled]="creationForm.prompt().invalid() || isTyping()"
-              class="flex items-center gap-2 px-8 py-3 font-bold rounded-2xl bg-text-main text-white shadow-lg shadow-text-main/20 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#6a5aa3] transition-all"
-            >
-              Next
-              <lucide-icon [img]="icons.arrowRightIcon" class="w-4 h-4"></lucide-icon>
-            </button>
+              (click)="onSetTitle()"
+              variant="secondary"
+              [icon]="icons.arrowRightIcon"
+            ></app-button>
           </div>
         </div>
       }
@@ -60,24 +59,26 @@
             placeholder="Enter a title (or leave blank for magic)..."
           />
 
-          <div class="flex justify-between mt-4">
-            <button
-              (click)="onBack()"
-              type="button"
-              class="px-6 py-3 font-bold text-zinc-400 disabled:opacity-30 hover:text-zinc-600 transition-colors"
-              [disabled]="isTyping()"
-            >
-              Back
-            </button>
+          <div class="grid grid-cols-[1fr_auto] mt-4">
+            <div>
+              <button
+                (click)="onBack()"
+                type="button"
+                class="px-6 py-3 font-bold text-zinc-400 disabled:opacity-30 hover:text-zinc-600 transition-colors"
+                [disabled]="isTyping()"
+              >
+                Back
+              </button>
+            </div>
 
-            <button
+            <app-button
+              label="Generate Image"
+              [disabled]="creationForm.prompt().invalid() || isTyping()"
               type="submit"
-              [disabled]="creationForm().invalid() || isTyping()"
-              class="flex items-center gap-2 px-6 py-3 font-bold rounded-2xl bg-text-main text-white shadow-lg shadow-text-main/20 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#6a5aa3] transition-all"
-            >
-              <lucide-icon [img]="icons.cloudUploadIcon" class="w-4 h-4"></lucide-icon>
-              Generate Image
-            </button>
+              variant="secondary"
+              [icon]="icons.cloudUploadIcon"
+              iconPosition="left"
+            ></app-button>
           </div>
         </div>
       }

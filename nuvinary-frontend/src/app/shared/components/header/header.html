@@ -4,7 +4,7 @@
       ? 'fixed top-0 right-0 left-0 z-50 border-white/15'
       : 'bg-header-bg border-header-border'
   "
-  class="flex items-center justify-between w-full max-w-app-max-width h-16 m-auto px-4 lg:px-8 border-b shadow-lg"
+  class="flex items-center justify-between w-full max-w-app-max-width p-4 px-8 border-b shadow-lg"
 >
   <div class="flex items-center gap-2 cursor-pointer" [routerLink]="['/']">
     <div
@@ -13,19 +13,15 @@
     <span class="font-bold text-xl text-white">Nuvinary</span>
   </div>
   @if (isLandingPage()) {
-    <div class="flex gap-4">
-      <button
+    <div class="flex gap-4 max-h-16">
+      <app-button
+        label="Sign In"
+        [fullWidth]="false"
+        variant="ghost"
         [routerLink]="['/auth/signin']"
-        class="px-6 py-3 rounded-xl border border-white/30 bg-white/5 font-bold text-sm text-white backdrop-blur-sm transition-all duration-75 ease-linear hover:scale-110 hover:border-brand-light hover:bg-brand-light hover:shadow-brand-light/50 hover:duration-[50] active:duration-0"
-      >
-        Sign in
-      </button>
-      <button
-        [routerLink]="['/auth/signup']"
-        class="px-6 py-3 rounded-xl bg-brand font-bold text-sm text-white shadow-lg tracking-tighter transition-all duration-75 ease-linear hover:scale-110 hover:bg-brand-light hover:shadow-brand-light/50 hover:duration-[50] active:scale-95 active:duration-0"
-      >
-        Sign up
-      </button>
+      ></app-button>
+
+      <app-button label="Sign Up" [routerLink]="['/auth/signup']" [fullWidth]="false"></app-button>
     </div>
   }
 </header>
