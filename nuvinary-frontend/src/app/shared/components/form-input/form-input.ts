@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { FieldState, FormField } from '@angular/forms/signals';
-import { INPUT_CONFIGS, InputTypes } from './form-input.model';
+import { INPUT_CONFIGS, InputTypes } from '../../models/form-input.model';
 
 let nextUniqueId = 0;
 
