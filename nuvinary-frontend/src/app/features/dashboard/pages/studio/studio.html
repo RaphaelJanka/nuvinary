@@ -1,12 +1,12 @@
 <app-page-layout [title]="'Studio'">
-  <section class="flex h-full bg-text-main">
+  <section class="flex h-full bg-primary">
     <aside class="flex flex-col items-center gap-4 bg-studio-frame px-2 py-4">
       @for (btn of toolbarButtons; track $index) {
         <button
           (click)="btn.action()"
           [class]="btn.className ? btn.className() : ''"
           [disabled]="btn.disabled ? btn.disabled() : false"
-          class="p-3 rounded-2xl text-white transition-all hover:bg-brand/60 hover:shadow-lg"
+          class="p-3 rounded-2xl text-white transition-all hover:bg-accent-strong hover:shadow-lg"
         >
           <span
             [class]="btn.iconClass ? btn.iconClass() : ''"
@@ -22,7 +22,7 @@
     <main class="flex-1 flex items-center justify-center overflow-hidden bg-studio-main p-12">
       <div
         #studioCard
-        class="studio-card relative flex justify-between overflow-hidden border border-text-main bg-studio-card rounded-4xl shadow-2xl p-8 transition-all duration-700 ease-in-out group"
+        class="studio-card relative flex justify-between overflow-hidden border border-primary bg-studio-card rounded-4xl shadow-2xl p-8 transition-all duration-700 ease-in-out group"
         [ngClass]="{
           'flex-col w-120 h-full max-h-200': orientation() === 'portrait',
           'flex-row w-250 aspect-video gap-8': orientation() === 'landscape',
@@ -30,7 +30,7 @@
         }"
       >
         <div
-          class="relative z-1 flex items-center justify-center overflow-hidden bg-zinc-800/70 rounded-4xl transition-all duration-700"
+          class="relative z-1 flex items-center justify-center overflow-hidden bg-slate-800/70 rounded-4xl transition-all duration-700"
           [ngClass]="{
             'h-full max-h-110': orientation() === 'portrait',
             'w-100': orientation() === 'landscape',
@@ -50,10 +50,10 @@
           } @else {
             <div class="absolute inset-8 flex items-center justify-center">
               @for (corner of cornerClasses; track $index) {
-                <div class="absolute w-8 h-8 border-zinc-950/20" [class]="corner"></div>
+                <div class="absolute w-8 h-8 border-slate-950/20" [class]="corner"></div>
               }
               <span
-                class="text-[8px] font-black uppercase tracking-[0.5em] text-zinc-950 opacity-20"
+                class="text-[8px] font-black uppercase tracking-[0.5em] text-slate-950 opacity-20"
               >
                 No Asset Selected
               </span>
@@ -80,7 +80,7 @@
                 (blur)="isEditing = false"
                 maxlength="30"
                 autoFocus
-                class="w-full border-b border-zinc-950/10 bg-black/30 p-0 text-4xl font-black leading-tight tracking-tighter focus:ring-0"
+                class="w-full border-b border-slate-950/10 bg-black/30 p-0 text-4xl font-black leading-tight tracking-tighter focus:ring-0"
               />
             } @else {
               <h2

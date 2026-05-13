@@ -1,8 +1,8 @@
 <div
-  class="relative flex flex-col lg:flex-row overflow-hidden w-full max-w-7xl max-h-[90vh] rounded-[2.5rem] border border-zinc-200 bg-page-bg shadow-2xl animate-in fade-in zoom-in duration-300"
+  class="relative flex flex-col lg:flex-row overflow-hidden w-full max-w-7xl max-h-[90vh] rounded-[2.5rem] border border-slate-200 bg-surface shadow-2xl animate-in fade-in zoom-in duration-300"
 >
   <section
-    class="flex items-center justify-center lg:w-3/5 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-zinc-100 bg-white/50 group"
+    class="flex items-center justify-center lg:w-3/5 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 bg-white-medium group"
   >
     <img
       [src]="creation().url"
@@ -12,13 +12,13 @@
   </section>
 
   <section
-    class="flex flex-col gap-8 lg:w-2/5 p-8 lg:p-10 overflow-y-auto bg-white/30 custom-scrollbar"
+    class="flex flex-col gap-8 lg:w-2/5 p-8 lg:p-10 overflow-y-auto bg-white-soft custom-scrollbar"
   >
     <div class="flex flex-col">
       <div class="flex justify-between items-center gap-3">
         <div class="flex-1 min-w-0">
           @if (!isEditingTitle()) {
-            <h2 class="font-black text-3xl text-zinc-900 tracking-tight wrap-break-word">
+            <h2 class="font-black text-3xl text-slate-900 tracking-tight wrap-break-word">
               {{ creation().title }}
             </h2>
           } @else {
@@ -27,7 +27,7 @@
                 <div class="flex gap-2">
                   <button
                     (click)="onCancelEdit()"
-                    class="p-1.5 rounded-xl text-zinc-400 cursor-pointer transition-colors hover:bg-zinc-200 hover:text-zinc-600"
+                    class="p-1.5 rounded-xl text-slate-400 cursor-pointer transition-colors hover:bg-slate-200 hover:text-slate-600"
                     title="Cancel"
                   >
                     <lucide-icon [img]="icons.closeIcon" class="w-5 h-5"></lucide-icon>
@@ -35,7 +35,7 @@
 
                   <button
                     (click)="onSaveTitle()"
-                    class="p-1.5 rounded-xl bg-text-main text-white shadow-sm shadow-text-main/20 cursor-pointer transition-all hover:bg-[#6a5ca1]"
+                    class="p-1.5 rounded-xl bg-primary text-white shadow-sm shadow-primary-subtle cursor-pointer transition-all hover:bg-[#6a5ca1]"
                     title="Save Title"
                   >
                     <lucide-icon [img]="icons.checkIcon" class="w-5 h-5"></lucide-icon>
@@ -49,25 +49,25 @@
         @if (!isEditingTitle()) {
           <button
             (click)="onClose()"
-            class="p-2 rounded-full border border-zinc-200 bg-white/80 shadow-sm backdrop-blur-md transition-colors group hover:bg-zinc-100"
+            class="p-2 rounded-full border border-slate-200 bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-slate-100"
           >
             <lucide-icon
               [img]="icons.closeIcon"
-              class="w-5 h-5 text-zinc-500 transition-transform duration-300 group-hover:rotate-90 group-hover:text-text-main"
+              class="w-5 h-5 text-slate-500 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
             ></lucide-icon>
           </button>
         }
       </div>
 
-      <div class="flex items-center gap-2 mt-3 text-zinc-400">
+      <div class="flex items-center gap-2 mt-3 text-slate-400">
         <lucide-icon [img]="icons.dateIcon" class="w-4 h-4"></lucide-icon>
         <span class="font-bold text-xs uppercase tracking-wider">
           Created on {{ creation().createdAt | date: 'longDate' }}
         </span>
         @if (currentUser()?.uid === creation().createdBy.id && canEdit() && !isEditingTitle()) {
-          <span class="text-zinc-400">|</span>
+          <span class="text-slate-400">|</span>
           <button
-            class="font-black text-xs text-zinc-400 uppercase tracking-wider transition-colors hover:text-text-main"
+            class="font-black text-xs text-slate-400 uppercase tracking-wider transition-colors hover:text-primary"
             (click)="this.isEditingTitle.set(true)"
           >
             Edit Title
@@ -77,7 +77,7 @@
     </div>
 
     <div>
-      <h4 class="mb-3 font-black text-[10px] text-zinc-400 uppercase tracking-[0.2em]">
+      <h4 class="mb-3 font-black text-[10px] text-slate-400 uppercase tracking-[0.2em]">
         Privacy Settings
       </h4>
 
@@ -85,31 +85,31 @@
         class="flex items-center justify-between w-full p-5 rounded-3xl border transition-all duration-300"
         [ngClass]="
           creation().isPublic
-            ? 'bg-text-main border-text-main shadow-lg shadow-text-main/20'
-            : 'bg-white border-zinc-100 shadow-sm'
+            ? 'bg-primary border-primary shadow-lg shadow-primary-subtle'
+            : 'bg-white border-slate-100 shadow-sm'
         "
       >
         <div class="flex items-center gap-4">
           <div
             class="p-2.5 rounded-xl transition-colors duration-500"
-            [ngClass]="creation().isPublic ? 'bg-white/20' : 'bg-zinc-200'"
+            [ngClass]="creation().isPublic ? 'bg-white-soft' : 'bg-slate-200'"
           >
             @if (creation().isPublic) {
               <lucide-icon [img]="icons.globeIcon" class="w-5 h-5 text-white"></lucide-icon>
             } @else {
-              <lucide-icon [img]="icons.lockIcon" class="w-5 h-5 text-zinc-400"></lucide-icon>
+              <lucide-icon [img]="icons.lockIcon" class="w-5 h-5 text-slate-400"></lucide-icon>
             }
           </div>
           <div class="text-left">
             <p
               class="font-black text-sm transition-colors duration-500"
-              [ngClass]="creation().isPublic ? 'text-white' : 'text-zinc-800'"
+              [ngClass]="creation().isPublic ? 'text-white' : 'text-slate-800'"
             >
               {{ creation().isPublic ? 'Public Asset' : 'Private Asset' }}
             </p>
             <p
               class="font-medium text-[10px] transition-colors duration-500"
-              [ngClass]="creation().isPublic ? 'text-white/70' : 'text-zinc-500'"
+              [ngClass]="creation().isPublic ? 'text-white-strong' : 'text-slate-500'"
             >
               {{
                 creation().isPublic
@@ -124,8 +124,8 @@
           <button
             type="button"
             (click)="onTogglePublic()"
-            class="relative w-12 h-7 p-1 rounded-full cursor-pointer transition-all duration-500 outline-none focus:ring-2 focus:ring-white/50 active:scale-90"
-            [ngClass]="creation().isPublic ? 'bg-white/30' : 'bg-zinc-300'"
+            class="relative w-12 h-7 p-1 rounded-full cursor-pointer transition-all duration-500 outline-none focus:ring-2 focus:ring-white-medium active:scale-90"
+            [ngClass]="creation().isPublic ? 'bg-white-soft' : 'bg-slate-300'"
           >
             <div
               class="w-5 h-5 bg-white rounded-full shadow-md transition-all duration-500 ease-in-out"
@@ -137,80 +137,80 @@
       </div>
     </div>
 
-    <hr class="border-zinc-100" />
+    <hr class="border-slate-100" />
 
     <div>
       <h4
-        class="flex items-center gap-2 mb-3 font-black text-[10px] text-zinc-400 uppercase tracking-[0.2em]"
+        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-400 uppercase tracking-[0.2em]"
       >
         Created By
       </h4>
       <div
-        class="relative overflow-hidden flex items-center gap-3 p-4 rounded-3xl border border-zinc-100 border-s-0 bg-white shadow-sm leading-relaxed transition-colors hover:border-text-main/30"
+        class="relative overflow-hidden flex items-center gap-3 p-4 rounded-3xl border border-slate-100 border-s-0 bg-white shadow-sm leading-relaxed transition-colors hover:border-primary-subtle"
       >
-        <div class="absolute top-0 left-0 w-1 h-full bg-text-main/40"></div>
+        <div class="absolute top-0 left-0 w-1 h-full bg-primary-muted"></div>
         <img
           [src]="creation().createdBy.avatarUrl"
           [alt]="creation().createdBy.name"
           class="z-10 w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
         />
         <div class="flex flex-col">
-          <span class="font-black text-base text-zinc-800 tracking-tight leading-tight">
+          <span class="font-black text-base text-slate-800 tracking-tight leading-tight">
             {{ creation().createdBy.name }}
           </span>
-          <span class="font-bold text-[10px] text-text-main uppercase tracking-wider opacity-80">
+          <span class="font-bold text-[10px] text-primary uppercase tracking-wider opacity-80">
             Verified Creator
           </span>
         </div>
       </div>
     </div>
 
-    <hr class="border-zinc-100" />
+    <hr class="border-slate-100" />
 
     <div>
       <h4
-        class="flex items-center gap-2 mb-3 font-black text-[10px] text-zinc-400 uppercase tracking-[0.2em]"
+        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-400 uppercase tracking-[0.2em]"
       >
         Info
       </h4>
       <div
-        class="relative p-5 rounded-3xl border border-zinc-100 bg-white shadow-sm text-sm leading-relaxed transition-colors hover:border-text-main/30"
+        class="relative p-5 rounded-3xl border border-slate-100 bg-white shadow-sm text-sm leading-relaxed transition-colors hover:border-primary-subtle"
       >
-        <div class="flex items-center gap-2 mb-2 text-zinc-400">
+        <div class="flex items-center gap-2 mb-2 text-slate-400">
           <lucide-icon [img]="icons.fileTextIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">Generation Prompt</span>
         </div>
-        <span class="italic text-zinc-800">"{{ creation().aiMetadata.prompt }}"</span>
+        <span class="italic text-slate-800">"{{ creation().aiMetadata.prompt }}"</span>
       </div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
       <div
-        class="p-5 rounded-3xl border border-zinc-100 bg-white shadow-sm transition-colors hover:border-text-main/30"
+        class="p-5 rounded-3xl border border-slate-100 bg-white shadow-sm transition-colors hover:border-primary-subtle"
       >
-        <div class="flex items-center gap-2 mb-2 text-zinc-400">
+        <div class="flex items-center gap-2 mb-2 text-slate-400">
           <lucide-icon [img]="icons.cpuIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">AI Engine</span>
         </div>
-        <p class="font-black text-xs text-zinc-800">{{ creation().aiMetadata.model }}</p>
+        <p class="font-black text-xs text-slate-800">{{ creation().aiMetadata.model }}</p>
       </div>
 
       <div
-        class="p-5 rounded-3xl border border-zinc-100 bg-white shadow-sm transition-colors hover:border-text-main/30"
+        class="p-5 rounded-3xl border border-slate-100 bg-white shadow-sm transition-colors hover:border-primary-subtle"
       >
-        <div class="flex items-center gap-2 mb-2 text-zinc-400">
+        <div class="flex items-center gap-2 mb-2 text-slate-400">
           <lucide-icon [img]="icons.layersIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">Parameters</span>
         </div>
-        <p class="font-black text-xs text-zinc-800">
-          {{ creation().aiMetadata.steps }} Steps <span class="mx-1 text-zinc-300">|</span>
+        <p class="font-black text-xs text-slate-800">
+          {{ creation().aiMetadata.steps }} Steps <span class="mx-1 text-slate-300">|</span>
           {{ creation().aiMetadata.cfgScale }} CFG
         </p>
       </div>
     </div>
 
     <div
-      class="flex items-center justify-between mt-auto pt-6 font-bold text-[10px] text-zinc-500 uppercase tracking-[0.15em]"
+      class="flex items-center justify-between mt-auto pt-6 font-bold text-[10px] text-slate-500 uppercase tracking-[0.15em]"
     >
       <span>ID: {{ creation().id }}</span>
       <span>{{ creation().fileSize / 1000000 | number: '1.1-2' }} MB</span>

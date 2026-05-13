@@ -1,5 +1,5 @@
-<h2 class="mb-6 font-black text-3xl text-center text-text-main tracking-tight">Welcome Back</h2>
-<p class="mb-8 text-center text-sm text-zinc-600">
+<h2 class="mb-6 font-black text-3xl text-center text-primary tracking-tight">Welcome Back</h2>
+<p class="mb-8 text-center text-sm text-slate-600">
   We're glad to see you again. Enter your credentials to get back into the action.
 </p>
 
@@ -8,7 +8,7 @@
   <app-form-input [field]="loginForm.password" purpose="password"></app-form-input>
 
   <a
-    class="flex text-[11px] justify-end -mt-2 me-4 font-semibold text-zinc-600 hover:text-brand transition-colors"
+    class="flex text-[11px] justify-end -mt-2 me-4 font-semibold text-slate-600 hover:text-accent transition-colors"
     [routerLink]="['/auth/reset-password']"
   >
     Forgot Password?
@@ -20,7 +20,7 @@
 <div class="mt-8 text-center">
   <p class="text-sm text-text">
     New to Nuvinary?
-    <a [routerLink]="['/auth/signup']" class="ml-1 font-bold text-brand hover:text-brand-light">
+    <a [routerLink]="['/auth/signup']" class="ml-1 font-bold text-accent hover:text-accent-light">
       Create Account
     </a>
   </p>

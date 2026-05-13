@@ -1,25 +1,25 @@
 <app-page-layout [title]="'Security & Password'">
   <section class="flex justify-center">
     <div
-      class="flex-1 max-w-[75%] mt-6 sm:mt-12 max-h-200 bg-white border border-white/5 rounded-4xl shadow-2xl p-4"
+      class="flex-1 max-w-[75%] mt-6 sm:mt-12 max-h-200 bg-white border border-white-glassrounded-4xl shadow-2xl p-4"
     >
       <div class="flex flex-col gap-10 h-full p-8 sm:p-12 overflow-y-scroll custom-scrollbar">
         <div>
-          <h2 class="text-xl font-bold text-text-main tracking-tight mb-6">E-mail Address</h2>
-          <div class="mb-6 bg-page-bg/30 max-w-[50%] font-medium rounded-xl p-3 ps-4">
+          <h2 class="text-xl font-bold text-primary tracking-tight mb-6">E-mail Address</h2>
+          <div class="mb-6 bg-surface/30 max-w-[50%] font-medium rounded-xl p-3 ps-4">
             {{ user()?.email }}
           </div>
           <div class="flex justify-between items-center">
             <button
               (click)="isChangingMailAddress.set(true)"
-              class="text-xs font-black text-zinc-400 hover:text-text-main uppercase tracking-widest transition-colors"
+              class="text-xs font-black text-slate-400 hover:text-primary uppercase tracking-widest transition-colors"
             >
               Change E-mail Address
             </button>
             @if (isChangingMailAddress()) {
               <button
                 (click)="onCancel('email')"
-                class="text-xs font-bold text-zinc-400 hover:text-text-main transition-colors"
+                class="text-xs font-bold text-slate-400 hover:text-primary transition-colors"
               >
                 Cancel
               </button>
@@ -28,7 +28,7 @@
 
           @if (isChangingMailAddress()) {
             <div
-              class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
+              class="mt-8 p-6 border border-primary-muted rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
             >
               <p class="text-xs mb-4">
                 To update your login credentials, please enter your **new email address** below.
@@ -49,19 +49,19 @@
           }
         </div>
 
-        <div class="pt-8 border-t border-zinc-600/30">
-          <h2 class="text-xl font-bold text-text-main tracking-tight mb-6">Password</h2>
+        <div class="pt-8 border-t border-slate-600/30">
+          <h2 class="text-xl font-bold text-primary tracking-tight mb-6">Password</h2>
           <div class="flex justify-between items-center">
             <button
               (click)="isSendingLink.set(true)"
-              class="text-xs font-black text-zinc-400 hover:text-text-main uppercase tracking-widest transition-colors"
+              class="text-xs font-black text-slate-400 hover:text-primary uppercase tracking-widest transition-colors"
             >
               Change Password
             </button>
             @if (isSendingLink()) {
               <button
                 (click)="onCancel('link')"
-                class="text-xs font-bold text-zinc-400 hover:text-text-main transition-colors"
+                class="text-xs font-bold text-slate-400 hover:text-primary transition-colors"
               >
                 Cancel
               </button>
@@ -69,7 +69,7 @@
           </div>
           @if (isSendingLink()) {
             <div
-              class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
+              class="mt-8 p-6 border border-primary-muted rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
             >
               @if (!isChangingPassword()) {
                 <div class="grid grid-cols-[1fr_auto] items-center gap-4">
@@ -103,7 +103,7 @@
                       [field]="passwordForm.confirmPassword"
                       purpose="confirmPassword"
                     ></app-form-input>
-                    <div class="flex pt-6 border-t border-zinc-600/30">
+                    <div class="flex pt-6 border-t border-slate-600/30">
                       <app-button
                         label="Change Password"
                         [disabled]="passwordForm().invalid()"
@@ -119,18 +119,18 @@
           }
         </div>
 
-        <div class="pt-10 border-t border-zinc-600/30">
+        <div class="pt-10 border-t border-slate-600/30">
           <div class="flex items-center justify-between">
             <button
               (click)="isDeleting.set(true)"
-              class="text-xs font-black text-zinc-400 hover:text-red-500 uppercase tracking-widest transition-colors"
+              class="text-xs font-black text-slate-400 hover:text-red-500 uppercase tracking-widest transition-colors"
             >
               Delete my Account
             </button>
             @if (isDeleting()) {
               <button
                 (click)="onCancel('account')"
-                class="text-xs font-bold text-zinc-400 hover:text-text-main transition-colors"
+                class="text-xs font-bold text-slate-400 hover:text-primary transition-colors"
               >
                 Cancel
               </button>
@@ -139,7 +139,7 @@
 
           @if (isDeleting()) {
             <div
-              class="mt-8 p-6 border border-text-main/50 rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
+              class="mt-8 p-6 border border-primary-muted rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
             >
               <p class="text-xs mb-6">
                 To confirm, please type

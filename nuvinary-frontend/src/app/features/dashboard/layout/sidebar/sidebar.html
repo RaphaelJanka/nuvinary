@@ -1,9 +1,9 @@
 <section class="flex flex-col justify-between h-full">
-  <div class="flex flex-col gap-1 text-lg text-zinc-500">
+  <div class="flex flex-col gap-1 text-lg text-slate-500">
     @if (showSettings()) {
       <a
         routerLink="/dashboard/gallery"
-        class="flex items-center gap-3 h-12 hover:text-text-main transition-all duration-300"
+        class="flex items-center gap-3 h-12 hover:text-primary transition-all duration-300"
         [class.ps-4]="!isCollapsed()"
         [class.justify-center]="isCollapsed()"
       >
@@ -28,7 +28,7 @@
   <ng-template #navLink let-item="item">
     <a
       [routerLink]="item.route"
-      routerLinkActive="bg-sidebar-main font-bold text-white !border-text-main"
+      routerLinkActive="bg-sidebar-main font-bold text-white !border-primary"
       [routerLinkActiveOptions]="{ exact: true }"
       class="group flex items-center gap-3 h-12 cursor-pointer rounded-e-4xl border-transparent hover:bg-sidebar-hover hover:text-white transition-all duration-300"
       [class.ps-4]="!isCollapsed()"
@@ -51,11 +51,11 @@
   </ng-template>
 
   @if (!isCollapsed()) {
-    <div class="flex flex-col gap-4 text-xs font-medium text-zinc-500">
+    <div class="flex flex-col gap-4 text-xs font-medium text-slate-500">
       @for (item of legalItems; track $index) {
         <a
           [routerLink]="item.route"
-          class="ps-5 [text-shadow:0.5px_0_0_currentColor] hover:text-text-main transition-all duration-200"
+          class="ps-5 [text-shadow:0.5px_0_0_currentColor] hover:text-primary transition-all duration-200"
         >
           <span class="whitespace-nowrap transition-all duration-300">
             {{ item.label }}

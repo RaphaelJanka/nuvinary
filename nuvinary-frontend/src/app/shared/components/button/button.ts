@@ -46,13 +46,13 @@ export class Button {
       'shadow-lg active:scale-95 hover:transition-all active:transition-all active:duration-300 hover:duration-300';
     switch (this.variant()) {
       case 'primary':
-        return `bg-brand shadow-brand/20 hover:bg-brand-light ${baseClasses}`;
+        return `bg-accent shadow-accent-subtle hover:bg-accent-light ${baseClasses}`;
       case 'secondary':
-        return `bg-text-main shadow-bg-text-main/20 hover:bg-text-main-hover ${baseClasses}`;
+        return `bg-primary shadow-bg-primary-subtle hover:bg-primary-hover ${baseClasses}`;
       case 'danger':
         return `bg-red-500 shadow-red-400 hover:bg-red-600 ${baseClasses}`;
       case 'ghost':
-        return `border border-white/30 bg-white/5 backdrop-blur-sm hover:bg-brand-light hover:border-brand-light hover:shadow-brand-light/50 ${baseClasses}`;
+        return `border border-white-soft bg-white-glassbackdrop-blur-sm hover:bg-accent-light hover:border-accent-light hover:shadow-accent-light/50 ${baseClasses}`;
       default:
         return '';
     }

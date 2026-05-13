@@ -2,7 +2,7 @@
   <main class="flex justify-center mt-20">
     <form (submit)="onSubmit($event)" class="flex flex-col gap-16 w-full max-w-2xl">
       <div class="flex flex-col gap-6 min-h-40">
-        <h1 class="font-mono font-bold text-5xl leading-relaxed text-gradient-brand">
+        <h1 class="font-mono font-bold text-5xl leading-relaxed text-gradient-accent">
           {{ displayedUserGreeting() }}
         </h1>
 
@@ -31,7 +31,7 @@
         <div class="animate-in fade-in slide-in-from-bottom-4 duration-1200">
           <textarea
             [formField]="creationForm.prompt"
-            class="block w-full p-6 font-semibold text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm resize-none outline-none placeholder:text-zinc-300 focus:ring-4 focus:ring-text-main/10 transition-all"
+            class="block w-full p-6 font-semibold text-lg rounded-3xl border border-slate-200 bg-white shadow-sm resize-none outline-none placeholder:text-slate-300 focus:ring-4 focus:ring-primary-subtle transition-all"
             rows="4"
             placeholder="e.g. A cybernetic owl with glowing blue eyes in a dark forest..."
           >
@@ -55,7 +55,7 @@
           <input
             type="text"
             [formField]="creationForm.title"
-            class="w-full p-6 font-semibold text-lg rounded-3xl border border-zinc-200 bg-white shadow-sm outline-none placeholder:text-zinc-300 focus:ring-4 focus:ring-text-main/10 transition-all"
+            class="w-full p-6 font-semibold text-lg rounded-3xl border border-slate-200 bg-white shadow-sm outline-none placeholder:text-slate-300 focus:ring-4 focus:ring-primary-subtle transition-all"
             placeholder="Enter a title (or leave blank for magic)..."
           />
 
@@ -64,7 +64,7 @@
               <button
                 (click)="onBack()"
                 type="button"
-                class="px-6 py-3 font-bold text-zinc-400 disabled:opacity-30 hover:text-zinc-600 transition-colors"
+                class="px-6 py-3 font-bold text-slate-400 disabled:opacity-30 hover:text-slate-600 transition-colors"
                 [disabled]="isTyping()"
               >
                 Back

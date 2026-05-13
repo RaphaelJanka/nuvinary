@@ -1,4 +1,4 @@
-.text-gradient-brand {
+.text-gradient-accent {
   background: linear-gradient(135deg, #7c6db2 0%, #b3a0f2 50%, #94afd1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

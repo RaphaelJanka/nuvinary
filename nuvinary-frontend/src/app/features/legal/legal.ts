@@ -15,7 +15,7 @@ import { Location } from '@angular/common';
         <div class="max-w-4xl rounded-xl p-8 shadow-md bg-white">
           <button
             (click)="onBack()"
-            class="flex items-center gap-2 w-fit mb-4 text-sm hover:text-text-main"
+            class="flex items-center gap-2 w-fit mb-4 text-sm hover:text-primary"
           >
             <lucide-angular [img]="backIcon" class="w-5 h-5" />
             <p>Back</p>

@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
         class="flex flex-wrap justify-center gap-x-8 gap-y-2 font-medium text-[10px] text-text/40 uppercase tracking-widest"
       >
         @for (item of legalItems; track item.label) {
-          <a [routerLink]="item.route" class="transition-colors hover:text-brand">
+          <a [routerLink]="item.route" class="transition-colors hover:text-accent">
             {{ item.label }}
           </a>
         }

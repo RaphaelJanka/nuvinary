@@ -1,17 +1,17 @@
 <section
-  class="flex flex-col overflow-hidden h-full min-w-0 rounded-xl border border-zinc-200 bg-white/50"
+  class="flex flex-col overflow-hidden h-full min-w-0 rounded-xl border border-slate-200 bg-white-medium"
 >
   <header
-    class="flex items-center gap-4 h-16 px-6 border-b border-text-main/20 bg-white"
+    class="flex items-center gap-4 h-16 px-6 border-b border-primary-subtle bg-white"
     [class.bg-studio-header]="title() === 'Studio'"
     [class.bg-white]="title() !== 'Studio'"
   >
     <div
-      class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-text-main/10 bg-sheet-bg"
-      [class.bg-zinc-900]="title() === 'Studio'"
-      [class.bg-sheet-bg]="title() !== 'Studio'"
+      class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-primary-subtle bg-layer"
+      [class.bg-slate-900]="title() === 'Studio'"
+      [class.bg-layer]="title() !== 'Studio'"
     >
-      <span class="font-black text-[10px] text-text-main uppercase tracking-wider">
+      <span class="font-black text-[10px] text-primary uppercase tracking-wider">
         {{ title() }}
       </span>
     </div>

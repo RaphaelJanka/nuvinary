@@ -2,7 +2,7 @@
   <div class="flex items-center gap-4">
     <button
       (click)="onToggleSidebar()"
-      class="rounded-lg text-zinc-400 transition-colors hover:text-white hover:bg-white/10"
+      class="rounded-4xl text-slate-400 transition-colors p-2 hover:text-white hover:bg-white-soft"
     >
       <lucide-icon [img]="menuIcon" class="w-6 h-6 stroke-[1.5px]"></lucide-icon>
     </button>
@@ -18,7 +18,7 @@
       [style.background-color]="authUser()?.avatarColor || 'transparent'"
     >
       <div
-        class="absolute inset-0 rounded-full bg-white/0 transition-colors group-hover:bg-white/15"
+        class="absolute inset-0 rounded-full bg-white/0 transition-colors group-hover:bg-white-soft"
       ></div>
 
       <span class="text-md tracking-tighter font-black text-white">

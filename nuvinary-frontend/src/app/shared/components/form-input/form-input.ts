@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { FieldState, FormField } from '@angular/forms/signals';
-import { INPUT_CONFIGS, InputTypes } from '../../models/form-input.model';
+import { INPUT_CONFIGS, InputTypes } from './form-input.model';
 
 let nextUniqueId = 0;
 
@@ -40,7 +40,7 @@ export class FormInput {
     return [
       'ml-1 font-bold text-[10px] uppercase tracking-[0.15em]',
       this.shouldHideLabel() ? 'sr-only' : null,
-      this.purpose() === 'collection' ? 'text-zinc-500' : 'text-brand',
+      this.purpose() === 'collection' ? '' : 'text-accent',
     ]
       .filter(Boolean)
       .join(' ');
@@ -48,13 +48,13 @@ export class FormInput {
 
   protected readonly inputClasses = computed(() => {
     return [
-      'rounded-xl py-3 focus:border-brand/40 focus:ring-form-focus transition-all',
+      'rounded-xl py-3 focus:border-accent-muted focus:ring-form-focus transition-all',
       this.purpose() !== 'detail' ? 'px-4 placeholder:text-sm focus:ring-2' : null,
       this.purpose() === 'detail'
-        ? 'text-text-main font-black text-3xl max-w-[300px] placeholder:text-3xl'
+        ? 'text-primary font-black text-3xl max-w-[300px] placeholder:text-3xl'
         : null,
-      this.purpose() === 'collection' ? 'ring-2 ring-zinc-200' : null,
-      this.purpose() === 'collection' || this.purpose() === 'detail' ? 'bg-white' : 'bg-page-bg/30',
+      this.purpose() === 'collection' ? 'ring-2 ring-slate-200' : null,
+      this.purpose() === 'collection' || this.purpose() === 'detail' ? 'bg-white' : 'bg-surface/30',
       this.isSuccessState() ? 'ring-form-success' : null,
     ]
       .filter(Boolean)

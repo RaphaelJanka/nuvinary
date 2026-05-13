@@ -7,7 +7,7 @@ import { SafeHtml } from '@angular/platform-browser';
   imports: [],
   template: `
     <article
-      class="prose max-w-4xl prose-slate prose-a:text-blue-500 prose-h1:text-text-main"
+      class="prose max-w-4xl prose-slate prose-a:text-blue-500 prose-h1:text-primary"
       [innerHTML]="content()"
     ></article>
   `,

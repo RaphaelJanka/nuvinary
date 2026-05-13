@@ -1,7 +1,7 @@
 <button
   (click)="onOpenDetailsDialog()"
   [disabled]="creation().status !== 'completed'"
-  class="group relative overflow-hidden w-full aspect-4/5 rounded-3xl border border-zinc-200 bg-zinc-100 shadow-sm shadow-sidebar-hover/20 transition-all duration-500 hover:shadow-2xl hover:shadow-text-main/30"
+  class="group relative overflow-hidden w-full aspect-4/5 rounded-3xl border border-slate-200 bg-slate-100 shadow-md transition-all duration-500 hover:shadow-2xl hover:shadow-primary-subtle"
 >
   @if (creation().status === 'completed') {
     <img
@@ -11,7 +11,7 @@
     />
   } @else {
     <div
-      class="flex items-center justify-center w-full h-full italic text-[10px] text-zinc-400 uppercase bg-zinc-200"
+      class="flex items-center justify-center w-full h-full italic text-[10px] text-slate-400 uppercase bg-slate-200"
     >
       {{ creation().status }}...
     </div>

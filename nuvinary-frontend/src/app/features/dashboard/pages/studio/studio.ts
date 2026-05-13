@@ -35,12 +35,12 @@ export class Studio {
     {
       icon: () => Plus,
       action: () => this.dialogService.openStudioDialog(),
-      className: () => 'bg-brand text-black shadow-lg hover:bg-brand/80',
+      className: () => 'bg-accent text-black shadow-lg hover:bg-accent-strong',
     },
     {
       icon: () => (this.isEditing ? Check : Pen),
       action: () => (this.isEditing = !this.isEditing),
-      className: () => (this.isEditing ? 'text-white bg-brand/40 shadow-lg' : ''),
+      className: () => (this.isEditing ? 'text-white bg-accent-muted shadow-lg' : ''),
     },
     {
       icon: () => RotateCwSquare,

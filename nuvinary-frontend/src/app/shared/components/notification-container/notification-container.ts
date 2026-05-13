@@ -25,7 +25,7 @@ import { CircleAlert, CircleCheck, Info, LucideAngularModule, X } from 'lucide-a
 
           <button
             (click)="onRemove(note.id)"
-            class="p-1 rounded-lg text-zinc-400 transition-colors hover:bg-black/5 hover:text-zinc-600"
+            class="p-1 rounded-lg text-slate-400 transition-colors hover:bg-black/5 hover:text-slate-600"
           >
             <lucide-icon [img]="icons.close" class="w-4 h-4"></lucide-icon>
           </button>
@@ -50,7 +50,7 @@ export class NotificationContainer {
     const styles = {
       success: 'bg-green-50/90 border-green-100 text-green-900',
       error: 'bg-red-50/90 border-red-100 text-red-900',
-      info: 'bg-white/90 border-zinc-200 text-zinc-800', // Dein neuer edler Default
+      info: 'bg-white-strong border-slate-200 text-slate-800', // Dein neuer edler Default
     };
     return `${base} ${styles[type]}`;
   }

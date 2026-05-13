@@ -5,23 +5,41 @@
 @plugin '@tailwindcss/typography';
 
 @theme {
-  --color-brand: #6366f1; /* Indigo-500 */
-  --color-brand-light: #818cf8; /* Indigo-400 (Hover) */
-  --color-brand-dark: #4f46e5; /* Indigo-600 (Pressed) */
+  /* main */
+  --spacing-app-max-width: 1920px;
 
-  /* Der sanfte Hintergrund */
-  --color-page-bg: #d8d4e8; /* Sehr helles Purple (ähnlich purple-100) */
-  --color-sheet-bg: #f2eef5;
-  --color-text: #1e1b4b;
+  /* responsive */
+
+  /* colors */
+
+  /* text */
+  --color-text-strong: var(--color-text-strong);
+  --color-text-main: var(--color-slate-600);
+  --color-text-gentle: var(--color-text-gentle);
+  --color-text-light: var(--color-text-light); /* Sehr dezent */
+
+  --color-primary: #7c6db2;
+  --color-primary-hover: #8b79cb;
+  --color-primary-subtle: color-mix(in srgb, var(--color-primary), transparent 75%);
+  --color-primary-muted: color-mix(in srgb, var(--color-primary), transparent 55%);
+
+  --color-accent: #6366f1; /* Indigo-500 */
+  --color-accent-light: #818cf8;
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent), transparent 75%);
+  --color-accent-muted: color-mix(in srgb, var(--color-accent), transparent 55%);
+  --color-accent-strong: color-mix(in srgb, var(--color-accent), transparent 25%);
+
+  --color-white-glass: color-mix(in srgb, white, transparent 92%);
+  --color-white-soft: color-mix(in srgb, white, transparent 75%);
+  --color-white-medium: color-mix(in srgb, white, transparent 50%);
+  --color-white-strong: color-mix(in srgb, white, transparent 20%);
+
+  --color-surface: #d8d4e8;
+  --color-layer: #f2eef5;
 
   /* form variables */
   --color-form-success: #24dc13a3;
   --color-form-focus: #6366f166;
-
-  --color-text-main: #7c6db2;
-  --color-text-main-hover: #8b79cb;
-
-  --spacing-app-max-width: 1920px;
 
   /* header variables */
   --color-header-bg: #8c84b4;
@@ -43,8 +61,8 @@
 }
 
 body {
-  background-color: var(--color-page-bg);
-  color: var(--color-text);
+  background-color: var(--color-surface);
+  color: var(--color-text-main);
   margin: 0;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
