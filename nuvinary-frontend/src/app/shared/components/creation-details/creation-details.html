@@ -22,16 +22,9 @@
               {{ creation().title }}
             </h2>
           } @else {
-            <div class="flex flex-col gap-2 animate-in fade-in slide-in-from-left-2 duration-200">
-              <div class="relative flex items-center group/input">
-                <input
-                  #titleInput
-                  [value]="editValue()"
-                  maxlength="50"
-                  (input)="editValue.set(titleInput.value)"
-                  class="w-full py-2 pl-3 pr-24 font-black text-3xl text-text-main tracking-tight leading-tight rounded-2xl border-none bg-zinc-100/80 outline-none focus:ring-2 focus:ring-text-main/20 transition-all"
-                />
-                <div class="absolute right-2 flex items-center gap-1">
+            <div class="animate-in fade-in slide-in-from-left-2 duration-200">
+              <app-form-input [field]="editTitleForm.title" purpose="detail">
+                <div class="flex gap-2">
                   <button
                     (click)="onCancelEdit()"
                     class="p-1.5 rounded-xl text-zinc-400 cursor-pointer transition-colors hover:bg-zinc-200 hover:text-zinc-600"
@@ -48,12 +41,7 @@
                     <lucide-icon [img]="icons.checkIcon" class="w-5 h-5"></lucide-icon>
                   </button>
                 </div>
-              </div>
-              <span
-                class="px-3 font-bold text-[10px] text-zinc-400 uppercase tracking-widest animate-pulse"
-              >
-                Editing Title...
-              </span>
+              </app-form-input>
             </div>
           }
         </div>
@@ -76,11 +64,11 @@
         <span class="font-bold text-xs uppercase tracking-wider">
           Created on {{ creation().createdAt | date: 'longDate' }}
         </span>
-        @if (currentUser()?.uid === creation().createdBy.id && canEdit()) {
+        @if (currentUser()?.uid === creation().createdBy.id && canEdit() && !isEditingTitle()) {
           <span class="text-zinc-400">|</span>
           <button
             class="font-black text-xs text-zinc-400 uppercase tracking-wider transition-colors hover:text-text-main"
-            (click)="onStartEditTitle()"
+            (click)="this.isEditingTitle.set(true)"
           >
             Edit Title
           </button>

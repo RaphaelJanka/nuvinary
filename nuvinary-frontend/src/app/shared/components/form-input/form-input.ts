@@ -7,45 +7,7 @@ let nextUniqueId = 0;
 @Component({
   selector: 'app-form-input',
   imports: [FormField],
-  template: `
-    <div class="flex flex-col gap-2">
-      <label
-        [attr.for]="controlId"
-        [class.sr-only]="shouldHideLabel()"
-        [class.text-zinc-500]="purpose() === 'collection'"
-        class="ml-1 font-bold text-brand  text-[10px] uppercase tracking-[0.15em]"
-        >{{ displayLabel() }}</label
-      >
-
-      <div class="grid grid-cols-[1fr_auto] items-center" [class.gap-4]="hasContent()">
-        <input
-          [id]="controlId"
-          [type]="displayType()"
-          [placeholder]="displayPlaceholder()"
-          [formField]="field()"
-          [class.ring-2]="purpose() === 'collection'"
-          [class.bg-white]="purpose() === 'collection'"
-          [class.ring-zinc-200]="purpose() === 'collection'"
-          [class.ring-form-success]="isSuccessState()"
-          class=" rounded-xl bg-page-bg/30 px-4 py-3 placeholder:text-sm focus:border-brand/40 focus:ring-2 focus:ring-form-focus transition-all"
-        />
-        @if (hasContent()) {
-          <div class="col-start-2">
-            <ng-content></ng-content>
-          </div>
-        }
-      </div>
-      <div class="min-h-5 ps-1">
-        @if (state().touched() && state().invalid()) {
-          @for (error of state().errors(); track error.message) {
-            <p class="text-xs text-red-500 font-medium leading-tight">
-              {{ error.message }}
-            </p>
-          }
-        }
-      </div>
-    </div>
-  `,
+  templateUrl: './form-input.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormInput {
@@ -64,4 +26,38 @@ export class FormInput {
   protected readonly displayType = computed(() => this.config()?.type);
   protected readonly shouldHideLabel = computed(() => this.config()?.hideLabelVisually);
   protected readonly hasContent = computed(() => this.config()?.content);
+  protected readonly containerClasses = computed(() => {
+    return [
+      'grid grid-cols-[1fr_auto] items-center',
+      this.hasContent() ? 'gap-4' : null,
+      this.purpose() === 'detail' ? 'bg-white py-2 px-4 rounded-xl' : null,
+    ]
+      .filter(Boolean)
+      .join(' ');
+  });
+
+  protected readonly labelClasses = computed(() => {
+    return [
+      'ml-1 font-bold text-[10px] uppercase tracking-[0.15em]',
+      this.shouldHideLabel() ? 'sr-only' : null,
+      this.purpose() === 'collection' ? 'text-zinc-500' : 'text-brand',
+    ]
+      .filter(Boolean)
+      .join(' ');
+  });
+
+  protected readonly inputClasses = computed(() => {
+    return [
+      'rounded-xl py-3 focus:border-brand/40 focus:ring-form-focus transition-all',
+      this.purpose() !== 'detail' ? 'px-4 placeholder:text-sm focus:ring-2' : null,
+      this.purpose() === 'detail'
+        ? 'text-text-main font-black text-3xl max-w-[300px] placeholder:text-3xl'
+        : null,
+      this.purpose() === 'collection' ? 'ring-2 ring-zinc-200' : null,
+      this.purpose() === 'collection' || this.purpose() === 'detail' ? 'bg-white' : 'bg-page-bg/30',
+      this.isSuccessState() ? 'ring-form-success' : null,
+    ]
+      .filter(Boolean)
+      .join(' ');
+  });
 }

@@ -31,47 +31,22 @@
           >
             @if (editingCollectionId() === collection.id) {
               <form (submit)="onSubmit($event)">
-                <div class="flex items-center gap-4">
-                  <input
-                    [formField]="collectionForm.title"
-                    placeholder="Collection name..."
-                    class="w-full px-2 py-0.5 font-bold text-sm text-zinc-700 rounded-lg border border-text-main/40 bg-zinc-50 outline-none placeholder:font-normal placeholder:text-zinc-400 focus:ring-2 focus:ring-text-main/20 animate-in fade-in slide-in-from-left-1 duration-200"
-                  />
-
-                  <div class="flex">
-                    <button
-                      type="submit"
-                      [disabled]="collectionForm().invalid()"
-                      class="p-2 rounded-xl text-zinc-400 hover:bg-text-main/10 hover:text-text-main"
-                      [class.opacity-30]="collectionForm().invalid()"
-                    >
-                      <lucide-icon [img]="icons.checkIcon" class="w-4 h-4"></lucide-icon>
-                    </button>
-                    <button
-                      (click)="onCancel()"
-                      class="p-2 rounded-xl text-zinc-400 hover:bg-text-main/10 hover:text-text-main"
-                    >
-                      <lucide-icon [img]="icons.cancelIcon" class="w-4 h-4"></lucide-icon>
-                    </button>
-                  </div>
-                </div>
-
-                @if (
-                  collectionForm.title().touched() &&
-                  collectionForm.title().invalid() &&
-                  collectionForm.title().dirty()
-                ) {
-                  <div class="mt-2 px-1">
-                    @for (error of collectionForm.title().errors(); track error.message) {
-                      <p
-                        class="flex items-center gap-1 font-bold text-[10px] text-red-500 uppercase tracking-wide"
-                      >
-                        <span class="w-1 h-1 rounded-full bg-red-500"></span>
-                        {{ error.message }}
-                      </p>
-                    }
-                  </div>
-                }
+                <app-form-input [field]="collectionForm.title" purpose="updateCollection">
+                  <button
+                    type="submit"
+                    [disabled]="collectionForm().invalid()"
+                    class="p-2 rounded-xl text-zinc-400 hover:bg-text-main/10 hover:text-text-main"
+                    [class.opacity-30]="collectionForm().invalid()"
+                  >
+                    <lucide-icon [img]="icons.checkIcon" class="w-4 h-4"></lucide-icon>
+                  </button>
+                  <button
+                    (click)="onCancel()"
+                    class="p-2 rounded-xl text-zinc-400 hover:bg-text-main/10 hover:text-text-main"
+                  >
+                    <lucide-icon [img]="icons.cancelIcon" class="w-4 h-4"></lucide-icon>
+                  </button>
+                </app-form-input>
               </form>
             } @else {
               <div class="flex justify-between items-center">

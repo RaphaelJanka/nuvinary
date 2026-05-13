@@ -8,7 +8,9 @@ export type InputTypes =
   | 'code'
   | 'updateEmail'
   | 'deleteAccount'
-  | 'collection';
+  | 'collection'
+  | 'updateCollection'
+  | 'detail';
 
 export interface InputConfig {
   label: string;
@@ -44,5 +46,19 @@ export const INPUT_CONFIGS: Record<InputTypes, InputConfig> = {
     label: 'New collection',
     placeholder: 'Enter collection name',
     type: 'text',
+  },
+  updateCollection: {
+    label: 'Update Collection',
+    placeholder: 'Enter new collection title',
+    type: 'text',
+    hideLabelVisually: true,
+    content: true,
+  },
+  detail: {
+    label: 'Edit Title',
+    placeholder: 'Enter new title',
+    type: 'text',
+    hideLabelVisually: true,
+    content: true,
   },
 };

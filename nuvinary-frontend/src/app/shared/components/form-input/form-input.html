@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-2">
+  <label [attr.for]="controlId" [class]="labelClasses()">{{ displayLabel() }}</label>
+  <div [class]="containerClasses()">
+    <input
+      [id]="controlId"
+      [type]="displayType()"
+      [placeholder]="displayPlaceholder()"
+      [formField]="field()"
+      [class]="inputClasses()"
+    />
+    @if (hasContent()) {
+      <div class="col-start-2">
+        <ng-content></ng-content>
+      </div>
+    }
+  </div>
+  <div class="min-h-5 ps-1">
+    @if (state().touched() && state().invalid()) {
+      @for (error of state().errors(); track error.message) {
+        <p
+          class="text-[10px] text-red-500 flex items-center gap-1 font-bold uppercase leading-tight"
+        >
+          <span class="w-1 h-1 rounded-full bg-red-500"></span>
+          {{ error.message }}
+        </p>
+      }
+    }
+  </div>
+</div>

@@ -20,10 +20,12 @@ import { Creation } from '../../models/creation.model';
 import { CreationService } from '../../../features/services/creation-service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
+import { FormInput } from '../form-input/form-input';
+import { form, maxLength, required } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-creation-details',
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, FormInput],
   templateUrl: './creation-details.html',
 })
 export class CreationDetails {
@@ -36,6 +38,14 @@ export class CreationDetails {
   protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
   protected isEditingTitle = signal(false);
   protected editValue = signal('');
+  private readonly titleModel = signal({
+    title: this.creation().title,
+  });
+  protected readonly editTitleForm = form(this.titleModel, (schema) => {
+    required(schema.title, { message: 'Title is required' });
+    maxLength(schema.title, 40);
+  });
+
   protected readonly canEdit = computed(() => {
     return this.router.url.includes('/gallery');
   });
@@ -53,12 +63,6 @@ export class CreationDetails {
     fileTextIcon: FileText,
     checkIcon: Check,
   };
-
-  onStartEditTitle() {
-    this.editValue.set(this.creation().title);
-    this.isEditingTitle.set(true);
-  }
-
   onSaveTitle() {
     const newTitle = this.editValue().trim();
     if (newTitle && newTitle !== this.creation().title) {
