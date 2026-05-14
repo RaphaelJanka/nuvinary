@@ -1,10 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@import './styles/fonts.css';
+
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
 @plugin '@tailwindcss/typography';
 
 @theme {
+  /* fonts */
+  --font-header: 'Sora', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
   /* main */
   --spacing-app-max-width: 1920px;
 
@@ -64,8 +70,7 @@ body {
   background-color: var(--color-surface);
   color: var(--color-text-main);
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--font-body);
 }
 
 button,
