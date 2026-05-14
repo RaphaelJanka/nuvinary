@@ -74,12 +74,12 @@
               @if (!isChangingPassword()) {
                 <div class="grid grid-cols-[1fr_auto] items-center gap-4">
                   <p class="text-xs font-medium">
-                    To change your password, please enter your **new email address** below. You'll
-                    need to verify it in the next step.
+                    To change your password, please request a verification code. We will send it to
+                    your email address to confirm your identity.
                   </p>
 
                   <app-button
-                    label="Send Reset Link"
+                    label="Send Code"
                     (click)="onResetPassword()"
                     variant="secondary"
                   ></app-button>
@@ -143,8 +143,8 @@
             >
               <p class="text-xs mb-6 font-medium">
                 To confirm, please type
-                <span class="font-bold italic">****</span> below. This will permanently remove all
-                your generated images and data.
+                <span class="font-bold italic">**{{ DELETE_PHRASE }}**</span> below. This will
+                permanently remove all your generated images and data.
               </p>
 
               <form (submit)="onDeleteAccount($event)" class="grid grid-cols-[1fr_auto] gap-4">

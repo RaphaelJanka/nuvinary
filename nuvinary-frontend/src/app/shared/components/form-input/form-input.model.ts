@@ -1,3 +1,5 @@
+import { DELETE_PHRASE } from '../../utils/validation-functions';
+
 export type InputTypes =
   | 'firstName'
   | 'lastName'
@@ -37,7 +39,7 @@ export const INPUT_CONFIGS: Record<InputTypes, InputConfig> = {
   },
   deleteAccount: {
     label: 'Delete Account',
-    placeholder: 'Type the phrase here...',
+    placeholder: `${DELETE_PHRASE}`,
     type: 'text',
     hideLabelVisually: true,
     content: true,

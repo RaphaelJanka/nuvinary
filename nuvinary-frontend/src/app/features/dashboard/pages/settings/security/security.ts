@@ -13,6 +13,7 @@ import {
 import { UserService } from '../../../../services/user-service';
 import { Button } from '../../../../../shared/components/button/button';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
+import { DELETE_PHRASE } from '../../../../../shared/utils/validation-functions';
 
 type CancelActions = 'email' | 'link' | 'password' | 'account';
 
@@ -57,6 +58,8 @@ export class Security {
     return 'Resend Code';
   });
   protected readonly canResend = computed(() => this.resendTimer() === 0);
+
+  protected readonly DELETE_PHRASE = DELETE_PHRASE;
 
   protected readonly isDeleting = signal(false);
   private readonly accountDeletionModel = signal({
