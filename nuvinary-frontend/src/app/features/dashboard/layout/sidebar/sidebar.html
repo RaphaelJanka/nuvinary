@@ -1,5 +1,5 @@
 <section class="flex flex-col justify-between h-full">
-  <div class="flex flex-col gap-1 text-lg text-slate-500">
+  <div class="flex flex-col gap-1 text-lg">
     @if (showSettings()) {
       <a
         routerLink="/dashboard/gallery"
@@ -51,7 +51,7 @@
   </ng-template>
 
   @if (!isCollapsed()) {
-    <div class="flex flex-col gap-4 text-xs font-medium text-slate-500">
+    <div class="flex flex-col gap-4 text-xs font-medium">
       @for (item of legalItems; track $index) {
         <a [routerLink]="item.route" class="ps-5 hover:text-primary transition-all duration-200">
           <span class="whitespace-nowrap transition-all duration-300">

@@ -14,7 +14,7 @@
     </div>
 
     <div class="flex-1">
-      <h1 class="font-extrabold text-xl text-slate-900 leading-tight">
+      <h1 class="font-extrabold text-xl text-text-strong leading-tight">
         {{ data.title }}
       </h1>
       <p
@@ -36,14 +36,14 @@
     </div>
   </div>
 
-  <p class="font-medium text-sm text-slate-600 leading-relaxed">
+  <p class="font-medium text-sm leading-relaxed">
     {{ data.message }}
   </p>
 
   <div class="flex gap-3">
     <button
       (click)="dialogRef.close(false)"
-      class="flex-1 px-5 py-3 font-bold text-sm text-slate-500 rounded-xl transition-colors hover:bg-slate-100 hover:text-slate-800"
+      class="flex-1 px-5 py-3 font-bold text-sm rounded-xl transition-colors hover:bg-slate-100 hover:text-text-strong"
     >
       Cancel
     </button>

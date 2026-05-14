@@ -19,10 +19,11 @@
   /* colors */
 
   /* text */
-  --color-text-strong: var(--color-text-strong);
-  --color-text-main: var(--color-slate-600);
-  --color-text-gentle: var(--color-text-gentle);
-  --color-text-light: var(--color-text-light); /* Sehr dezent */
+
+  --color-text-gentle: var(--color-slate-400);
+  --color-text-main: var(--color-slate-500);
+  --color-text-emphasis: var(--color-slate-700);
+  --color-text-strong: var(--color-slate-900);
 
   --color-primary: #7c6db2;
   --color-primary-hover: #8b79cb;

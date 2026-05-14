@@ -12,14 +12,14 @@
           <div class="flex justify-between items-center">
             <button
               (click)="isChangingMailAddress.set(true)"
-              class="text-xs font-extrabold text-slate-400 hover:text-primary uppercase tracking-wider transition-colors"
+              class="text-xs font-extrabold text-text-gentle hover:text-primary uppercase tracking-wider transition-colors"
             >
               Change Email Address
             </button>
             @if (isChangingMailAddress()) {
               <button
                 (click)="onCancel('email')"
-                class="text-xs font-bold text-slate-400 hover:text-primary transition-colors"
+                class="text-xs font-bold text-text-gentle hover:text-primary transition-colors"
               >
                 Cancel
               </button>
@@ -54,14 +54,14 @@
           <div class="flex justify-between items-center">
             <button
               (click)="isSendingLink.set(true)"
-              class="text-xs font-extrabold text-slate-400 hover:text-primary uppercase tracking-wider transition-colors"
+              class="text-xs font-extrabold text-text-gentle hover:text-primary uppercase tracking-wider transition-colors"
             >
               Change Password
             </button>
             @if (isSendingLink()) {
               <button
                 (click)="onCancel('link')"
-                class="text-xs font-bold text-slate-400 hover:text-primary transition-colors"
+                class="text-xs font-bold text-text-gentle hover:text-primary transition-colors"
               >
                 Cancel
               </button>
@@ -123,14 +123,14 @@
           <div class="flex items-center justify-between">
             <button
               (click)="isDeleting.set(true)"
-              class="text-xs font-extrabold text-slate-400 hover:text-red-500 uppercase tracking-wider transition-colors"
+              class="text-xs font-extrabold text-text-gentle hover:text-red-500 uppercase tracking-wider transition-colors"
             >
               Delete my Account
             </button>
             @if (isDeleting()) {
               <button
                 (click)="onCancel('account')"
-                class="text-xs font-bold text-slate-400 hover:text-primary transition-colors"
+                class="text-xs font-bold text-text-gentle hover:text-primary transition-colors"
               >
                 Cancel
               </button>

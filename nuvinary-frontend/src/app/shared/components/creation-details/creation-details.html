@@ -18,7 +18,7 @@
       <div class="flex justify-between items-center gap-3">
         <div class="flex-1 min-w-0">
           @if (!isEditingTitle()) {
-            <h1 class="font-black text-3xl text-slate-900 tracking-tight wrap-break-word">
+            <h1 class="font-black text-3xl text-text-strong tracking-tight wrap-break-word">
               {{ creation().title }}
             </h1>
           } @else {
@@ -27,7 +27,7 @@
                 <div class="flex gap-2">
                   <button
                     (click)="onCancelEdit()"
-                    class="p-1.5 rounded-xl text-slate-400 cursor-pointer transition-colors hover:bg-slate-200 hover:text-slate-600"
+                    class="p-1.5 rounded-xl text-text-gentle cursor-pointer transition-colors hover:bg-slate-200 hover:text-text-emphasis"
                     title="Cancel"
                   >
                     <lucide-icon [img]="icons.closeIcon" class="w-5 h-5"></lucide-icon>
@@ -53,21 +53,21 @@
           >
             <lucide-icon
               [img]="icons.closeIcon"
-              class="w-5 h-5 text-slate-500 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
+              class="w-5 h-5 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
             ></lucide-icon>
           </button>
         }
       </div>
 
-      <div class="flex items-center gap-2 mt-3 text-slate-400">
+      <div class="flex items-center gap-2 mt-3 text-text-gentle">
         <lucide-icon [img]="icons.dateIcon" class="w-4 h-4 mb-1"></lucide-icon>
         <span class="font-bold text-[10px] uppercase tracking-wider">
           Created on {{ creation().createdAt | date: 'longDate' }}
         </span>
         @if (currentUser()?.uid === creation().createdBy.id && canEdit() && !isEditingTitle()) {
-          <span class="text-slate-400">|</span>
+          <span class="text-text-gentle">|</span>
           <button
-            class="font-black text-[10px] text-slate-400 uppercase tracking-widest transition-colors hover:text-primary"
+            class="font-black text-[10px] text-text-gentle uppercase tracking-widest transition-colors hover:text-primary"
             (click)="this.isEditingTitle.set(true)"
           >
             Edit Title
@@ -77,9 +77,7 @@
     </div>
 
     <div>
-      <h4 class="mb-3 font-black text-[10px] text-slate-500 uppercase tracking-[0.2em]">
-        Privacy Settings
-      </h4>
+      <h4 class="mb-3 font-black text-[10px] uppercase tracking-[0.2em]">Privacy Settings</h4>
 
       <div
         class="flex items-center justify-between w-full p-5 rounded-3xl border transition-all duration-300"
@@ -97,19 +95,19 @@
             @if (creation().isPublic) {
               <lucide-icon [img]="icons.globeIcon" class="w-5 h-5 text-white"></lucide-icon>
             } @else {
-              <lucide-icon [img]="icons.lockIcon" class="w-5 h-5 text-slate-400"></lucide-icon>
+              <lucide-icon [img]="icons.lockIcon" class="w-5 h-5 text-text-gentle"></lucide-icon>
             }
           </div>
           <div class="text-left">
             <p
               class="font-black text-sm transition-colors duration-500"
-              [ngClass]="creation().isPublic ? 'text-white' : 'text-slate-800'"
+              [ngClass]="creation().isPublic ? 'text-white' : 'text-text-strong'"
             >
               {{ creation().isPublic ? 'Public Asset' : 'Private Asset' }}
             </p>
             <p
               class="font-medium text-[10px] transition-colors duration-500"
-              [ngClass]="creation().isPublic ? 'text-white-strong' : 'text-slate-500'"
+              [ngClass]="creation().isPublic ? 'text-white-strong' : ''"
             >
               {{
                 creation().isPublic
@@ -140,9 +138,7 @@
     <hr class="border-slate-100" />
 
     <div>
-      <h4
-        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-500 uppercase tracking-[0.2em]"
-      >
+      <h4 class="flex items-center gap-2 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">
         Created By
       </h4>
       <div
@@ -155,7 +151,7 @@
           class="z-10 w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
         />
         <div class="flex flex-col">
-          <span class="font-black text-base text-slate-800 tracking-tight leading-tight">
+          <span class="font-black text-base text-text-strong tracking-tight leading-tight">
             {{ creation().createdBy.name }}
           </span>
           <span class="font-bold text-[10px] text-primary uppercase tracking-wider opacity-80">
@@ -168,19 +164,17 @@
     <hr class="border-slate-100" />
 
     <div>
-      <h4
-        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-500 uppercase tracking-[0.2em]"
-      >
+      <h4 class="flex items-center gap-2 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">
         Info
       </h4>
       <div
         class="relative p-5 rounded-3xl border border-slate-100 bg-white shadow-sm text-sm leading-relaxed transition-colors hover:border-primary-subtle"
       >
-        <div class="flex items-center gap-2 mb-2 text-slate-400">
+        <div class="flex items-center gap-2 mb-2 text-text-gentle">
           <lucide-icon [img]="icons.fileTextIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">Generation Prompt</span>
         </div>
-        <span class="italic text-slate-800">"{{ creation().aiMetadata.prompt }}"</span>
+        <span class="italic text-text-strong">"{{ creation().aiMetadata.prompt }}"</span>
       </div>
     </div>
 
@@ -188,29 +182,29 @@
       <div
         class="p-5 rounded-3xl border border-slate-100 bg-white shadow-sm transition-colors hover:border-primary-subtle"
       >
-        <div class="flex items-center gap-2 mb-2 text-slate-400">
+        <div class="flex items-center gap-2 mb-2 text-text-gentle">
           <lucide-icon [img]="icons.cpuIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">AI Engine</span>
         </div>
-        <p class="font-black text-xs text-slate-800">{{ creation().aiMetadata.model }}</p>
+        <p class="font-black text-xs text-text-strong">{{ creation().aiMetadata.model }}</p>
       </div>
 
       <div
         class="p-5 rounded-3xl border border-slate-100 bg-white shadow-sm transition-colors hover:border-primary-subtle"
       >
-        <div class="flex items-center gap-2 mb-2 text-slate-400">
+        <div class="flex items-center gap-2 mb-2 text-text-gentle">
           <lucide-icon [img]="icons.layersIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">Parameters</span>
         </div>
-        <p class="font-black text-xs text-slate-800">
-          {{ creation().aiMetadata.steps }} Steps <span class="mx-1 text-slate-300">|</span>
+        <p class="font-black text-xs text-text-strong">
+          {{ creation().aiMetadata.steps }} Steps <span class="mx-1 text-text-gentle">|</span>
           {{ creation().aiMetadata.cfgScale }} CFG
         </p>
       </div>
     </div>
 
     <div
-      class="flex items-center justify-between mt-auto pt-6 font-bold text-[10px] text-slate-500 uppercase tracking-[0.15em]"
+      class="flex items-center justify-between mt-auto pt-6 font-bold text-[10px] uppercase tracking-[0.15em]"
     >
       <span>ID: {{ creation().id }}</span>
       <span>{{ creation().fileSize / 1000000 | number: '1.1-2' }} MB</span>

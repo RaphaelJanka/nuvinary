@@ -48,7 +48,7 @@ export class FormInput {
 
   protected readonly inputClasses = computed(() => {
     return [
-      'rounded-xl py-3 focus:border-accent-muted focus:ring-form-focus transition-all',
+      'rounded-xl py-3 focus:border-accent-muted focus:ring-form-focus text-text-emphasis transition-all',
       this.purpose() !== 'detail' ? 'px-4 placeholder:text-sm focus:ring-2' : null,
       this.purpose() === 'detail'
         ? 'text-primary font-black text-3xl max-w-[300px] placeholder:text-3xl'

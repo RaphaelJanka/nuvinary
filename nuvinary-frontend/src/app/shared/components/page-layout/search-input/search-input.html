@@ -1,17 +1,17 @@
 <div
   class="flex items-center bg-[#f9f8fc] border border-slate-200 rounded-2xl px-4 py-2 focus-within:ring-2 focus-within:ring-primary-subtle transition-all"
 >
-  <lucide-icon [img]="icons.searchIcon" class="w-4 h-4 text-slate-400"></lucide-icon>
+  <lucide-icon [img]="icons.searchIcon" class="w-4 h-4 text-text-gentle"></lucide-icon>
   <input
     #searchInput
     type="text"
     [value]="query()"
     (input)="query.set(searchInput.value)"
     placeholder="Search assets..."
-    class="ml-3 flex-1 bg-transparent border-none text-sm font-semibold text-slate-700 outline-none"
+    class="ml-3 flex-1 bg-transparent border-none text-sm font-semibold text-text-emphasis outline-none"
   />
   @if (query()) {
-    <button (click)="query.set('')" class="text-slate-400 hover:text-primary transition-colors">
+    <button (click)="query.set('')" class="text-text-gentle hover:text-primary transition-colors">
       <lucide-icon [img]="icons.closeIcon" class="w-4 h-4"></lucide-icon>
     </button>
   }
