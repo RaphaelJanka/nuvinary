@@ -50,7 +50,7 @@ export class Button {
       case 'secondary':
         return `bg-primary shadow-bg-primary-subtle hover:bg-primary-hover ${baseClasses}`;
       case 'danger':
-        return `bg-red-500 shadow-red-400 hover:bg-red-600 ${baseClasses}`;
+        return `bg-danger shadow-danger hover:bg-danger-hover ${baseClasses}`;
       case 'ghost':
         return `border border-white-soft bg-white-glassbackdrop-blur-sm hover:bg-accent-light hover:border-accent-light hover:shadow-accent-light/50 ${baseClasses}`;
       default:

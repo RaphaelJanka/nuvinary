@@ -49,7 +49,7 @@
           }
         </div>
 
-        <div class="pt-8 border-t border-slate-600/30">
+        <div class="pt-8 border-t border-border-gentle">
           <h2 class="text-xl font-bold text-primary tracking-tight mb-6">Password</h2>
           <div class="flex justify-between items-center">
             <button
@@ -103,7 +103,7 @@
                       [field]="passwordForm.confirmPassword"
                       purpose="confirmPassword"
                     ></app-form-input>
-                    <div class="flex pt-6 border-t border-slate-600/30">
+                    <div class="flex pt-6 border-t border-border-gentle">
                       <app-button
                         label="Change Password"
                         [disabled]="passwordForm().invalid()"
@@ -119,11 +119,11 @@
           }
         </div>
 
-        <div class="pt-10 border-t border-slate-600/30">
+        <div class="pt-10 border-t border-border-gentle">
           <div class="flex items-center justify-between">
             <button
               (click)="isDeleting.set(true)"
-              class="text-xs font-extrabold text-text-gentle hover:text-red-500 uppercase tracking-wider transition-colors"
+              class="text-xs font-extrabold text-text-gentle hover:text-danger uppercase tracking-wider transition-colors"
             >
               Delete my Account
             </button>

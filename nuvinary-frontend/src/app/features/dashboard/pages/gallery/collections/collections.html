@@ -25,7 +25,7 @@
           (drop)="onDrop(collection.id)"
         >
           <div
-            class="z-1 p-4 rounded-2xl border border-slate-100 bg-white shadow-xs transition-all group hover:border-primary-subtle hover:shadow-md"
+            class="z-1 p-4 rounded-2xl border border-border-light bg-white shadow-xs transition-all group hover:border-primary-subtle hover:shadow-md"
             [class.border-[#7c6db2]/50]="dragOverId() === collection.id"
             [class.shadow-lg]="dragOverId() === collection.id"
           >
@@ -57,7 +57,7 @@
                   (click)="onToggleExpand(collection.id)"
                 >
                   <div
-                    class="flex items-center justify-center w-9 h-9 rounded-xl bg-[#f9f8fc] text-primary transition-colors group-hover:bg-primary-subtle group-hover:text-primary"
+                    class="flex items-center justify-center w-9 h-9 rounded-xl bg-layer text-primary transition-colors group-hover:bg-primary-subtle group-hover:text-primary"
                   >
                     <lucide-icon
                       [img]="icons.folderIcon"
@@ -90,7 +90,7 @@
                     </button>
                     <button
                       (click)="onDeleteCollection(collection)"
-                      class="p-2 rounded-xl text-text-gentle hover:bg-red-50 hover:text-red-500"
+                      class="p-2 rounded-xl text-text-gentle hover:bg-bg-danger hover:text-danger"
                     >
                       <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
                     </button>
@@ -102,11 +102,11 @@
 
           @if (expandedCollectionId() === collection.id) {
             <div
-              class="grid grid-cols-4 gap-2 px-2 pt-8 pb-4 -mt-4 min-h-50 rounded-bl-xl rounded-br-xl border border-slate-100 bg-white shadow-xs animate-in slide-in-from-top-2 fade-in duration-300"
+              class="grid grid-cols-4 gap-2 px-2 pt-8 pb-4 -mt-4 min-h-50 rounded-bl-xl rounded-br-xl border border-border-light bg-white shadow-xs animate-in slide-in-from-top-2 fade-in duration-300"
             >
               @for (creation of collection.creations; track creation.id) {
                 <div
-                  class="relative aspect-square overflow-hidden rounded-lg border border-slate-200 bg-slate-50 group"
+                  class="relative aspect-square overflow-hidden rounded-lg border border-border-gentle group"
                 >
                   <img
                     [src]="creation.url"
@@ -115,7 +115,7 @@
                   />
                   <button
                     (click)="onRemoveCreationFromCollection(collection.id, creation.id)"
-                    class="absolute top-1 right-1 p-1 rounded-md border border-slate-200 bg-white-strong opacity-0 shadow-sm backdrop-blur-sm transition-all duration-200 group-hover:opacity-100 hover:border-red-100 hover:bg-red-50 hover:text-red-500"
+                    class="absolute top-1 right-1 p-1 rounded-md border border-border-gentle bg-white-strong opacity-0 shadow-sm backdrop-blur-sm transition-all duration-200 group-hover:opacity-100 hover:border-danger-light hover:bg-bg-danger hover:text-danger"
                   >
                     <lucide-icon [img]="icons.cancelIcon" class="w-3 h-3"></lucide-icon>
                   </button>
@@ -132,7 +132,7 @@
 
               @if (collection.creations.length === 0 && dragOverId() !== collection.id) {
                 <div
-                  class="flex col-span-4 items-center justify-center py-6 rounded-xl border border-dashed border-slate-200 bg-slate-50"
+                  class="flex col-span-4 items-center justify-center py-6 rounded-xl border border-dashed border-border-gentle bg-bg-light"
                 >
                   <p class="font-bold text-[9px] text-text-gentle uppercase tracking-widest">
                     No assets in this collection

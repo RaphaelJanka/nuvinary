@@ -11,7 +11,7 @@ import { RouterOutlet } from '@angular/router';
       <app-header></app-header>
       <main class="flex-1 w-full p-8">
         <div
-          class="mx-auto w-full bg-white max-w-xl p-8 rounded-4xl border border-slate-200 shadow-2xl"
+          class="mx-auto w-full bg-white max-w-xl p-8 rounded-4xl border border-border-gentle shadow-2xl"
         >
           <router-outlet />
         </div>

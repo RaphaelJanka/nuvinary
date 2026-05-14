@@ -17,9 +17,7 @@
       class="group relative flex items-center justify-center w-10 h-10 rounded-full shadow-lg transition-all"
       [style.background-color]="authUser()?.avatarColor || 'transparent'"
     >
-      <div
-        class="absolute inset-0 rounded-full bg-white/0 transition-colors group-hover:bg-white-soft"
-      ></div>
+      <div class="absolute inset-0 rounded-full transition-colors group-hover:bg-white-soft"></div>
 
       <span class="text-md font-bold tracking-wide text-white">
         {{ authUser() | userInitial }}

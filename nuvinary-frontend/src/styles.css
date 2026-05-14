@@ -17,20 +17,12 @@
   /* responsive */
 
   /* colors */
-
-  /* text */
-
-  --color-text-gentle: var(--color-slate-400);
-  --color-text-main: var(--color-slate-500);
-  --color-text-emphasis: var(--color-slate-700);
-  --color-text-strong: var(--color-slate-900);
-
   --color-primary: #7c6db2;
   --color-primary-hover: #8b79cb;
   --color-primary-subtle: color-mix(in srgb, var(--color-primary), transparent 75%);
   --color-primary-muted: color-mix(in srgb, var(--color-primary), transparent 55%);
 
-  --color-accent: #6366f1; /* Indigo-500 */
+  --color-accent: #6366f1;
   --color-accent-light: #818cf8;
   --color-accent-subtle: color-mix(in srgb, var(--color-accent), transparent 75%);
   --color-accent-muted: color-mix(in srgb, var(--color-accent), transparent 55%);
@@ -43,6 +35,38 @@
 
   --color-surface: #d8d4e8;
   --color-layer: #f2eef5;
+
+  --color-warning: var(--color-amber-500);
+  --color-warning-light: var(--color-amber-100);
+  --color-bg-warning: var(--color-amber-50);
+  --color-bg-warning-hover: var(--color-amber-600);
+
+  --color-success: var(--color-green-500);
+  --color-success-light: var(--color-green-100);
+  --color-bg-success: var(--color-green-50);
+  --color-success-strong: var(--color-green-900);
+
+  --color-danger: var(--color-red-500);
+  --color-danger-light: var(--color-red-100);
+  --color-bg-danger: var(--color-red-50);
+  --color-danger-hover: var(--color-red-600);
+  --color-danger-strong: var(--color-red-900);
+
+  /* text */
+  --color-text-gentle: var(--color-slate-400);
+  --color-text-main: var(--color-slate-500);
+  --color-text-emphasis: var(--color-slate-700);
+  --color-text-strong: var(--color-slate-900);
+
+  /* border */
+  --color-border-light: var(--color-slate-100);
+  --color-border-gentle: var(--color-slate-200);
+  --color-border-strong: var(--color-slate-900);
+
+  /* background */
+  --color-bg-light: var(--color-slate-100);
+  --color-bg-gentle: var(--color-slate-200);
+  --color-bg-strong: var(--color-slate-900);
 
   /* form variables */
   --color-form-success: #24dc13a3;
@@ -65,6 +89,9 @@
   --color-studio-border: #5c4270;
   --color-studio-header: #766496;
   --color-studio-frame: #5c4f7d;
+
+  /* create */
+  --color-line: #94afd1;
 }
 
 body {

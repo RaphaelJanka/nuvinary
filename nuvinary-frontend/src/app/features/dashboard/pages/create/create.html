@@ -20,7 +20,7 @@
 
             @if (isTyping()) {
               <span
-                class="inline-block w-0.75 h-[0.9em] ml-1 translate-y-[0.1em] bg-[#94afd1] animate-pulse"
+                class="inline-block w-0.75 h-[0.9em] ml-1 translate-y-[0.1em] bg-line animate-pulse"
               ></span>
             }
           }
@@ -31,7 +31,7 @@
         <div class="animate-in fade-in slide-in-from-bottom-4 duration-1200">
           <textarea
             [formField]="creationForm.prompt"
-            class="block w-full p-6 font-semibold text-lg rounded-3xl border border-slate-200 bg-white shadow-sm resize-none outline-none focus:ring-4 focus:ring-primary-subtle transition-all"
+            class="block w-full p-6 font-semibold text-lg rounded-3xl border border-border-gentle bg-white shadow-sm resize-none outline-none focus:ring-4 focus:ring-primary-subtle transition-all"
             rows="4"
             placeholder="e.g. A cybernetic owl with glowing blue eyes in a dark forest..."
           >
@@ -55,7 +55,7 @@
           <input
             type="text"
             [formField]="creationForm.title"
-            class="w-full p-6 font-semibold text-lg rounded-3xl border border-slate-200 bg-white shadow-sm outline-none placeholder:text-text-gentle focus:ring-1 focus:ring-primary-subtle transition-all"
+            class="w-full p-6 font-semibold text-lg rounded-3xl border border-border-gentle bg-white shadow-sm outline-none placeholder:text-text-gentle focus:ring-1 focus:ring-primary-subtle transition-all"
             placeholder="Enter a title (or leave blank for magic)..."
           />
 

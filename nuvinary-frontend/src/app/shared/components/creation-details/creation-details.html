@@ -1,8 +1,8 @@
 <div
-  class="relative flex flex-col lg:flex-row overflow-hidden w-full max-w-7xl max-h-[90vh] rounded-[2.5rem] border border-slate-200 bg-surface shadow-2xl animate-in fade-in zoom-in duration-300"
+  class="relative flex flex-col lg:flex-row overflow-hidden w-full max-w-7xl max-h-[90vh] rounded-[2.5rem] border border-border-gentle bg-surface shadow-2xl animate-in fade-in zoom-in duration-300"
 >
   <section
-    class="flex items-center justify-center lg:w-3/5 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-slate-100 bg-white-medium group"
+    class="flex items-center justify-center lg:w-3/5 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-border-light bg-white-medium group"
   >
     <img
       [src]="creation().url"
@@ -27,7 +27,7 @@
                 <div class="flex gap-2">
                   <button
                     (click)="onCancelEdit()"
-                    class="p-1.5 rounded-xl text-text-gentle cursor-pointer transition-colors hover:bg-slate-200 hover:text-text-emphasis"
+                    class="p-1.5 rounded-xl text-text-gentle cursor-pointer transition-colors hover:bg-bg-gentle hover:text-text-emphasis"
                     title="Cancel"
                   >
                     <lucide-icon [img]="icons.closeIcon" class="w-5 h-5"></lucide-icon>
@@ -49,7 +49,7 @@
         @if (!isEditingTitle()) {
           <button
             (click)="onClose()"
-            class="p-2 rounded-full border border-slate-200 bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-slate-100"
+            class="p-2 rounded-full border border-border-gentle bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-bg-light"
           >
             <lucide-icon
               [img]="icons.closeIcon"
@@ -84,13 +84,13 @@
         [ngClass]="
           creation().isPublic
             ? 'bg-primary border-primary shadow-lg shadow-primary-subtle'
-            : 'bg-white border-slate-100 shadow-sm'
+            : 'bg-white border-border-light shadow-sm'
         "
       >
         <div class="flex items-center gap-4">
           <div
             class="p-2.5 rounded-xl transition-colors duration-500"
-            [ngClass]="creation().isPublic ? 'bg-white-soft' : 'bg-slate-200'"
+            [ngClass]="creation().isPublic ? 'bg-white-soft' : 'bg-bg-gentle'"
           >
             @if (creation().isPublic) {
               <lucide-icon [img]="icons.globeIcon" class="w-5 h-5 text-white"></lucide-icon>
@@ -123,7 +123,7 @@
             type="button"
             (click)="onTogglePublic()"
             class="relative w-12 h-7 p-1 rounded-full cursor-pointer transition-all duration-500 outline-none focus:ring-2 focus:ring-white-medium active:scale-90"
-            [ngClass]="creation().isPublic ? 'bg-white-soft' : 'bg-slate-300'"
+            [ngClass]="creation().isPublic ? 'bg-white-soft' : 'bg-bg-gentle'"
           >
             <div
               class="w-5 h-5 bg-white rounded-full shadow-md transition-all duration-500 ease-in-out"
@@ -135,14 +135,14 @@
       </div>
     </div>
 
-    <hr class="border-slate-100" />
+    <hr class="border-border-light" />
 
     <div>
       <h4 class="flex items-center gap-2 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">
         Created By
       </h4>
       <div
-        class="relative overflow-hidden flex items-center gap-3 p-4 rounded-3xl border border-slate-100 border-s-0 bg-white shadow-sm leading-relaxed transition-colors hover:border-primary-subtle"
+        class="relative overflow-hidden flex items-center gap-3 p-4 rounded-3xl border border-border-light border-s-0 bg-white shadow-sm leading-relaxed transition-colors hover:border-primary-subtle"
       >
         <div class="absolute top-0 left-0 w-1 h-full bg-primary-muted"></div>
         <img
@@ -161,14 +161,14 @@
       </div>
     </div>
 
-    <hr class="border-slate-100" />
+    <hr class="border-border-light" />
 
     <div>
       <h4 class="flex items-center gap-2 mb-3 font-black text-[10px] uppercase tracking-[0.2em]">
         Info
       </h4>
       <div
-        class="relative p-5 rounded-3xl border border-slate-100 bg-white shadow-sm text-sm leading-relaxed transition-colors hover:border-primary-subtle"
+        class="relative p-5 rounded-3xl border border-border-light bg-white shadow-sm text-sm leading-relaxed transition-colors hover:border-primary-subtle"
       >
         <div class="flex items-center gap-2 mb-2 text-text-gentle">
           <lucide-icon [img]="icons.fileTextIcon" class="w-4 h-4"></lucide-icon>
@@ -180,7 +180,7 @@
 
     <div class="grid grid-cols-2 gap-4">
       <div
-        class="p-5 rounded-3xl border border-slate-100 bg-white shadow-sm transition-colors hover:border-primary-subtle"
+        class="p-5 rounded-3xl border border-border-light bg-white shadow-sm transition-colors hover:border-primary-subtle"
       >
         <div class="flex items-center gap-2 mb-2 text-text-gentle">
           <lucide-icon [img]="icons.cpuIcon" class="w-4 h-4"></lucide-icon>
@@ -190,7 +190,7 @@
       </div>
 
       <div
-        class="p-5 rounded-3xl border border-slate-100 bg-white shadow-sm transition-colors hover:border-primary-subtle"
+        class="p-5 rounded-3xl border border-border-light bg-white shadow-sm transition-colors hover:border-primary-subtle"
       >
         <div class="flex items-center gap-2 mb-2 text-text-gentle">
           <lucide-icon [img]="icons.layersIcon" class="w-4 h-4"></lucide-icon>

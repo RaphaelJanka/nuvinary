@@ -1,13 +1,13 @@
 <div
-  class="flex flex-col justify-center gap-12 h-full p-8 rounded-3xl border border-slate-100 bg-white shadow-2xl animate-in zoom-in-95 duration-300"
+  class="flex flex-col justify-center gap-12 h-full p-8 rounded-3xl border border-border-light bg-white shadow-2xl animate-in zoom-in-95 duration-300"
 >
   <div class="flex items-center gap-4">
     <div
       class="flex items-center justify-center w-14 h-14 rounded-2xl border shadow-inner transition-colors"
       [ngClass]="{
-        'bg-red-50 text-red-500 border-red-100': data.type === 'delete',
+        'bg-bg-danger text-danger border-danger-light': data.type === 'delete',
         'bg-primary-subtle text-primary border-primary-subtle': data.type === 'info',
-        'bg-amber-50 text-amber-500 border-amber-100': data.type === 'warning',
+        'bg-bg-warning text-warning border-warning-light': data.type === 'warning',
       }"
     >
       <lucide-icon [img]="icons.trashIcon" class="w-7 h-7"></lucide-icon>
@@ -20,9 +20,9 @@
       <p
         class="inline-block mt-1 px-2 py-0.5 font-black text-[10px] uppercase tracking-widest rounded-full"
         [ngClass]="{
-          'text-red-600 bg-red-50': data.type === 'delete',
+          'text-danger bg-bg-danger': data.type === 'delete',
           'text-primary bg-primary-subtle': data.type === 'info',
-          'text-amber-600 bg-amber-50': data.type === 'warning',
+          'text-warning bg-bg-warning': data.type === 'warning',
         }"
       >
         {{
@@ -43,7 +43,7 @@
   <div class="flex gap-3">
     <button
       (click)="dialogRef.close(false)"
-      class="flex-1 px-5 py-3 font-bold text-sm rounded-xl transition-colors hover:bg-slate-100 hover:text-text-strong"
+      class="flex-1 px-5 py-3 font-bold text-sm rounded-xl transition-colors hover:bg-bg-light hover:text-text-strong"
     >
       Cancel
     </button>
@@ -52,9 +52,9 @@
       (click)="dialogRef.close(true)"
       class="flex-1 px-5 py-3 font-bold text-sm text-white rounded-xl shadow-lg transition-all active:scale-95"
       [ngClass]="{
-        'bg-red-500 hover:bg-red-600 shadow-red-100': data.type === 'delete',
+        'bg-danger hover:bg-danger-hover shadow-danger-light': data.type === 'delete',
         'bg-primary hover:bg-[#6a5ca1] shadow-indigo-100': data.type === 'info',
-        'bg-amber-500 hover:bg-amber-600 shadow-amber-100': data.type === 'warning',
+        'bg-bg-warning hover:bg-bg-warning-hover shadow-warning-light': data.type === 'warning',
       }"
     >
       {{ data.type === 'delete' ? 'Yes, delete' : 'Confirm' }}

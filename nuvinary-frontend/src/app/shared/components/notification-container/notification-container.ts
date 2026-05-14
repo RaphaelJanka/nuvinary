@@ -15,8 +15,8 @@ import { CircleAlert, CircleCheck, Info, LucideAngularModule, X } from 'lucide-a
             [img]="icons[note.type]"
             class="w-5 h-5"
             [class.text-blue-500]="note.type === 'info'"
-            [class.text-green-500]="note.type === 'success'"
-            [class.text-red-500]="note.type === 'error'"
+            [class.text-success]="note.type === 'success'"
+            [class.text-danger]="note.type === 'error'"
           ></lucide-icon>
 
           <p class="flex-1 font-semibold text-sm tracking-tight">
@@ -48,9 +48,9 @@ export class NotificationContainer {
     const base =
       'pointer-events-auto flex items-center gap-3 px-5 py-3 rounded-2xl border shadow-2xl backdrop-blur-md animate-in slide-in-from-right-10 duration-300';
     const styles = {
-      success: 'bg-green-50/90 border-green-100 text-green-900',
-      error: 'bg-red-50/90 border-red-100 text-red-900',
-      info: 'bg-white-strong border-slate-200 text-text-strong', // Dein neuer edler Default
+      success: 'bg-bg-success border-success-light text-success-strong',
+      error: 'bg-bg-danger border-danger-light text-danger-strong',
+      info: 'bg-white-strong border-border-gentle text-text-strong', // Dein neuer edler Default
     };
     return `${base} ${styles[type]}`;
   }
