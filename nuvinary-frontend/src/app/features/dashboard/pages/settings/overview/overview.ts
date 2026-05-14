@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { PageLayout } from '../../../../../shared/components/page-layout/page-layout';
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
@@ -8,6 +8,7 @@ import { BaseChartDirective } from 'ng2-charts';
   selector: 'app-overview',
   imports: [PageLayout, BaseChartDirective],
   templateUrl: './overview.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Overview {
   private readonly authService = inject(AuthService);

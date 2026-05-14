@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { PageLayout } from '../../../../../shared/components/page-layout/page-layout';
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { Check, Lock, LucideAngularModule } from 'lucide-angular';
@@ -13,6 +13,7 @@ import { verifyName } from '../../../../../shared/utils/validation-functions';
   selector: 'app-profile',
   imports: [PageLayout, LucideAngularModule, UserInitialPipe, Button, FormInput],
   templateUrl: './profile.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Profile {
   private readonly authService = inject(AuthService);

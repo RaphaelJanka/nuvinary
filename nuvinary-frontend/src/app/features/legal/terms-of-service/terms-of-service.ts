@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { TERMS_OF_SERVICE_CONTENT } from './terms-of-service.content';
 import { LegalService } from '../../services/legal-service';
@@ -12,6 +12,7 @@ import { LegalService } from '../../services/legal-service';
       [innerHTML]="termsHtml()"
     ></article>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TermsOfService {
   private readonly legalService = inject(LegalService);

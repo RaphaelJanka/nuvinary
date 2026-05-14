@@ -1,5 +1,6 @@
 import {
   afterNextRender,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
@@ -18,6 +19,7 @@ interface VantaWindow extends Window {
   selector: 'app-hero',
   imports: [Header],
   templateUrl: './hero.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Hero implements OnDestroy {
   private vantaEffect?: VantaEffect;

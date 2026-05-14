@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CreationService } from '../../../services/creation-service';
 import { Collections } from './collections/collections';
 import { CreationGrid } from '../../../../shared/components/creation-grid/creation-grid';
@@ -11,6 +11,7 @@ import { createCreationFilter } from '../../../../shared/utils/creation-filter';
   selector: 'app-gallery',
   imports: [Collections, CreationGrid, PageLayout, LucideAngularModule, SearchInput],
   templateUrl: './gallery.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Gallery {
   private readonly creationService = inject(CreationService);

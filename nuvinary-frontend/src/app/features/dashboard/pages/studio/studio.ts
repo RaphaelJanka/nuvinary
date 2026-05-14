@@ -1,4 +1,11 @@
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import {
   Check,
@@ -19,6 +26,7 @@ import { toPng } from 'html-to-image';
   imports: [PageLayout, LucideAngularModule, NgClass],
   templateUrl: './studio.html',
   styleUrl: './studio.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Studio {
   private readonly dialogService = inject(DialogService);

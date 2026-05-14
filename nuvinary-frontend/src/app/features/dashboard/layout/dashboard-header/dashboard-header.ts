@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { SidebarService } from '../../../services/sidebar-service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
@@ -10,6 +10,7 @@ import { UserInitialPipe } from '../../../../shared/pipes/user-initial.pipe';
   selector: 'app-main-header',
   imports: [LucideAngularModule, UserMenu, UserInitialPipe],
   templateUrl: './dashboard-header.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
   private readonly sidebarService = inject(SidebarService);

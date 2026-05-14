@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   ArrowLeft,
@@ -19,6 +19,7 @@ import { NgTemplateOutlet } from '@angular/common';
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive, LucideAngularModule, NgTemplateOutlet],
   templateUrl: './sidebar.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Sidebar {
   private readonly sideBarService = inject(SidebarService);

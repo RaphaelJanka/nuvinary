@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { PRIVACY_HTML_CONTENT } from './privacy-policy.content';
 import { LegalService } from '../../services/legal-service';
@@ -12,6 +12,7 @@ import { LegalService } from '../../services/legal-service';
       [innerHTML]="content()"
     ></article>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrivacyPolicy implements OnInit {
   private readonly legalService = inject(LegalService);

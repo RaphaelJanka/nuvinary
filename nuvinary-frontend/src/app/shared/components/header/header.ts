@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -10,6 +10,7 @@ import { Button } from '../button/button';
   selector: 'app-header',
   imports: [RouterLink, NgClass, Button],
   templateUrl: './header.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
   private readonly router = inject(Router);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Header } from '../../shared/components/header/header';
 import { Footer } from '../../shared/components/footer/footer';
 import { RouterOutlet } from '@angular/router';
@@ -19,5 +19,6 @@ import { RouterOutlet } from '@angular/router';
       <app-footer></app-footer>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Auth {}

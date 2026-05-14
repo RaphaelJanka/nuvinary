@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Footer } from '../../shared/components/footer/footer';
 import { Header } from '../../shared/components/header/header';
@@ -26,6 +26,7 @@ import { Location } from '@angular/common';
       <app-footer class="w-full block"></app-footer>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LegalLayout {
   protected readonly backIcon = ArrowLeft;

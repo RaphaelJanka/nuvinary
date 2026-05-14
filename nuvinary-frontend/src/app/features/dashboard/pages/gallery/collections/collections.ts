@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
 import { CollectionService } from '../../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
@@ -12,6 +12,7 @@ import { Button } from '../../../../../shared/components/button/button';
   selector: 'app-collections',
   imports: [LucideAngularModule, FormInput, Button],
   templateUrl: './collections.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Collections {
   private readonly collectionService = inject(CollectionService);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,7 +7,7 @@ import { RouterLink } from '@angular/router';
   template: `
     <footer class="shrink-0 px-4 py-6">
       <div
-        class="flex flex-wrap justify-center gap-x-8 gap-y-2 font-medium text-[10px] text-text/40 uppercase tracking-widest"
+        class="flex flex-wrap justify-center gap-x-8 gap-y-2 font-medium text-[10px] uppercase tracking-widest"
       >
         @for (item of legalItems; track item.label) {
           <a [routerLink]="item.route" class="transition-colors hover:text-accent">
@@ -18,6 +18,7 @@ import { RouterLink } from '@angular/router';
       </div>
     </footer>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Footer {
   currentYear = new Date().getFullYear();

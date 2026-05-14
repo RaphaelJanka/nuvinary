@@ -1,4 +1,11 @@
-import { Component, ElementRef, HostListener, inject, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  output,
+} from '@angular/core';
 import { ChartLine, CircleUserRound, LockOpen, LogOut, LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../../core/auth/auth.service';
@@ -8,6 +15,7 @@ import { MenuItem } from '../../../../../shared/models/menu-item.model';
   selector: 'app-user-menu',
   templateUrl: './user-menu.html',
   imports: [LucideAngularModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserMenu {
   private readonly authService = inject(AuthService);

@@ -1,4 +1,11 @@
-import { Component, ElementRef, inject, input, viewChildren } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  viewChildren,
+} from '@angular/core';
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
@@ -9,6 +16,7 @@ import { DialogService } from '../../services/dialog-service';
   selector: 'app-creation-grid',
   imports: [LucideAngularModule, CreationCard],
   templateUrl: './creation-grid.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreationGrid {
   private readonly dragService = inject(DragAndDropService);

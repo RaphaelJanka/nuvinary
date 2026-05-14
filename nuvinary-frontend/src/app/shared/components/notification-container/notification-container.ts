@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NotificationService, Notification } from '../../services/notification-service';
 import { CircleAlert, CircleCheck, Info, LucideAngularModule, X } from 'lucide-angular';
 
@@ -33,6 +33,7 @@ import { CircleAlert, CircleCheck, Info, LucideAngularModule, X } from 'lucide-a
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationContainer {
   private readonly notificationService = inject(NotificationService);

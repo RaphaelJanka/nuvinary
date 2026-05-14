@@ -1,5 +1,5 @@
 // src/app/shared/components/delete-confirm-dialog/delete-confirm-dialog.component.ts
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { LucideAngularModule, Trash2, TriangleAlert } from 'lucide-angular';
@@ -10,6 +10,7 @@ import { ConfirmDialogData } from '../../../models/dialog-data.model';
   standalone: true,
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './confirmation-dialog.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialog {
   protected readonly dialogRef = inject(DialogRef<boolean>);

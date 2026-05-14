@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { typeWriter } from './typewriter.helper';
 import { ArrowRight, CloudUpload, LucideAngularModule } from 'lucide-angular';
 import { CreationModel, CreationService } from '../../../services/creation-service';
@@ -12,6 +12,7 @@ import { Button } from '../../../../shared/components/button/button';
   imports: [LucideAngularModule, FormField, PageLayout, Button],
   templateUrl: './create.html',
   styleUrl: './create.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Create {
   private readonly creationService = inject(CreationService);

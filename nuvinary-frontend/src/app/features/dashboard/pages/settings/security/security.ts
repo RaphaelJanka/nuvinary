@@ -1,4 +1,11 @@
-import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../../shared/components/page-layout/page-layout';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +28,7 @@ type CancelActions = 'email' | 'link' | 'password' | 'account';
   selector: 'app-security',
   imports: [PageLayout, FormsModule, Button, FormInput],
   templateUrl: './security.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Security {
   private readonly authService = inject(AuthService);

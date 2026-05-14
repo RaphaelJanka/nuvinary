@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CreationGrid } from '../../../../shared/components/creation-grid/creation-grid';
 import { CreationService } from '../../../services/creation-service';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
@@ -9,6 +9,7 @@ import { createCreationFilter } from '../../../../shared/utils/creation-filter';
   selector: 'app-community',
   imports: [CreationGrid, PageLayout, SearchInput],
   templateUrl: './community.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Community {
   private readonly creationService = inject(CreationService);

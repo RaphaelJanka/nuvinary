@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { Creation } from '../../models/creation.model';
 import { DialogService } from '../../services/dialog-service';
 
@@ -6,6 +6,7 @@ import { DialogService } from '../../services/dialog-service';
   selector: 'app-creation-card',
   imports: [],
   templateUrl: './creation-card.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreationCard {
   private readonly dialogService = inject(DialogService);

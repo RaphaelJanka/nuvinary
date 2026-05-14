@@ -1,6 +1,13 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal, Signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  Signal,
+} from '@angular/core';
 import {
   Calendar,
   Check,
@@ -27,6 +34,7 @@ import { form, maxLength, required } from '@angular/forms/signals';
   selector: 'app-creation-details',
   imports: [CommonModule, LucideAngularModule, FormInput],
   templateUrl: './creation-details.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreationDetails {
   private readonly creationService = inject(CreationService);
