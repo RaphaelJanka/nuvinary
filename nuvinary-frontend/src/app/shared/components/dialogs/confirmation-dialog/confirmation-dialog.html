@@ -14,11 +14,11 @@
     </div>
 
     <div class="flex-1">
-      <h3 class="font-extrabold text-xl text-slate-900 leading-tight">
+      <h1 class="font-extrabold text-xl text-slate-900 leading-tight">
         {{ data.title }}
-      </h3>
+      </h1>
       <p
-        class="inline-block mt-1 px-2 py-0.5 font-black text-[10px] uppercase tracking-wider rounded-full"
+        class="inline-block mt-1 px-2 py-0.5 font-black text-[10px] uppercase tracking-widest rounded-full"
         [ngClass]="{
           'text-red-600 bg-red-50': data.type === 'delete',
           'text-primary bg-primary-subtle': data.type === 'info',

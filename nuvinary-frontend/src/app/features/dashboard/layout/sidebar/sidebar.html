@@ -41,11 +41,11 @@
       ></lucide-icon>
 
       @if (!isCollapsed()) {
-        <span
+        <h1
           class="overflow-hidden whitespace-nowrap group-hover:translate-x-2 transition-transform duration-300"
         >
           {{ item.label }}
-        </span>
+        </h1>
       }
     </a>
   </ng-template>
@@ -53,16 +53,13 @@
   @if (!isCollapsed()) {
     <div class="flex flex-col gap-4 text-xs font-medium text-slate-500">
       @for (item of legalItems; track $index) {
-        <a
-          [routerLink]="item.route"
-          class="ps-5 [text-shadow:0.5px_0_0_currentColor] hover:text-primary transition-all duration-200"
-        >
+        <a [routerLink]="item.route" class="ps-5 hover:text-primary transition-all duration-200">
           <span class="whitespace-nowrap transition-all duration-300">
             {{ item.label }}
           </span>
         </a>
       }
-      <div class="mt-3 p-4 text-xs bg-sidebar-main text-white">
+      <div class="mt-3 p-4 text-xs bg-primary text-white">
         <p class="overflow-hidden ml-1 whitespace-nowrap">© 2023 Nuvinary</p>
       </div>
     </div>

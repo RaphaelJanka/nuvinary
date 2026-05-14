@@ -30,7 +30,7 @@
         }"
       >
         <div
-          class="relative z-1 flex items-center justify-center overflow-hidden bg-slate-800/70 rounded-4xl transition-all duration-700"
+          class="relative z-1 flex items-center justify-center overflow-hidden bg-slate-900/60 rounded-4xl transition-all duration-700"
           [ngClass]="{
             'h-full max-h-110': orientation() === 'portrait',
             'w-100': orientation() === 'landscape',
@@ -50,10 +50,10 @@
           } @else {
             <div class="absolute inset-8 flex items-center justify-center">
               @for (corner of cornerClasses; track $index) {
-                <div class="absolute w-8 h-8 border-slate-950/20" [class]="corner"></div>
+                <div class="absolute w-8 h-8 border-slate-950 opacity-20" [class]="corner"></div>
               }
               <span
-                class="text-[8px] font-black uppercase tracking-[0.5em] text-slate-950 opacity-20"
+                class="text-[8px] font-black uppercase tracking-[0.5em] text-slate-950 opacity-60"
               >
                 No Asset Selected
               </span>
@@ -80,14 +80,14 @@
                 (blur)="isEditing = false"
                 maxlength="30"
                 autoFocus
-                class="w-full border-b border-slate-950/10 bg-black/30 p-0 text-4xl font-black leading-tight tracking-tighter focus:ring-0"
+                class="w-full border-b border-slate-950/10 bg-black/30 p-0 text-4xl font-black leading-tight tracking-tighter focus:ring-0 text-primary"
               />
             } @else {
-              <h2
+              <h1
                 class="z-1 bg-linear-to-r from-studio-primary via-studio-secondary to-studio-light bg-clip-text text-4xl font-black text-transparent tracking-tighter wrap-break-word select-none transition-all"
               >
                 {{ storyTitle() || 'Untitled' }}
-              </h2>
+              </h1>
             }
           </div>
 
@@ -103,12 +103,12 @@
             </div>
 
             <div class="text-right">
-              <span
+              <h2
                 class="block font-black italic leading-none tracking-tighter text-studio-primary transition-all"
-                [ngClass]="orientation() === 'portrait' ? 'text-[16px]' : 'text-[24px]'"
+                [ngClass]="orientation() === 'portrait' ? 'text-[16px]' : 'text-[20px]'"
               >
                 NUVINARY
-              </span>
+              </h2>
               <span class="text-[7px] font-bold uppercase tracking-widest">Studio</span>
             </div>
           </div>

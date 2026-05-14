@@ -38,7 +38,7 @@ export class FormInput {
 
   protected readonly labelClasses = computed(() => {
     return [
-      'ml-1 font-bold text-[10px] uppercase tracking-[0.15em]',
+      'ml-1 font-bold text-[10px] uppercase tracking-widest',
       this.shouldHideLabel() ? 'sr-only' : null,
       this.purpose() === 'collection' ? '' : 'text-accent',
     ]

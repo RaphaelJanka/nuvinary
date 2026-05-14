@@ -1,7 +1,7 @@
 <header
   class="flex justify-between items-center h-16 px-6 border-b border-primary-subtle bg-primary shadow-lg shadow-primary-subtle"
 >
-  <h3 class="font-black text-sm text-white uppercase tracking-widest">Collections</h3>
+  <h1 class="font-black text-xl text-white tracking-widest">Collections</h1>
 
   <button
     (click)="onCreate()"
@@ -32,20 +32,22 @@
             @if (editingCollectionId() === collection.id) {
               <form (submit)="onSubmit($event)">
                 <app-form-input [field]="collectionForm.title" purpose="updateCollection">
-                  <button
-                    type="submit"
-                    [disabled]="collectionForm().invalid()"
-                    class="p-2 rounded-xl text-slate-400 hover:bg-primary-subtle hover:text-primary"
-                    [class.opacity-30]="collectionForm().invalid()"
-                  >
-                    <lucide-icon [img]="icons.checkIcon" class="w-4 h-4"></lucide-icon>
-                  </button>
-                  <button
-                    (click)="onCancel()"
-                    class="p-2 rounded-xl text-slate-400 hover:bg-primary-subtle hover:text-primary"
-                  >
-                    <lucide-icon [img]="icons.cancelIcon" class="w-4 h-4"></lucide-icon>
-                  </button>
+                  <div class="flex">
+                    <button
+                      type="submit"
+                      [disabled]="collectionForm().invalid()"
+                      class="p-2 rounded-xl text-slate-400 hover:bg-primary-subtle hover:text-primary"
+                      [class.opacity-30]="collectionForm().invalid()"
+                    >
+                      <lucide-icon [img]="icons.checkIcon" class="w-4 h-4"></lucide-icon>
+                    </button>
+                    <button
+                      (click)="onCancel()"
+                      class="p-2 rounded-xl text-slate-400 hover:bg-primary-subtle hover:text-primary"
+                    >
+                      <lucide-icon [img]="icons.cancelIcon" class="w-4 h-4"></lucide-icon>
+                    </button>
+                  </div>
                 </app-form-input>
               </form>
             } @else {
@@ -64,12 +66,12 @@
                     ></lucide-icon>
                   </div>
                   <div class="flex flex-col items-start min-w-0">
-                    <span
-                      class="font-bold text-sm text-slate-700 truncate transition-colors group-hover:text-primary"
+                    <h2
+                      class="font-bold text-sm text-slate-700 transition-colors group-hover:text-primary"
                     >
                       {{ collection.title }}
-                    </span>
-                    <span class="font-black text-[10px] text-slate-400 uppercase tracking-tighter">
+                    </h2>
+                    <span class="font-extrabold text-[10px] text-slate-400 uppercase">
                       {{ collection.creations.length }}
                       {{ collection.creations.length > 1 ? 'Assets' : 'Asset' }}
                     </span>
@@ -143,7 +145,7 @@
       }
     </section>
   } @else {
-    <section class="">
+    <section>
       <form
         (submit)="onSubmit($event)"
         class="flex flex-col gap-4 pt-4 animate-in zoom-in-95 fade-in duration-200"

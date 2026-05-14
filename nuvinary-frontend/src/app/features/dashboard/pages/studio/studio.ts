@@ -1,7 +1,6 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import {
-  BadgeX,
   Check,
   Download,
   LucideAngularModule,
@@ -9,6 +8,7 @@ import {
   Plus,
   RotateCwSquare,
   SwatchBook,
+  Trash,
 } from 'lucide-angular';
 import { DialogService } from '../../../../shared/services/dialog-service';
 import { NgClass } from '@angular/common';
@@ -35,7 +35,7 @@ export class Studio {
     {
       icon: () => Plus,
       action: () => this.dialogService.openStudioDialog(),
-      className: () => 'bg-accent text-black shadow-lg hover:bg-accent-strong',
+      className: () => 'bg-accent text-black shadow-lg',
     },
     {
       icon: () => (this.isEditing ? Check : Pen),
@@ -54,7 +54,7 @@ export class Studio {
       iconStyle: () => `transform: rotate(${this.iconRotation()}deg)`,
     },
     {
-      icon: () => BadgeX,
+      icon: () => Trash,
       action: () => this.clearStudio(),
       className: () => 'disabled:opacity-10',
       disabled: () => !this.selectedCreation() && this.storyTitle() === '',

@@ -59,7 +59,7 @@
   --color-studio-card: #b395e8;
   --color-studio-primary: #5052db;
   --color-studio-secondary: #812eb9;
-  --color-studio-main: #4a4266;
+  --color-studio-main: #484470;
   --color-studio-light: #2184ee;
   --color-studio-border: #5c4270;
   --color-studio-header: #766496;
@@ -71,6 +71,14 @@ body {
   color: var(--color-text-main);
   margin: 0;
   font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+label {
+  font-family: var(--font-header);
 }
 
 button,

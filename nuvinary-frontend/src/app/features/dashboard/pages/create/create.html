@@ -6,7 +6,7 @@
           {{ displayedUserGreeting() }}
         </h1>
 
-        <h2 class="font-mono font-bold text-3xl leading-tight">
+        <span class="font-mono font-bold text-3xl leading-tight">
           @if (isThinking()) {
             <span class="flex gap-1 text-[#94afd1]">
               <span class="animate-dot">.</span>
@@ -24,7 +24,7 @@
               ></span>
             }
           }
-        </h2>
+        </span>
       </div>
 
       @if (currentStep() === 'prompt') {
@@ -55,7 +55,7 @@
           <input
             type="text"
             [formField]="creationForm.title"
-            class="w-full p-6 font-semibold text-lg rounded-3xl border border-slate-200 bg-white shadow-sm outline-none placeholder:text-slate-300 focus:ring-4 focus:ring-primary-subtle transition-all"
+            class="w-full p-6 font-semibold text-lg rounded-3xl border border-slate-200 bg-white shadow-sm outline-none placeholder:text-slate-300 focus:ring-1 focus:ring-primary-subtle transition-all"
             placeholder="Enter a title (or leave blank for magic)..."
           />
 

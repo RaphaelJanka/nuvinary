@@ -18,9 +18,9 @@
       <div class="flex justify-between items-center gap-3">
         <div class="flex-1 min-w-0">
           @if (!isEditingTitle()) {
-            <h2 class="font-black text-3xl text-slate-900 tracking-tight wrap-break-word">
+            <h1 class="font-black text-3xl text-slate-900 tracking-tight wrap-break-word">
               {{ creation().title }}
-            </h2>
+            </h1>
           } @else {
             <div class="animate-in fade-in slide-in-from-left-2 duration-200">
               <app-form-input [field]="editTitleForm.title" purpose="detail">
@@ -60,14 +60,14 @@
       </div>
 
       <div class="flex items-center gap-2 mt-3 text-slate-400">
-        <lucide-icon [img]="icons.dateIcon" class="w-4 h-4"></lucide-icon>
-        <span class="font-bold text-xs uppercase tracking-wider">
+        <lucide-icon [img]="icons.dateIcon" class="w-4 h-4 mb-1"></lucide-icon>
+        <span class="font-bold text-[10px] uppercase tracking-wider">
           Created on {{ creation().createdAt | date: 'longDate' }}
         </span>
         @if (currentUser()?.uid === creation().createdBy.id && canEdit() && !isEditingTitle()) {
           <span class="text-slate-400">|</span>
           <button
-            class="font-black text-xs text-slate-400 uppercase tracking-wider transition-colors hover:text-primary"
+            class="font-black text-[10px] text-slate-400 uppercase tracking-widest transition-colors hover:text-primary"
             (click)="this.isEditingTitle.set(true)"
           >
             Edit Title
@@ -77,7 +77,7 @@
     </div>
 
     <div>
-      <h4 class="mb-3 font-black text-[10px] text-slate-400 uppercase tracking-[0.2em]">
+      <h4 class="mb-3 font-black text-[10px] text-slate-500 uppercase tracking-[0.2em]">
         Privacy Settings
       </h4>
 
@@ -141,7 +141,7 @@
 
     <div>
       <h4
-        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-400 uppercase tracking-[0.2em]"
+        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-500 uppercase tracking-[0.2em]"
       >
         Created By
       </h4>
@@ -169,7 +169,7 @@
 
     <div>
       <h4
-        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-400 uppercase tracking-[0.2em]"
+        class="flex items-center gap-2 mb-3 font-black text-[10px] text-slate-500 uppercase tracking-[0.2em]"
       >
         Info
       </h4>

@@ -6,51 +6,7 @@ import { LucideAngularModule, Plus, X } from 'lucide-angular';
 @Component({
   selector: 'app-studio-dialog',
   imports: [LucideAngularModule],
-  template: `
-    <section
-      class="flex flex-col bg-surface rounded-4xl w-full max-w-5xl h-full max-h-[80vh] overflow-hidden shadow-2xl"
-    >
-      <header class="flex items-center justify-between p-6 border-b border-slate-500/20">
-        <h1 class=" font-black text-3xl text-primary tracking-tight">Select Asset</h1>
-        <button
-          (click)="onClose()"
-          class="p-2 rounded-full border border-slate-200 bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-slate-100"
-        >
-          <lucide-icon
-            [img]="icons.closeIcon"
-            class="w-5 h-5 text-slate-500 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
-          ></lucide-icon>
-        </button>
-      </header>
-
-      <main class="flex-1 overflow-y-auto px-6 py-10 bg-white-soft custom-scrollbar">
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          @for (creation of creationList(); track creation.id) {
-            <button
-              (click)="onSelect(creation)"
-              class="group relative aspect-4/5 overflow-hidden rounded-2xl border border-white-glasstransition-all duration-300 hover:border-accent-muted hover:scale-[0.98] shadow-xl"
-            >
-              <img
-                [src]="creation.url"
-                [alt]="creation.title"
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-
-              <div
-                class="absolute inset-0 bg-accent-subtle opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-              >
-                <div
-                  class="bg-primary text-slate-800 p-2 rounded-full shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
-                >
-                  <lucide-icon [img]="icons.plusIcon" class="w-5 h-5"></lucide-icon>
-                </div>
-              </div>
-            </button>
-          }
-        </div>
-      </main>
-    </section>
-  `,
+  templateUrl: './studio-dialog.html',
 })
 export class StudioDialog {
   protected readonly creationList = inject<Signal<Creation[]>>(DIALOG_DATA);
