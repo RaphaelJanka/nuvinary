@@ -4,6 +4,8 @@ import {
   Component,
   ElementRef,
   HostListener,
+  inject,
+  NgZone,
   OnDestroy,
   viewChild,
 } from '@angular/core';
@@ -24,30 +26,35 @@ interface VantaWindow extends Window {
 export class Hero implements OnDestroy {
   private vantaEffect?: VantaEffect;
   private readonly vantaContainer = viewChild.required<ElementRef<HTMLElement>>('vantaContainer');
+  private readonly ngZone = inject(NgZone);
 
   @HostListener('window:resize')
   onResize() {
-    this.vantaEffect?.resize();
+    this.ngZone.runOutsideAngular(() => {
+      this.vantaEffect?.resize();
+    });
   }
 
   constructor() {
     afterNextRender(() => {
-      (window as VantaWindow).THREE = THREE;
+      this.ngZone.runOutsideAngular(() => {
+        (window as VantaWindow).THREE = THREE;
 
-      this.vantaEffect = CLOUDS({
-        el: this.vantaContainer().nativeElement,
-        THREE: THREE,
-        mouseControls: false,
-        touchControls: false,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        speed: 0.3,
-        skyColor: 0xedadb0,
-        cloudColor: 0xadadde,
-        cloudShadowColor: 0x183550,
-        sunColor: 0xffbb18,
-        sunGlareColor: 0xffb530,
-        sunLightColor: 0xff9130,
+        this.vantaEffect = CLOUDS({
+          el: this.vantaContainer().nativeElement,
+          THREE: THREE,
+          mouseControls: false,
+          touchControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          speed: 0.3,
+          skyColor: 0xedadb0,
+          cloudColor: 0xadadde,
+          cloudShadowColor: 0x183550,
+          sunColor: 0xffbb18,
+          sunGlareColor: 0xffb530,
+          sunLightColor: 0xff9130,
+        });
       });
     });
   }
