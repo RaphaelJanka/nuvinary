@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import './styles/fonts.css';
+@import './styles/colors.css';
 
 @import 'tailwindcss';
 
@@ -15,94 +16,6 @@
   --spacing-app-max-width: 1920px;
 
   /* responsive */
-
-  /* colors */
-  --color-primary: #7c6db2;
-  --color-primary-hover: #8b79cb;
-  --color-primary-subtle: color-mix(in srgb, var(--color-primary), transparent 75%);
-  --color-primary-muted: color-mix(in srgb, var(--color-primary), transparent 55%);
-
-  --color-accent: #6366f1;
-  --color-accent-light: #818cf8;
-  --color-accent-subtle: color-mix(in srgb, var(--color-accent), transparent 75%);
-  --color-accent-muted: color-mix(in srgb, var(--color-accent), transparent 55%);
-  --color-accent-strong: color-mix(in srgb, var(--color-accent), transparent 25%);
-
-  --color-white-glass: color-mix(in srgb, white, transparent 92%);
-  --color-white-soft: color-mix(in srgb, white, transparent 75%);
-  --color-white-medium: color-mix(in srgb, white, transparent 50%);
-  --color-white-strong: color-mix(in srgb, white, transparent 20%);
-
-  --color-surface: #d8d4e8;
-  --color-layer: #f2eef5;
-
-  --color-warning: var(--color-amber-500);
-  --color-warning-light: var(--color-amber-100);
-  --color-bg-warning: var(--color-amber-50);
-  --color-bg-warning-hover: var(--color-amber-600);
-
-  --color-success: var(--color-green-500);
-  --color-success-light: var(--color-green-100);
-  --color-bg-success: var(--color-green-50);
-  --color-success-strong: var(--color-green-900);
-
-  --color-danger: var(--color-red-500);
-  --color-danger-light: var(--color-red-100);
-  --color-bg-danger: var(--color-red-50);
-  --color-danger-hover: var(--color-red-600);
-  --color-danger-strong: var(--color-red-900);
-
-  /* text */
-  --color-text-gentle: var(--color-slate-400);
-  --color-text-main: var(--color-slate-500);
-  --color-text-emphasis: var(--color-slate-700);
-  --color-text-strong: var(--color-slate-900);
-
-  /* border */
-  --color-border-light: var(--color-slate-100);
-  --color-border-gentle: var(--color-slate-200);
-  --color-border-strong: var(--color-slate-900);
-
-  /* background */
-  --color-bg-light: var(--color-slate-100);
-  --color-bg-gentle: var(--color-slate-200);
-  --color-bg-strong: var(--color-slate-900);
-
-  /* form variables */
-  --color-form-success: #24dc13a3;
-  --color-form-focus: #6366f166;
-
-  /* hero */
-  --color-hero-gradient-top: #8670f4f1;
-  --color-hero-gradient-center: #ffc9fe;
-  --color-hero-gradient-bottom: #a38ae7;
-  --color-hero-bubble-top: #fbcf9dbf;
-  --color-hero-bubble-left: #937dce;
-  --color-hero-bubble-right: #7b57a4;
-  --color-hero-card: #e1d8ff4b;
-  --color-hero-subline-gradient-left: #865bdf;
-  --color-hero-subline-gradient-right: #b293eb;
-
-  /* header variables */
-  --color-header-bg: #8c84b4;
-  --color-header-border: #9b94bf;
-
-  /* sidebar variables */
-  --color-sidebar-main: #9b8fbc;
-  --color-sidebar-hover: #bbb2d8;
-
-  /* studio */
-  --color-studio-card: #b395e8;
-  --color-studio-primary: #5052db;
-  --color-studio-secondary: #812eb9;
-  --color-studio-main: #484470;
-  --color-studio-light: #2184ee;
-  --color-studio-border: #5c4270;
-  --color-studio-header: #766496;
-  --color-studio-frame: #5c4f7d;
-
-  /* create */
-  --color-line: #94afd1;
 }
 
 body {
