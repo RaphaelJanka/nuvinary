@@ -1,23 +1,58 @@
 <app-header></app-header>
 
-<section class="flex flex-col">
-  <div
-    class="relative flex flex-col items-center justify-center shrink-0 w-full h-screen overflow-hidden"
-  >
+<section
+  class="relative w-full h-screen flex flex-col items-center justify-center bg-linear-to-b from-hero-gradient-top via-hero-gradient-center to-hero-gradient-bottom"
+>
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div
-      class="relative flex flex-col items-center gap-4 p-10 md:p-20 rounded-[2.5rem] border border-white-soft bg-white-glass shadow-2xl backdrop-blur-xl select-none text-center"
-    >
-      <img src="logos/nuvinary.png" alt="Nuvinary" class="" />
+      class="absolute bottom-[-35%] right-[-10%] w-200 h-150 bg-hero-bubble-right rounded-full blur-[160px] animate-pulse duration-[3s]"
+    ></div>
 
-      <p class="mb-10 max-w-md text-xl md:text-2xl text-blue-50 tracking-wide">
-        Where clouds meet
-        <span
-          class="font-bold bg-linear-to-r from-accent to-accent-light bg-clip-text text-transparent"
-        >
-          Visionary
-        </span>
-        ideas.
-      </p>
+    <div
+      class="absolute top-[-10%] left-[60%] w-130 h-100 bg-hero-bubble-top rounded-full blur-[100px] animate-pulse duration-[4s]"
+    ></div>
+    <div
+      class="absolute top-[60%] left-[-10%] w-100 h-100 bg-hero-bubble-left rounded-full blur-[100px] animate-pulse duration-[5s]"
+    ></div>
+
+    <div
+      class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff09_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[4rem_4rem]"
+    ></div>
+  </div>
+
+  <div
+    class="flex flex-col items-center gap-4 p-20 mx-4 rounded-[3rem] border border-white-glass shadow-2xl bg-hero-card backdrop-blur-3xl select-none"
+  >
+    <img
+      src="logos/nuvinary.png"
+      alt="Nuvinary"
+      fetchpriority="high"
+      class="h-50 w-auto object-contain animate-logo"
+    />
+    <p
+      class="flex flex-wrap justify-center gap-x-6 text-4xl text-indigo-50 tracking-wide leading-relaxed font-medium"
+    >
+      <span class="animate-word" style="animation-delay: 0.8s">Where</span>
+      <span
+        class="font-extrabold bg-linear-to-r from-hero-subline-gradient-left to-hero-subline-gradient-right bg-clip-text text-transparent animate-cloud"
+      >
+        Clouds
+      </span>
+      <span class="animate-word" style="animation-delay: 2s">meet</span>
+      <span
+        class="font-extrabold bg-linear-to-r from-accent to-accent-light bg-clip-text text-transparent animate-vision"
+      >
+        Vision
+      </span>
+    </p>
+    <div class="w-full max-w-3xs mt-4">
+      <app-button
+        label="LET'S GET STARTED"
+        [icon]="arrowIcon"
+        iconPosition="right"
+        variant="hero"
+        [routerLink]="['/auth/signin']"
+      ></app-button>
     </div>
   </div>
 </section>

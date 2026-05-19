@@ -72,6 +72,17 @@
   --color-form-success: #24dc13a3;
   --color-form-focus: #6366f166;
 
+  /* hero */
+  --color-hero-gradient-top: #8670f4f1;
+  --color-hero-gradient-center: #ffc9fe;
+  --color-hero-gradient-bottom: #a38ae7;
+  --color-hero-bubble-top: #fbcf9dbf;
+  --color-hero-bubble-left: #937dce;
+  --color-hero-bubble-right: #7b57a4;
+  --color-hero-card: #e1d8ff4b;
+  --color-hero-subline-gradient-left: #865bdf;
+  --color-hero-subline-gradient-right: #b293eb;
+
   /* header variables */
   --color-header-bg: #8c84b4;
   --color-header-border: #9b94bf;
@@ -139,4 +150,22 @@ textarea:focus-visible {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #7c6db2; /* Dein Haupt-Lila beim Drüberfahren */
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-button {
+  opacity: 0;
+  /* Startet bei 2.4 Sekunden, also genau 0.4s nachdem "Vision" erschienen ist */
+  animation: buttonFadeIn 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 3.3s;
 }
