@@ -53,7 +53,8 @@ button:disabled {
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
+textarea:focus-visible,
+img:focus-visible {
   outline: none;
 }
 

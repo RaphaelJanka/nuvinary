@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { LucideAngularModule, LucideIconData } from 'lucide-angular';
 
@@ -6,15 +7,17 @@ type ButtonType = 'button' | 'submit';
 
 @Component({
   selector: 'app-button',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, NgClass],
   template: `
     <button
       [type]="type()"
       [disabled]="disabled()"
       [class]="disabled() ? 'bg-gray-300 shadow-none' : variantClasses"
       [class.mt-4]="variant() === 'primary' && fullWidth()"
-      [class.min-w-30]="!fullWidth()"
-      [class.min-w-40]="fullWidth()"
+      [ngClass]="{
+        'min-w-20 xs:min-w-30': !fullWidth(),
+        'min-w-40': fullWidth(),
+      }"
       [class.text-sm]="(variant() === 'secondary' || variant() === 'danger') && !icon()"
       class="flex flex-1 px-2 py-3 rounded-xl font-bold text-xs md:text-base text-white items-center justify-center gap-2"
     >

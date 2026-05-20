@@ -4,13 +4,13 @@
       ? 'fixed top-0 right-0 left-0 z-50 border-white-soft'
       : 'bg-header-bg border-header-border'
   "
-  class="flex items-center justify-between w-full max-w-app-max-width p-4 px-8 border-b shadow-lg"
+  class="flex items-center justify-between w-full max-w-app-max-width py-4 px-4 sm:px-8 border-b shadow-lg"
 >
   <div class="flex items-center gap-2 cursor-pointer" [routerLink]="['/']">
-    <img class="w-15" src="logos/nuvinary-icon.svg" alt="Nuvinary" />
+    <img class="w-12 sm:w-15" src="logos/nuvinary-icon.svg" alt="Nuvinary" />
   </div>
   @if (isLandingPage()) {
-    <div class="flex gap-4 max-h-16">
+    <div class="flex gap-4 h-11 sm:h-14">
       <app-button
         label="Sign In"
         [fullWidth]="false"
