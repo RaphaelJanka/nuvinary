@@ -1,36 +1,36 @@
 <app-header></app-header>
 
 <section
-  class="relative w-full h-screen flex flex-col items-center justify-center bg-linear-to-b from-hero-gradient-top via-hero-gradient-center to-hero-gradient-bottom"
+  class="relative min-h-screen flex items-start justify-center pt-30 bg-linear-to-b from-hero-gradient-top via-hero-gradient-center to-hero-gradient-bottom h-650:items-center h-650:pt-0"
 >
   <div class="absolute inset-0 overflow-hidden pointer-events-none">
     <div
-      class="absolute bottom-[-35%] right-[-10%] w-200 h-150 bg-hero-bubble-right rounded-full blur-[160px] animate-pulse duration-[3s]"
+      class="absolute top-[-25%] left-[50%] w-130 h-100 bg-hero-bubble-top rounded-full blur-[100px] animate-pulse duration-[4s] xl:top-[-10%] xl:left-[60%]"
     ></div>
 
     <div
-      class="absolute top-[-10%] left-[60%] w-130 h-100 bg-hero-bubble-top rounded-full blur-[100px] animate-pulse duration-[4s]"
-    ></div>
-    <div
-      class="absolute top-[60%] left-[-10%] w-100 h-100 bg-hero-bubble-left rounded-full blur-[100px] animate-pulse duration-[5s]"
+      class="absolute bottom-[10%] right-[-10%] w-100 h-100 bg-hero-bubble-right rounded-full blur-[160px] animate-pulse duration-[3s] xl:w-200 xl:h-150 xl:bottom-[-25%]"
     ></div>
 
+    <div
+      class="absolute top-[50%] left-[-40%] w-100 h-100 bg-hero-bubble-left rounded-full blur-[100px] animate-pulse duration-[5s] xl:top-[60%] xl:left-[-10%]"
+    ></div>
     <div
       class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff09_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[4rem_4rem]"
     ></div>
   </div>
 
   <div
-    class="flex flex-col items-center gap-4 p-20 mx-4 rounded-[3rem] border border-white-glass shadow-2xl bg-hero-card backdrop-blur-3xl select-none"
+    class="flex flex-col items-center gap-4 h-100 mx-4 rounded-[3rem] border border-white-glass shadow-2xl bg-hero-card backdrop-blur-3xl select-none py-17 px-10 xs:p-20 xs:h-auto h-650:mt-0"
   >
     <img
       src="logos/nuvinary.png"
       alt="Nuvinary"
       fetchpriority="high"
-      class="h-50 w-auto object-contain animate-logo"
+      class="h-20 w-auto object-contain animate-logo xs:h-30 2xl:h-40 3xl:h-50"
     />
     <p
-      class="flex flex-wrap justify-center gap-x-6 text-4xl text-indigo-50 tracking-wide leading-relaxed font-medium"
+      class="flex flex-wrap justify-center gap-x-3 text-md text-indigo-50 tracking-wide leading-relaxed font-medium xs:text-xl sm:gap-x-6 md:text-2xl 2xl:text-3xl 3xl:text-4xl"
     >
       <span class="animate-word" style="animation-delay: 0.8s">Where</span>
       <span
@@ -45,7 +45,7 @@
         Vision
       </span>
     </p>
-    <div class="w-full max-w-3xs mt-4">
+    <div class="w-full max-w-3xs mt-10 xs:mt-4">
       <app-button
         label="LET'S GET STARTED"
         [icon]="arrowIcon"

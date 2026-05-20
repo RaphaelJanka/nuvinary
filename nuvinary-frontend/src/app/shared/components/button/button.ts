@@ -16,6 +16,7 @@ type ButtonType = 'button' | 'submit';
       [class.min-w-30]="!fullWidth()"
       [class.min-w-40]="fullWidth()"
       [class.text-sm]="(variant() === 'secondary' || variant() === 'danger') && !icon()"
+      class="flex flex-1 px-2 py-3 rounded-xl font-bold text-xs md:text-base text-white items-center justify-center gap-2"
     >
       @if (iconPosition() === 'left' && icon()) {
         <lucide-icon [img]="icon()" class="w-5 h-5"></lucide-icon>
@@ -42,8 +43,8 @@ export class Button {
 
   get variantClasses() {
     const baseClasses =
-      'flex flex-1 px-2 py-3 rounded-xl font-bold text-white items-center justify-center gap-2 ' +
       'shadow-lg active:scale-95 hover:transition-all active:transition-all active:duration-300 hover:duration-300';
+
     switch (this.variant()) {
       case 'primary':
         return `bg-accent shadow-accent-subtle hover:bg-accent-light ${baseClasses}`;
