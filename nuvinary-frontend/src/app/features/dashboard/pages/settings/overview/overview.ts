@@ -9,6 +9,9 @@ import { BaseChartDirective } from 'ng2-charts';
   imports: [PageLayout, BaseChartDirective],
   templateUrl: './overview.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Overview {
   private readonly authService = inject(AuthService);

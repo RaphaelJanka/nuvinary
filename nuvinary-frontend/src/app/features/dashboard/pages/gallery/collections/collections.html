@@ -1,5 +1,5 @@
 <header
-  class="flex justify-between items-center h-16 px-6 border-b border-primary-subtle bg-primary shadow-lg shadow-primary-subtle"
+  class="flex justify-between items-center h-16 px-6 rounded-t-2xl border-b border-primary-subtle bg-primary shadow-lg shadow-primary-subtle"
 >
   <h1 class="font-black text-xl text-white tracking-widest">Collections</h1>
 
@@ -16,7 +16,9 @@
 
 <main class="flex-1 h-full p-4 space-y-3 overflow-y-auto">
   @if (!isCreating()) {
-    <section class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+    <section
+      class="space-y-3 h-full animate-in fade-in slide-in-from-bottom-2 duration-300 overflow-y-auto custom-scrollbar"
+    >
       @for (collection of collections(); track collection.id) {
         <div
           class="flex flex-col relative"

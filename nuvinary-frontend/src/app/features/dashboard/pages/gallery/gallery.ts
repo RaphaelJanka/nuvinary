@@ -12,6 +12,9 @@ import { createCreationFilter } from '../../../../shared/utils/creation-filter';
   imports: [Collections, CreationGrid, PageLayout, LucideAngularModule, SearchInput],
   templateUrl: './gallery.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Gallery {
   private readonly creationService = inject(CreationService);

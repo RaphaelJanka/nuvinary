@@ -1,4 +1,4 @@
-<div class="flex h-full w-full gap-4">
+<div class="flex flex-1 gap-4">
   <section class="flex-3">
     <app-page-layout [title]="'My Gallery'">
       <app-search-input searchHeader [(query)]="searchQuery" class="flex-1"></app-search-input>
@@ -11,7 +11,7 @@
   </section>
 
   <section
-    class="flex flex-col flex-1 min-w-75 overflow-hidden rounded-xl border border-border-gentle bg-white-medium"
+    class="flex flex-col flex-1 min-w-75 rounded-xl border border-border-gentle bg-white-medium"
   >
     <app-collections></app-collections>
   </section>

@@ -29,6 +29,9 @@ type CancelActions = 'email' | 'link' | 'password' | 'account';
   imports: [PageLayout, FormsModule, Button, FormInput],
   templateUrl: './security.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Security {
   private readonly authService = inject(AuthService);

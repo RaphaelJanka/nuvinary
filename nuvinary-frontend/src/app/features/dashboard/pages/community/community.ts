@@ -10,6 +10,9 @@ import { createCreationFilter } from '../../../../shared/utils/creation-filter';
   imports: [CreationGrid, PageLayout, SearchInput],
   templateUrl: './community.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Community {
   private readonly creationService = inject(CreationService);

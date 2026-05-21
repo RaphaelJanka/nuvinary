@@ -1,8 +1,8 @@
 <section
-  class="flex flex-col overflow-hidden h-full min-w-0 rounded-xl border border-border-gentle bg-white-medium"
+  class="flex flex-col flex-1 w-full h-full rounded-xl border border-border-gentle bg-white-medium"
 >
   <header
-    class="flex items-center gap-4 h-16 px-6 border-b border-primary-subtle bg-white"
+    class="flex items-center gap-4 h-16 px-6 py-2 border-b border-primary-subtle rounded-t-2xl bg-white"
     [class.bg-studio-header]="title() === 'Studio'"
     [class.bg-white]="title() !== 'Studio'"
   >
@@ -21,7 +21,7 @@
     </div>
   </header>
 
-  <div class="flex-1 overflow-hidden">
+  <div class="h-full overflow-hidden">
     <ng-content></ng-content>
   </div>
 </section>

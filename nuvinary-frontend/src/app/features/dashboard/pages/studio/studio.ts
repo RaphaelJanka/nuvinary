@@ -27,6 +27,9 @@ import { toPng } from 'html-to-image';
   templateUrl: './studio.html',
   styleUrl: './studio.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Studio {
   private readonly dialogService = inject(DialogService);

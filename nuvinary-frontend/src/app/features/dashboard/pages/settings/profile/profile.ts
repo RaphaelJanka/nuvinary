@@ -14,6 +14,9 @@ import { verifyName } from '../../../../../shared/utils/validation-functions';
   imports: [PageLayout, LucideAngularModule, UserInitialPipe, Button, FormInput],
   templateUrl: './profile.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Profile {
   private readonly authService = inject(AuthService);

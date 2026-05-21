@@ -1,129 +1,131 @@
-<app-page-layout [title]="'Studio'">
-  <section class="flex h-full bg-primary">
-    <aside class="flex flex-col items-center gap-4 bg-studio-frame px-2 py-4">
-      @for (btn of toolbarButtons; track $index) {
-        <button
-          (click)="btn.action()"
-          [class]="btn.className ? btn.className() : ''"
-          [disabled]="btn.disabled ? btn.disabled() : false"
-          class="p-3 rounded-2xl text-white transition-all hover:bg-accent-strong hover:shadow-lg"
-        >
-          <span
-            [class]="btn.iconClass ? btn.iconClass() : ''"
-            [style]="btn.iconStyle ? btn.iconStyle() : ''"
-            class="flex items-center justify-center"
+<section class="flex-1">
+  <app-page-layout [title]="'Studio'">
+    <div class="flex h-full">
+      <aside class="flex flex-col items-center rounded-bl-2xl gap-4 bg-studio-frame px-2 py-4">
+        @for (btn of toolbarButtons; track $index) {
+          <button
+            (click)="btn.action()"
+            [class]="btn.className ? btn.className() : ''"
+            [disabled]="btn.disabled ? btn.disabled() : false"
+            class="p-3 rounded-2xl text-white transition-all hover:bg-accent-strong hover:shadow-lg"
           >
-            <lucide-icon [img]="btn.icon()" class="w-6 h-6"></lucide-icon>
-          </span>
-        </button>
-      }
-    </aside>
+            <span
+              [class]="btn.iconClass ? btn.iconClass() : ''"
+              [style]="btn.iconStyle ? btn.iconStyle() : ''"
+              class="flex items-center justify-center"
+            >
+              <lucide-icon [img]="btn.icon()" class="w-6 h-6"></lucide-icon>
+            </span>
+          </button>
+        }
+      </aside>
 
-    <main class="flex-1 flex items-center justify-center overflow-hidden bg-studio-main p-12">
-      <div
-        #studioCard
-        class="studio-card relative flex justify-between overflow-hidden border border-primary bg-studio-card rounded-4xl shadow-2xl p-8 transition-all duration-700 ease-in-out group"
-        [ngClass]="{
-          'flex-col w-120 h-full max-h-200': orientation() === 'portrait',
-          'flex-row w-250 aspect-video gap-8': orientation() === 'landscape',
-          'animate-shine': isGenerating(),
-        }"
-      >
+      <main class="flex-1 flex items-center justify-center bg-studio-main rounded-br-2xl p-12">
         <div
-          class="relative z-1 flex items-center justify-center overflow-hidden bg-bg-strong/60 rounded-4xl transition-all duration-700"
+          #studioCard
+          class="studio-card relative flex justify-between overflow-hidden border border-primary bg-studio-card rounded-4xl shadow-2xl p-8 transition-all duration-700 ease-in-out group"
           [ngClass]="{
-            'h-full max-h-110': orientation() === 'portrait',
-            'w-100': orientation() === 'landscape',
+            'flex-col w-120 h-full max-h-200': orientation() === 'portrait',
+            'flex-row w-250 aspect-video gap-8': orientation() === 'landscape',
+            'animate-shine': isGenerating(),
           }"
         >
           <div
-            class="absolute inset-0 z-10 pointer-events-none border-4 border-studio-border rounded-4xl"
-          ></div>
+            class="relative z-1 flex items-center justify-center bg-bg-strong/60 rounded-4xl transition-all duration-700"
+            [ngClass]="{
+              'h-full max-h-110': orientation() === 'portrait',
+              'w-100': orientation() === 'landscape',
+            }"
+          >
+            <div
+              class="absolute inset-0 z-10 pointer-events-none border-4 border-studio-border rounded-4xl"
+            ></div>
 
-          @if (selectedCreation(); as creation) {
-            <img
-              [src]="creation.url"
-              [alt]="creation.title"
-              crossOrigin="anonymous"
-              class="absolute inset-0 w-full h-full object-cover pointer-events-none animate-in fade-in"
-            />
-          } @else {
-            <div class="absolute inset-8 flex items-center justify-center">
-              @for (corner of cornerClasses; track $index) {
-                <div class="absolute w-8 h-8 border-black opacity-20" [class]="corner"></div>
-              }
-              <span
-                class="text-[8px] font-black uppercase tracking-[0.5em] text-text-strong opacity-60"
-              >
-                No Asset Selected
-              </span>
-            </div>
-          }
-        </div>
-
-        <div
-          class="flex flex-col transition-all duration-700"
-          [ngClass]="{
-            'px-3 pt-6 pb-2 gap-6': orientation() === 'portrait',
-            'mt-10 py-4 w-100 justify-between': orientation() === 'landscape',
-          }"
-        >
-          <div class="flex flex-col gap-5">
-            <span class="text-[9px] font-black uppercase text-text-emphasis tracking-[0.3em]"
-              >Nuvinary Archive</span
-            >
-
-            @if (isEditing) {
-              <input
-                #t
-                [value]="storyTitle()"
-                (input)="storyTitle.set(t.value)"
-                (keyup.enter)="isEditing = false"
-                (blur)="isEditing = false"
-                maxlength="30"
-                autoFocus
-                class="w-full bg-black/30 p-0 text-4xl font-black leading-tight tracking-tighter focus:ring-0 text-text-strong"
+            @if (selectedCreation(); as creation) {
+              <img
+                [src]="creation.url"
+                [alt]="creation.title"
+                crossOrigin="anonymous"
+                class="absolute inset-0 w-full h-full object-cover pointer-events-none animate-in fade-in"
               />
             } @else {
-              <h1
-                class="z-1 bg-linear-to-r from-studio-primary via-studio-secondary to-studio-light bg-clip-text text-4xl font-black text-transparent tracking-tighter wrap-break-word select-none transition-all"
-              >
-                {{ storyTitle() || 'Untitled' }}
-              </h1>
+              <div class="absolute inset-8 flex items-center justify-center">
+                @for (corner of cornerClasses; track $index) {
+                  <div class="absolute w-8 h-8 border-black opacity-20" [class]="corner"></div>
+                }
+                <span
+                  class="text-[8px] font-black uppercase tracking-[0.5em] text-text-strong opacity-60"
+                >
+                  No Asset Selected
+                </span>
+              </div>
             }
           </div>
 
-          <div class="flex items-end justify-between border-t border-text/50 pt-5 select-none">
-            <div class="flex flex-col gap-0.5">
-              <div class="flex items-center gap-1">
-                <div class="w-1.5 h-1.5 rounded-full bg-studio-primary"></div>
-                <span
-                  class="text-[9px] font-black text-text-emphasis italic uppercase tracking-tight"
-                  >Verified AI</span
+          <div
+            class="flex flex-col transition-all duration-700"
+            [ngClass]="{
+              'px-3 pt-6 pb-2 gap-6': orientation() === 'portrait',
+              'mt-10 py-4 w-100 justify-between': orientation() === 'landscape',
+            }"
+          >
+            <div class="flex flex-col gap-5">
+              <span class="text-[9px] font-black uppercase text-text-emphasis tracking-[0.3em]"
+                >Nuvinary Archive</span
+              >
+
+              @if (isEditing) {
+                <input
+                  #t
+                  [value]="storyTitle()"
+                  (input)="storyTitle.set(t.value)"
+                  (keyup.enter)="isEditing = false"
+                  (blur)="isEditing = false"
+                  maxlength="30"
+                  autoFocus
+                  class="w-full bg-black/30 p-0 text-4xl font-black leading-tight tracking-tighter focus:ring-0 text-text-strong"
+                />
+              } @else {
+                <h1
+                  class="z-1 bg-linear-to-r from-studio-primary via-studio-secondary to-studio-light bg-clip-text text-4xl font-black text-transparent tracking-tighter wrap-break-word select-none transition-all"
+                >
+                  {{ storyTitle() || 'Untitled' }}
+                </h1>
+              }
+            </div>
+
+            <div class="flex items-end justify-between border-t border-text/50 pt-5 select-none">
+              <div class="flex flex-col gap-0.5">
+                <div class="flex items-center gap-1">
+                  <div class="w-1.5 h-1.5 rounded-full bg-studio-primary"></div>
+                  <span
+                    class="text-[9px] font-black text-text-emphasis italic uppercase tracking-tight"
+                    >Verified AI</span
+                  >
+                </div>
+                <span class="text-[8px] font-medium text-text-strong italic">2026-Gen-Core</span>
+              </div>
+
+              <div class="text-right">
+                <h2
+                  class="block font-black italic leading-none tracking-tighter text-studio-primary transition-all"
+                  [ngClass]="orientation() === 'portrait' ? 'text-[16px]' : 'text-[20px]'"
+                >
+                  NUVINARY
+                </h2>
+                <span class="text-[7px] font-bold uppercase text-text-strong tracking-widest"
+                  >Studio</span
                 >
               </div>
-              <span class="text-[8px] font-medium text-text-strong italic">2026-Gen-Core</span>
-            </div>
-
-            <div class="text-right">
-              <h2
-                class="block font-black italic leading-none tracking-tighter text-studio-primary transition-all"
-                [ngClass]="orientation() === 'portrait' ? 'text-[16px]' : 'text-[20px]'"
-              >
-                NUVINARY
-              </h2>
-              <span class="text-[7px] font-bold uppercase text-text-strong tracking-widest"
-                >Studio</span
-              >
             </div>
           </div>
-        </div>
 
-        <div
-          class="absolute inset-0 pointer-events-none mix-blend-multiply"
-          [style.backgroundImage]="'url(' + cardBackground() + ')'"
-        ></div>
-      </div>
-    </main>
-  </section>
-</app-page-layout>
+          <div
+            class="absolute inset-0 pointer-events-none mix-blend-multiply"
+            [style.backgroundImage]="'url(' + cardBackground() + ')'"
+          ></div>
+        </div>
+      </main>
+    </div>
+  </app-page-layout>
+</section>

@@ -93,3 +93,7 @@ img:focus-visible {
   animation: buttonFadeIn 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: 3.3s;
 }
+
+.dashboard-page {
+  @apply flex flex-1;
+}

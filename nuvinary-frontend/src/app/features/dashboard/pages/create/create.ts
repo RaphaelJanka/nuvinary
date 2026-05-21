@@ -13,6 +13,9 @@ import { Button } from '../../../../shared/components/button/button';
   templateUrl: './create.html',
   styleUrl: './create.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'dashboard-page',
+  },
 })
 export class Create {
   private readonly creationService = inject(CreationService);
