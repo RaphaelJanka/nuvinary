@@ -13,6 +13,9 @@ import { Button } from '../../../../../shared/components/button/button';
   imports: [LucideAngularModule, FormInput, Button],
   templateUrl: './collections.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'flex flex-col flex-1',
+  },
 })
 export class Collections {
   private readonly collectionService = inject(CollectionService);

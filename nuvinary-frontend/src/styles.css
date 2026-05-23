@@ -24,9 +24,11 @@
   --breakpoint-xl: 1280px; /* Desktop-Monitore */
   --breakpoint-2xl: 1440px; /* Dein Haupt-Dashboard-Target */
   --breakpoint-3xl: 1920px; /* Extrem breite Screens */
+  --spacing-dashboard-mobile: calc(100vh - 64px);
 }
 
 @custom-variant h-650 (@media (min-height: 650px));
+@custom-variant screen-low (@media (min-width: 768px) and (min-height: 650px));
 
 body {
   background-color: var(--color-surface);
@@ -41,10 +43,6 @@ h3,
 h4,
 label {
   font-family: var(--font-header);
-}
-
-.dashboard-mobile-height {
-  height: calc(100vh - 64px);
 }
 
 button,

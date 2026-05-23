@@ -1,5 +1,5 @@
 <section class="flex flex-col justify-between h-full">
-  <div class="flex flex-col gap-1 text-lg">
+  <div class="flex flex-col gap-1 text-base xl:text-lg">
     @if (showSettings()) {
       <a
         routerLink="/dashboard/gallery"
@@ -7,7 +7,7 @@
         [class.ps-4]="!isCollapsed()"
         [class.justify-center]="isCollapsed()"
       >
-        <lucide-icon class="w-5 h-5" [img]="arrowLeftIcon"></lucide-icon>
+        <lucide-icon class="w-4 h-4 xl:w-5 xl:h-5" [img]="arrowLeftIcon"></lucide-icon>
         @if (!isCollapsed()) {
           <span class="overflow-hidden text-sm tracking-tight whitespace-nowrap font-bold"
             >Back to Dashboard</span
@@ -36,7 +36,7 @@
       [class.border-l-4]="!isCollapsed()"
     >
       <lucide-icon
-        class="shrink-0 w-5 h-5 group-hover:scale-110 transition-transform duration-200"
+        class="shrink-0 w-4 h-4 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform duration-200"
         [img]="item.icon"
       ></lucide-icon>
 

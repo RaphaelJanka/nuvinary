@@ -1,7 +1,7 @@
 <header
   class="flex justify-between items-center h-16 px-6 rounded-t-2xl border-b border-primary-subtle bg-primary shadow-lg shadow-primary-subtle"
 >
-  <h1 class="font-black text-xl text-white tracking-widest">Collections</h1>
+  <h1 class="font-black text-base md:text-lg xl:text-xl text-white tracking-widest">Collections</h1>
 
   <button
     (click)="onCreate()"
@@ -14,11 +14,9 @@
   </button>
 </header>
 
-<main class="flex-1 h-full p-4 space-y-3 overflow-y-auto">
+<main class="flex-1 p-4 space-y-3 max-h-100 md:max-h-full overflow-y-auto custom-scrollbar">
   @if (!isCreating()) {
-    <section
-      class="space-y-3 h-full animate-in fade-in slide-in-from-bottom-2 duration-300 overflow-y-auto custom-scrollbar"
-    >
+    <section class="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
       @for (collection of collections(); track collection.id) {
         <div
           class="flex flex-col relative"
