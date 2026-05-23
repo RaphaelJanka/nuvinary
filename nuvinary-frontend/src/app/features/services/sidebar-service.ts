@@ -25,4 +25,8 @@ export class SidebarService {
   toggle() {
     this._collapsedSignal.update((collapsed) => !collapsed);
   }
+
+  setCollapsed(collapsed: boolean) {
+    this._collapsedSignal.set(collapsed);
+  }
 }

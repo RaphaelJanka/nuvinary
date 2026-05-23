@@ -20,6 +20,9 @@ import { NgTemplateOutlet } from '@angular/common';
   imports: [RouterLink, RouterLinkActive, LucideAngularModule, NgTemplateOutlet],
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'transition-all duration-300 ease-in-out bg-surface hidden lg:block',
+  },
 })
 export class Sidebar {
   private readonly sideBarService = inject(SidebarService);

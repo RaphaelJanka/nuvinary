@@ -8,7 +8,7 @@
     [value]="query()"
     (input)="query.set(searchInput.value)"
     placeholder="Search assets..."
-    class="ml-3 flex-1 bg-transparent border-none text-sm font-semibold text-text-emphasis outline-none"
+    class="ml-3 flex-1 bg-transparent border-none text-[10px] sm:text-sm font-semibold text-text-emphasis outline-none w-25 sm:w-auto"
   />
   @if (query()) {
     <button (click)="query.set('')" class="text-text-gentle hover:text-primary transition-colors">

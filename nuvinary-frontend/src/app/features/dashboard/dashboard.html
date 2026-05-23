@@ -1,14 +1,12 @@
-<div class="flex flex-col h-screen">
-  <app-main-header class="bg-surface"></app-main-header>
+<div class="flex flex-col lg:h-screen">
+  <app-main-header></app-main-header>
 
   <div class="flex flex-1 min-h-0">
-    <app-sidebar
-      [class.w-64]="!isCollapsed()"
-      [class.w-10]="isCollapsed()"
-      class="transition-all duration-300 ease-in-out bg-surface"
-    />
+    <app-sidebar [class.w-64]="!isCollapsed()" [class.w-10]="isCollapsed()" />
 
-    <main class="flex p-4 flex-1 me-10 bg-layer rounded-t-2xl transition-all duration-300">
+    <main
+      class="flex p-4 flex-1 mb-10 lg:mb-0 mx-4 lg:mx-0 lg:me-10 bg-layer rounded-b-2xl lg:rounded-b-none rounded-t-2xl transition-all duration-300"
+    >
       <router-outlet />
     </main>
   </div>

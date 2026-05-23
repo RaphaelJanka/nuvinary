@@ -11,6 +11,9 @@ import { UserInitialPipe } from '../../../../shared/pipes/user-initial.pipe';
   imports: [LucideAngularModule, UserMenu, UserInitialPipe],
   templateUrl: './dashboard-header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'bg-surface',
+  },
 })
 export class Header {
   private readonly sidebarService = inject(SidebarService);

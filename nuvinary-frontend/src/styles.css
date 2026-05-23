@@ -43,6 +43,10 @@ label {
   font-family: var(--font-header);
 }
 
+.dashboard-mobile-height {
+  height: calc(100vh - 64px);
+}
+
 button,
 a {
   cursor: pointer;

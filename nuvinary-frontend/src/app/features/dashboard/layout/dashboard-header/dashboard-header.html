@@ -1,9 +1,10 @@
-<header class="flex items-center justify-between h-16 px-6">
-  <div class="flex items-center gap-4">
-    <img class="w-10" src="logos/nuvinary-icon.svg" alt="Nuvinary" />
+<header class="flex items-center justify-between h-16 px-4 lg:px-6">
+  <div class="flex items-center">
+    <img class="w-10 hidden xs:block" src="logos/nuvinary-icon.svg" alt="Nuvinary" />
+    <div class="hidden xs:block w-0.5 h-8 mx-4 bg-text-gentle"></div>
     <button
       (click)="onToggleSidebar()"
-      class="rounded-4xl text-text-gentle transition-colors p-2 hover:text-white hover:bg-white-soft"
+      class="rounded-4xl text-text-gentle transition-colors p-2 bg-layer hover:text-white hover:bg-white-soft"
     >
       <lucide-icon [img]="menuIcon" class="w-6 h-6 stroke-[1.5px]"></lucide-icon>
     </button>
