@@ -1,38 +1,44 @@
 <section class="flex-1">
   <app-page-layout title="Create">
-    <main class="flex justify-center mt-20">
-      <form (submit)="onSubmit($event)" class="flex flex-col gap-16 w-full max-w-2xl">
+    <main class="flex justify-center my-10 xl:my-20">
+      <form
+        (submit)="onSubmit($event)"
+        class="flex flex-col xl:gap-16 w-full max-w-70 md:max-w-lg xl:max-w-2xl"
+      >
         <div class="flex flex-col gap-6 min-h-40">
-          <h1 class="font-mono font-bold text-5xl leading-relaxed text-gradient-accent">
+          <h1
+            class="font-bold text-xl md:text-3xl xl:text-5xl leading-relaxed text-gradient-accent"
+          >
             {{ displayedUserGreeting() }}
           </h1>
+          <div class="h-20">
+            <span class="font-bold text-sm md:text-base xl:text-3xl leading-tight">
+              @if (isThinking()) {
+                <span class="flex gap-1 text-line">
+                  <span class="animate-dot">.</span>
+                  <span class="animate-dot dot-2">.</span>
+                  <span class="animate-dot dot-3">.</span>
+                </span>
+              } @else {
+                <span class="text-gradient">
+                  {{ displayedText() }}
+                </span>
 
-          <span class="font-mono font-bold text-3xl leading-tight">
-            @if (isThinking()) {
-              <span class="flex gap-1 text-line">
-                <span class="animate-dot">.</span>
-                <span class="animate-dot dot-2">.</span>
-                <span class="animate-dot dot-3">.</span>
-              </span>
-            } @else {
-              <span class="text-gradient">
-                {{ displayedText() }}
-              </span>
-
-              @if (isTyping()) {
-                <span
-                  class="inline-block w-0.75 h-[0.9em] ml-1 translate-y-[0.1em] bg-line animate-pulse"
-                ></span>
+                @if (isTyping()) {
+                  <span
+                    class="inline-block w-0.75 h-[0.9em] ml-1 translate-y-[0.1em] bg-line animate-pulse"
+                  ></span>
+                }
               }
-            }
-          </span>
+            </span>
+          </div>
         </div>
 
         @if (currentStep() === 'prompt') {
           <div class="animate-in fade-in slide-in-from-bottom-4 duration-1200">
             <textarea
               [formField]="creationForm.prompt"
-              class="block w-full p-6 font-semibold text-lg rounded-3xl border border-border-gentle bg-white shadow-sm resize-none outline-none focus:ring-4 focus:ring-primary-subtle transition-all"
+              class="block w-full p-4 md:p-6 font-semibold text-[10px] md:text-base xl:text-lg rounded-3xl border border-border-gentle bg-white shadow-sm resize-none outline-none focus:ring-4 focus:ring-primary-subtle transition-all"
               rows="4"
               placeholder="e.g. A cybernetic owl with glowing blue eyes in a dark forest..."
             >
@@ -56,7 +62,7 @@
             <input
               type="text"
               [formField]="creationForm.title"
-              class="w-full p-6 font-semibold text-lg rounded-3xl border border-border-gentle bg-white shadow-sm outline-none placeholder:text-text-gentle focus:ring-1 focus:ring-primary-subtle transition-all"
+              class="w-full p-4 xl:p-6 font-semibold text-[10px] xl:text-lg rounded-3xl border border-border-gentle bg-white shadow-sm outline-none placeholder:text-text-gentle focus:ring-1 focus:ring-primary-subtle transition-all"
               placeholder="Enter a title (or leave blank for magic)..."
             />
 
@@ -65,7 +71,7 @@
                 <button
                   (click)="onBack()"
                   type="button"
-                  class="px-6 py-3 font-bold text-text-gentle disabled:opacity-30 hover:text-text-emphasis transition-colors"
+                  class="px-6 py-3 text-xs md:text-base font-bold text-text-gentle disabled:opacity-30 hover:text-text-emphasis transition-colors"
                   [disabled]="isTyping()"
                 >
                   Back
@@ -73,7 +79,7 @@
               </div>
 
               <app-button
-                label="Generate Image"
+                label="Generate"
                 [disabled]="creationForm.prompt().invalid() || isTyping()"
                 type="submit"
                 variant="secondary"

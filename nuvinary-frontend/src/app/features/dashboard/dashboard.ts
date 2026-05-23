@@ -9,6 +9,9 @@ import { SidebarService } from '../services/sidebar-service';
   imports: [Header, Sidebar, RouterOutlet],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'flex flex-1 flex-col',
+  },
 })
 export class Dashboard {
   private readonly sidebarService = inject(SidebarService);
