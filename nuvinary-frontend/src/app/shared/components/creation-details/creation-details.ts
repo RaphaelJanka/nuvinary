@@ -29,6 +29,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormInput } from '../form-input/form-input';
 import { form, maxLength, required } from '@angular/forms/signals';
+import { MobileService } from '../../services/mobile-service';
 
 @Component({
   selector: 'app-creation-details',
@@ -39,11 +40,13 @@ import { form, maxLength, required } from '@angular/forms/signals';
 export class CreationDetails {
   private readonly creationService = inject(CreationService);
   private readonly authService = inject(AuthService);
+  private readonly mobileService = inject(MobileService);
   private readonly router = inject(Router);
   private readonly dialogRef = inject(DialogRef);
 
   protected readonly currentUser = this.authService.authUser;
   protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
+  protected isMobile = this.mobileService._isMobile;
   protected isEditingTitle = signal(false);
   protected editValue = signal('');
   private readonly titleModel = signal({
@@ -71,6 +74,7 @@ export class CreationDetails {
     fileTextIcon: FileText,
     checkIcon: Check,
   };
+
   onSaveTitle() {
     const newTitle = this.editValue().trim();
     if (newTitle && newTitle !== this.creation().title) {

@@ -51,7 +51,7 @@ export class FormInput {
       'rounded-xl py-3 focus:border-accent-muted focus:ring-form-focus text-text-emphasis transition-all',
       this.purpose() !== 'detail' ? 'px-4 placeholder:text-sm focus:ring-2' : null,
       this.purpose() === 'detail'
-        ? 'text-primary font-black text-3xl max-w-[300px] placeholder:text-3xl'
+        ? 'text-primary font-black text-xl md:text-3xl max-w-[150px] md:max-w-[300px] placeholder:text-xl md:placeholder:text-3xl'
         : null,
       this.purpose() === 'collection' ? 'ring-2 ring-slate-200' : null,
       this.purpose() === 'collection' || this.purpose() === 'detail' ? 'bg-white' : 'bg-surface/30',

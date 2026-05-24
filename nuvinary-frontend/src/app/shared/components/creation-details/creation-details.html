@@ -2,13 +2,24 @@
   class="relative flex flex-col lg:flex-row overflow-hidden w-full max-w-7xl max-h-[90vh] rounded-[2.5rem] border border-border-gentle bg-surface shadow-2xl animate-in fade-in zoom-in duration-300"
 >
   <section
-    class="flex items-center justify-center lg:w-3/5 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-border-light bg-white-medium group"
+    class="relative flex items-center justify-center lg:w-3/5 p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-border-light bg-white-medium group"
   >
     <img
       [src]="creation().url"
       [alt]="creation().title"
-      class="max-w-full max-h-full object-contain rounded-xl shadow-2xl shadow-black/10 transition-transform duration-500 group-hover:scale-[1.02]"
+      class="max-w-full lg:max-h-full max-h-[35vh] md:max-h-[45vh] object-contain rounded-xl shadow-2xl shadow-black/10 transition-transform duration-500 group-hover:scale-[1.02]"
     />
+    @if (isMobile()) {
+      <button
+        (click)="onClose()"
+        class="absolute right-5 top-5 p-1.5 md:p-2 rounded-full border border-border-gentle bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-bg-light"
+      >
+        <lucide-icon
+          [img]="icons.closeIcon"
+          class="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
+        ></lucide-icon>
+      </button>
+    }
   </section>
 
   <section
@@ -18,7 +29,9 @@
       <div class="flex justify-between items-center gap-3">
         <div class="flex-1 min-w-0">
           @if (!isEditingTitle()) {
-            <h1 class="font-black text-3xl text-text-strong tracking-tight wrap-break-word">
+            <h1
+              class="font-black text-xl md:text-3xl text-text-strong tracking-tight wrap-break-word"
+            >
               {{ creation().title }}
             </h1>
           } @else {
@@ -46,14 +59,14 @@
           }
         </div>
 
-        @if (!isEditingTitle()) {
+        @if (!isEditingTitle() && !isMobile()) {
           <button
             (click)="onClose()"
-            class="p-2 rounded-full border border-border-gentle bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-bg-light"
+            class="p-1.5 md:p-2 rounded-full border border-border-gentle bg-white-strong shadow-sm backdrop-blur-md transition-colors group hover:bg-bg-light"
           >
             <lucide-icon
               [img]="icons.closeIcon"
-              class="w-5 h-5 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
+              class="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:rotate-90 group-hover:text-primary"
             ></lucide-icon>
           </button>
         }
