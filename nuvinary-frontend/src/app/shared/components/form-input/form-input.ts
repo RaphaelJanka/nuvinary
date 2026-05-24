@@ -28,7 +28,7 @@ export class FormInput {
   protected readonly hasContent = computed(() => this.config()?.content);
   protected readonly containerClasses = computed(() => {
     return [
-      'grid grid-cols-[1fr_auto] items-center',
+      'flex flex-col xl:grid xl:grid-cols-[1fr_auto] xl:items-center',
       this.hasContent() ? 'gap-4' : null,
       this.purpose() === 'detail' ? 'bg-white py-2 px-4 rounded-xl' : null,
     ]
@@ -48,12 +48,13 @@ export class FormInput {
 
   protected readonly inputClasses = computed(() => {
     return [
-      'rounded-xl py-3 focus:border-accent-muted focus:ring-form-focus text-text-emphasis transition-all',
+      'rounded-xl py-3 text-sm xs:text-base focus:border-accent-muted focus:ring-form-focus text-text-emphasis transition-all placeholder:text-[10px] xl:placeholder:text-sm 3xl:placeholder:text-base',
+      this.hasContent() ? 'max-w-[200px] xs:max-w-none' : '',
       this.purpose() !== 'detail' ? 'px-4 placeholder:text-sm focus:ring-2' : null,
       this.purpose() === 'detail'
         ? 'text-primary font-black text-xl md:text-3xl max-w-[150px] md:max-w-[300px] placeholder:text-xl md:placeholder:text-3xl'
         : null,
-      this.purpose() === 'collection' ? 'ring-2 ring-slate-200' : null,
+      this.purpose() === 'collection' ? ' ring-2 ring-slate-200' : null,
       this.purpose() === 'collection' || this.purpose() === 'detail' ? 'bg-white' : 'bg-surface/30',
       this.isSuccessState() ? 'ring-form-success' : null,
     ]

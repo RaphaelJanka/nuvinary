@@ -15,11 +15,11 @@ type ButtonType = 'button' | 'submit';
       [class]="disabled() ? 'bg-gray-300 shadow-none' : variantClasses"
       [class.mt-4]="variant() === 'primary' && fullWidth()"
       [ngClass]="{
-        'min-w-20 xs:min-w-30': !fullWidth(),
-        'min-w-30 xs:min-w-40': fullWidth(),
+        'min-w-20 xl:min-w-30': !fullWidth(),
+        'min-w-30 xl:min-w-40': fullWidth(),
       }"
       [class.text-sm]="(variant() === 'secondary' || variant() === 'danger') && !icon()"
-      class="flex flex-1 px-1 py-2 xs:px-2 xs:py-3 rounded-xl font-bold text-xs md:text-base text-white items-center justify-center gap-2"
+      class="flex flex-1 px-1 py-2 xl:px-2 xl:py-3 rounded-xl font-bold text-xs xl:text-base text-white items-center justify-center gap-2"
     >
       @if (iconPosition() === 'left' && icon()) {
         <lucide-icon [img]="icon()" class="w-5 h-5"></lucide-icon>

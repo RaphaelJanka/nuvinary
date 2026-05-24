@@ -1,26 +1,30 @@
 <section class="flex-1">
   <app-page-layout [title]="'Security & Password'">
-    <div class="flex justify-center">
+    <div class="flex justify-center px-4 py-8 sm:p-12">
       <div
-        class="flex-1 max-w-[75%] mt-6 sm:mt-12 max-h-200 bg-white border border-white-glass rounded-4xl shadow-2xl p-4"
+        class="w-[75vw] xs:w-full lg:max-w-[75%] lg:mt-12 3xl:max-h-200 bg-white border border-white-glass rounded-4xl shadow-2xl p-4"
       >
-        <div class="flex flex-col gap-10 h-full p-8 sm:p-12 overflow-y-scroll custom-scrollbar">
+        <div class="flex flex-col gap-10 py-8 h-full px-4 sm:p-12 overflow-y-auto custom-scrollbar">
           <div>
-            <h2 class="text-xl font-bold text-primary tracking-tight mb-6">Email Address</h2>
-            <div class="mb-6 bg-surface/30 max-w-[50%] font-medium rounded-xl p-3 ps-4">
+            <h2 class="text-lg xs:text-xl font-bold text-primary tracking-tight mb-6">
+              Email Address
+            </h2>
+            <div
+              class="mb-6 bg-surface/30 max-w-full lg:max-w-[75%] xl:max-w-[50%] text-xs xs:text-base font-medium rounded-xl p-3 ps-4"
+            >
               {{ user()?.email }}
             </div>
             <div class="flex justify-between items-center">
               <button
                 (click)="isChangingMailAddress.set(true)"
-                class="text-xs font-extrabold text-text-gentle hover:text-primary uppercase tracking-wider transition-colors"
+                class="text-[10px] xs:text-xs font-extrabold text-text-gentle hover:text-primary uppercase tracking-wider transition-colors"
               >
                 Change Email Address
               </button>
               @if (isChangingMailAddress()) {
                 <button
                   (click)="onCancel('email')"
-                  class="text-xs font-bold text-text-gentle hover:text-primary transition-colors"
+                  class="text-[10px] xs:text-xs font-bold text-text-gentle hover:text-primary transition-colors"
                 >
                   Cancel
                 </button>
@@ -36,7 +40,7 @@
                   You'll need to verify it in the next step.
                 </p>
 
-                <form (submit)="onUpdateMail($event)" class="grid grid-cols-[1fr_auto]">
+                <form (submit)="onUpdateMail($event)" class="xs:max-w-[50%]">
                   <app-form-input [field]="emailUpdateForm.email" purpose="updateEmail">
                     <app-button
                       label="Update E-Mail"
@@ -51,18 +55,18 @@
           </div>
 
           <div class="pt-8 border-t border-border-gentle">
-            <h2 class="text-xl font-bold text-primary tracking-tight mb-6">Password</h2>
+            <h2 class="text-lg xs:text-xl font-bold text-primary tracking-tight mb-6">Password</h2>
             <div class="flex justify-between items-center">
               <button
                 (click)="isSendingLink.set(true)"
-                class="text-xs font-extrabold text-text-gentle hover:text-primary uppercase tracking-wider transition-colors"
+                class="text-[10px] xs:text-xs font-extrabold text-text-gentle hover:text-primary uppercase tracking-wider transition-colors"
               >
                 Change Password
               </button>
               @if (isSendingLink()) {
                 <button
                   (click)="onCancel('link')"
-                  class="text-xs font-bold text-text-gentle hover:text-primary transition-colors"
+                  class="text-[10px] xs:text-xs font-bold text-text-gentle hover:text-primary transition-colors"
                 >
                   Cancel
                 </button>
@@ -73,7 +77,7 @@
                 class="mt-8 p-6 border border-primary-muted rounded-3xl animate-in fade-in slide-in-from-top-4 duration-300"
               >
                 @if (!isChangingPassword()) {
-                  <div class="grid grid-cols-[1fr_auto] items-center gap-4">
+                  <div class="grid grid-cols-1 xs:grid-cols-[1fr_auto] items-center gap-4">
                     <p class="text-xs font-medium">
                       To change your password, please request a verification code. We will send it
                       to your email address to confirm your identity.
@@ -86,7 +90,7 @@
                     ></app-button>
                   </div>
                 } @else {
-                  <form (submit)="onChangePassword($event)" class="max-w-[50%]">
+                  <form (submit)="onChangePassword($event)" class="xs:max-w-[50%]">
                     <div class="flex flex-col gap-4">
                       <app-form-input [field]="passwordForm.code" purpose="code">
                         <app-button
@@ -124,14 +128,14 @@
             <div class="flex items-center justify-between">
               <button
                 (click)="isDeleting.set(true)"
-                class="text-xs font-extrabold text-text-gentle hover:text-danger uppercase tracking-wider transition-colors"
+                class="text-[10px] xs:text-xs font-extrabold text-text-gentle hover:text-danger uppercase tracking-wider transition-colors"
               >
                 Delete my Account
               </button>
               @if (isDeleting()) {
                 <button
                   (click)="onCancel('account')"
-                  class="text-xs font-bold text-text-gentle hover:text-primary transition-colors"
+                  class="text-[10px] xs:text-xs font-bold text-text-gentle hover:text-primary transition-colors"
                 >
                   Cancel
                 </button>
@@ -148,10 +152,10 @@
                   permanently remove all your generated images and data.
                 </p>
 
-                <form (submit)="onDeleteAccount($event)" class="grid grid-cols-[1fr_auto] gap-4">
+                <form (submit)="onDeleteAccount($event)" class="xs:max-w-[50%]">
                   <app-form-input [field]="accountDeletionForm.phrase" purpose="deleteAccount">
                     <app-button
-                      label="Delete Permanently"
+                      label="Delete"
                       [disabled]="accountDeletionForm().invalid()"
                       variant="danger"
                       type="submit"

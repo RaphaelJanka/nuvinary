@@ -24,7 +24,6 @@
   --breakpoint-xl: 1280px; /* Desktop-Monitore */
   --breakpoint-2xl: 1440px; /* Dein Haupt-Dashboard-Target */
   --breakpoint-3xl: 1920px; /* Extrem breite Screens */
-  --spacing-dashboard-mobile: calc(100vh - 64px);
 }
 
 @custom-variant h-650 (@media (min-height: 650px));
