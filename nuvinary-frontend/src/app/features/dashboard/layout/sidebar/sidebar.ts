@@ -1,16 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import {
-  ArrowLeft,
-  BookImage,
-  ChartLine,
-  CircleUserRound,
-  Earth,
-  LockOpen,
-  LucideAngularModule,
-  PencilRuler,
-  Sparkles,
-} from 'lucide-angular';
+import { ArrowLeft, LucideAngularModule } from 'lucide-angular';
 import { SidebarService } from '../../../services/sidebar-service';
 
 import { NgTemplateOutlet } from '@angular/common';
@@ -29,23 +19,7 @@ export class Sidebar {
   protected readonly isCollapsed = this.sideBarService.isCollapsed;
   protected readonly showSettings = this.sideBarService.showSettings;
   protected readonly arrowLeftIcon = ArrowLeft;
-
-  protected readonly sideBarMenuItems = [
-    { label: 'My Gallery', icon: BookImage, route: '/dashboard/gallery' },
-    { label: 'Create', icon: PencilRuler, route: '/dashboard/create' },
-    { label: 'Studio', icon: Sparkles, route: '/dashboard/studio' },
-    { label: 'Community', icon: Earth, route: '/dashboard/community' },
-  ];
-
-  protected readonly settingsMenuItems = [
-    { label: 'Profile Settings', icon: CircleUserRound, route: '/dashboard/settings/profile' },
-    { label: 'Account Overview', icon: ChartLine, route: '/dashboard/settings/overview' },
-    { label: 'Security & Password', icon: LockOpen, route: '/dashboard/settings/security' },
-  ];
-
-  protected readonly legalItems = [
-    { label: 'Legal Notice', route: '/legal/legal-notice' },
-    { label: 'Privacy Policy', route: '/legal/privacy-policy' },
-    { label: 'Terms of Service', route: '/legal/terms-of-service' },
-  ];
+  protected readonly legalNavItems = this.sideBarService.legalNavItems;
+  protected readonly dashboardNavItems = this.sideBarService.dashboardNavItems;
+  protected readonly settingsNavItems = this.sideBarService.settingsNavItems;
 }

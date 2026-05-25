@@ -15,11 +15,11 @@
         }
       </a>
 
-      @for (item of settingsMenuItems; track item.label) {
+      @for (item of settingsNavItems; track item) {
         <ng-container *ngTemplateOutlet="navLink; context: { item: item }"></ng-container>
       }
     } @else {
-      @for (item of sideBarMenuItems; track item.label) {
+      @for (item of dashboardNavItems; track item) {
         <ng-container *ngTemplateOutlet="navLink; context: { item: item }"></ng-container>
       }
     }
@@ -51,8 +51,8 @@
   </ng-template>
 
   @if (!isCollapsed()) {
-    <div class="flex flex-col gap-4 text-xs font-medium">
-      @for (item of legalItems; track $index) {
+    <nav class="flex flex-col gap-4 text-xs font-medium">
+      @for (item of legalNavItems; track item) {
         <a [routerLink]="item.route" class="ps-5 hover:text-primary transition-all duration-200">
           <span class="whitespace-nowrap transition-all duration-300">
             {{ item.label }}
@@ -62,6 +62,6 @@
       <div class="mt-3 p-4 text-xs bg-primary text-white">
         <p class="overflow-hidden ml-1 whitespace-nowrap">© 2023 Nuvinary</p>
       </div>
-    </div>
+    </nav>
   }
 </section>
