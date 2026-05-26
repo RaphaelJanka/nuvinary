@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
     <div class="min-h-screen flex flex-col gap-8">
       <app-header class="w-full block"></app-header>
       <main class="flex-1 flex items-center justify-center">
-        <div class="max-w-4xl rounded-xl p-8 shadow-md bg-white">
+        <div class="max-w-4xl rounded-xl p-8 shadow-md bg-white mx-4">
           <button
             (click)="onBack()"
             class="flex items-center gap-2 w-fit mb-4 text-sm hover:text-primary"

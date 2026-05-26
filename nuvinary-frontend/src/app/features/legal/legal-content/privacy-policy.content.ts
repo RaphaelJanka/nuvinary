@@ -1,4 +1,4 @@
-export const PRIVACY_HTML_CONTENT = `
+export const PRIVACY_CONTENT = `
 <h1>Privacy Policy</h1>
 <h2>1. Data Protection at a Glance</h2>
 <h3>General Information</h3>

@@ -97,21 +97,22 @@ export const routes: Routes = [
         path: 'terms-of-service',
         title: 'Terms of Service',
         loadComponent: () =>
-          import('./features/legal/terms-of-service/terms-of-service').then(
-            (c) => c.TermsOfService,
-          ),
+          import('./features/legal/legal-content/legal-content').then((c) => c.LegalContent),
+        data: { contentKey: 'TERMS' },
       },
       {
         path: 'privacy-policy',
         title: 'Privacy Policy',
         loadComponent: () =>
-          import('./features/legal/privacy-policy/privacy-policy').then((c) => c.PrivacyPolicy),
+          import('./features/legal/legal-content/legal-content').then((c) => c.LegalContent),
+        data: { contentKey: 'PRIVACY' },
       },
       {
         path: 'legal-notice',
         title: 'Legal Notice',
         loadComponent: () =>
-          import('./features/legal/legal-notice/legal-notice').then((c) => c.LegalNotice),
+          import('./features/legal/legal-content/legal-content').then((c) => c.LegalContent),
+        data: { contentKey: 'NOTICE' },
       },
     ],
   },
