@@ -29,7 +29,7 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormInput } from '../form-input/form-input';
 import { form, maxLength, required } from '@angular/forms/signals';
-import { SidebarService } from '../../../features/services/sidebar-service';
+import { ScreenSizeService } from '../../services/screen-size-service';
 
 @Component({
   selector: 'app-creation-details',
@@ -40,13 +40,13 @@ import { SidebarService } from '../../../features/services/sidebar-service';
 export class CreationDetails {
   private readonly creationService = inject(CreationService);
   private readonly authService = inject(AuthService);
-  private readonly sidebarService = inject(SidebarService);
+  private readonly screenSizeService = inject(ScreenSizeService);
   private readonly router = inject(Router);
   private readonly dialogRef = inject(DialogRef);
 
   protected readonly currentUser = this.authService.authUser;
   protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
-  protected isMobile = this.sidebarService.isMobile;
+  protected isMobile = this.screenSizeService.isMobile;
   protected isEditingTitle = signal(false);
   protected editValue = signal('');
   private readonly titleModel = signal({

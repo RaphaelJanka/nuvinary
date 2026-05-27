@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { filter, fromEvent, map } from 'rxjs';
+import { filter, map } from 'rxjs';
 import {
   BookImage,
   ChartLine,
@@ -11,12 +11,14 @@ import {
   PencilRuler,
   Sparkles,
 } from 'lucide-angular';
+import { ScreenSizeService } from '../../shared/services/screen-size-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SidebarService {
   private readonly router = inject(Router);
+  private readonly screenSizeService = inject(ScreenSizeService);
 
   readonly dashboardNavItems = [
     { label: 'My Gallery', icon: BookImage, route: '/dashboard/gallery' },
@@ -49,21 +51,11 @@ export class SidebarService {
   private readonly _collapsedSignal = signal(false);
   readonly isCollapsed = this._collapsedSignal.asReadonly();
 
-  private readonly _mobileSignal = signal<boolean>(false);
-  readonly isMobile = this._mobileSignal.asReadonly();
-
   private readonly _mobileSidebarSignal = signal(false);
   readonly isMobileSidebarOpen = this._mobileSidebarSignal.asReadonly();
 
-  constructor() {
-    this.checkWidth(window.innerWidth);
-    fromEvent(window, 'resize').subscribe(() => {
-      this.checkWidth(window.innerWidth);
-    });
-  }
-
   toggle() {
-    if (this.isMobile()) {
+    if (this.screenSizeService.isMobile()) {
       this._mobileSidebarSignal.update((collapsed) => !collapsed);
     } else {
       this._collapsedSignal.update((collapsed) => !collapsed);
@@ -72,9 +64,5 @@ export class SidebarService {
 
   setCollapsed(collapsed: boolean) {
     this._collapsedSignal.set(collapsed);
-  }
-
-  private checkWidth(width: number): void {
-    this._mobileSignal.set(width < 1024);
   }
 }

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   ElementRef,
   inject,
   signal,
@@ -20,6 +21,7 @@ import {
 import { DialogService } from '../../../../shared/services/dialog-service';
 import { NgClass } from '@angular/common';
 import { toPng } from 'html-to-image';
+import { ScreenSizeService } from '../../../../shared/services/screen-size-service';
 
 @Component({
   selector: 'app-studio',
@@ -33,6 +35,7 @@ import { toPng } from 'html-to-image';
 })
 export class Studio {
   private readonly dialogService = inject(DialogService);
+  private readonly screenSizeService = inject(ScreenSizeService);
   protected readonly selectedCreation = this.dialogService.selectedCreation;
   protected isEditing = false;
   protected storyTitle = signal('');
@@ -56,7 +59,11 @@ export class Studio {
     {
       icon: () => RotateCwSquare,
       action: () => this.toggleOrientation(),
-      className: () => (this.orientation() === 'landscape' ? 'rotate-90' : ''),
+      className: () =>
+        this.orientation() === 'landscape'
+          ? 'rotate-90 disabled:opacity-10'
+          : 'disabled:opacity-10',
+      disabled: () => !this.screenSizeService.isDesktop(),
     },
     {
       icon: () => SwatchBook,
@@ -94,6 +101,14 @@ export class Studio {
     'images/sun-pattern.png',
     'images/swirl_pattern.png',
   ];
+
+  constructor() {
+    effect(() => {
+      if (!this.screenSizeService.isDesktop()) {
+        this.orientation.set('portrait');
+      }
+    });
+  }
 
   switchBackground() {
     const current = this.cardBackground();
