@@ -9,6 +9,7 @@
             (click)="btn.action()"
             [class]="btn.className ? btn.className() : ''"
             [disabled]="btn.disabled ? btn.disabled() : false"
+            [appTooltip]="btn.tooltip()"
             class="p-2 xs:p-3 rounded-xl xs:rounded-2xl text-white transition-all hover:bg-accent-strong hover:shadow-lg"
           >
             <span

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
 import { CollectionService } from '../../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
@@ -7,10 +7,11 @@ import { DragAndDropService } from '../../../../services/drag-and-drop-service';
 import { DialogService } from '../../../../../shared/services/dialog-service';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
 import { Button } from '../../../../../shared/components/button/button';
+import { Tooltip } from '../../../../../shared/directives/tooltip';
 
 @Component({
   selector: 'app-collections',
-  imports: [LucideAngularModule, FormInput, Button],
+  imports: [LucideAngularModule, FormInput, Button, Tooltip],
   templateUrl: './collections.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -46,6 +47,17 @@ export class Collections {
 
   protected readonly dragOverId = this.dragService.dragOverId;
   protected readonly isDragging = this.dragService.isDragging;
+  protected readonly collectionHeaderTooltip = computed(() => {
+    if (this.editingCollectionId()) {
+      return 'Currently editing...';
+    }
+
+    if (this.isCreating()) {
+      return 'Cancel';
+    }
+
+    return 'Create Collection';
+  });
 
   // ----------   Actions ------------
 

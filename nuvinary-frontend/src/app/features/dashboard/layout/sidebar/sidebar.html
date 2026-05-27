@@ -6,6 +6,8 @@
         class="flex items-center gap-3 h-12 hover:text-primary transition-all duration-300"
         [class.ps-4]="!isCollapsed()"
         [class.justify-center]="isCollapsed()"
+        [appTooltip]="isCollapsed() ? 'Back to Dashboard' : ''"
+        [tooltipPosition]="'right'"
       >
         <lucide-icon class="w-4 h-4 xl:w-5 xl:h-5" [img]="arrowLeftIcon"></lucide-icon>
         @if (!isCollapsed()) {
@@ -34,6 +36,8 @@
       [class.ps-4]="!isCollapsed()"
       [class.justify-center]="isCollapsed()"
       [class.border-l-4]="!isCollapsed()"
+      [appTooltip]="isCollapsed() ? item.tooltip : ''"
+      [tooltipPosition]="'right'"
     >
       <lucide-icon
         class="shrink-0 w-4 h-4 xl:w-5 xl:h-5 group-hover:scale-110 transition-transform duration-200"

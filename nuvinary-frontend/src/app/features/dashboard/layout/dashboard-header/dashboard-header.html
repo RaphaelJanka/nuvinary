@@ -5,6 +5,8 @@
     <button
       (click)="onToggleSidebar()"
       class="rounded-4xl text-text-gentle transition-colors p-2 bg-layer hover:text-white hover:bg-white-soft"
+      [appTooltip]="'Collapse Sidebar'"
+      tooltipPosition="right"
     >
       <lucide-icon [img]="menuIcon" class="w-6 h-6 stroke-[1.5px]"></lucide-icon>
     </button>

@@ -9,6 +9,8 @@
     class="flex items-center justify-center w-9 h-9 rounded-xl bg-white-soft text-white transition-all duration-300 hover:bg-white hover:text-primary disabled:opacity-50"
     [class.rotate-45]="isCreating()"
     [class.bg-white]="isCreating()"
+    [appTooltip]="collectionHeaderTooltip()"
+    [tooltipPosition]="'left'"
   >
     <lucide-icon [img]="icons.plusIcon" class="w-5 h-5"></lucide-icon>
   </button>
@@ -38,12 +40,14 @@
                       [disabled]="collectionForm().invalid()"
                       class="p-2 rounded-xl text-text-gentle hover:bg-primary-subtle hover:text-primary"
                       [class.opacity-30]="collectionForm().invalid()"
+                      [appTooltip]="'Save Title'"
                     >
                       <lucide-icon [img]="icons.checkIcon" class="w-4 h-4"></lucide-icon>
                     </button>
                     <button
                       (click)="onCancel()"
                       class="p-2 rounded-xl text-text-gentle hover:bg-primary-subtle hover:text-primary"
+                      [appTooltip]="'Cancel'"
                     >
                       <lucide-icon [img]="icons.cancelIcon" class="w-4 h-4"></lucide-icon>
                     </button>
@@ -85,12 +89,14 @@
                     <button
                       (click)="onEdit(collection)"
                       class="p-2 rounded-xl text-text-gentle hover:bg-primary-subtle hover:text-primary"
+                      [appTooltip]="'Edit Title'"
                     >
                       <lucide-icon [img]="icons.penIcon" class="w-4 h-4"></lucide-icon>
                     </button>
                     <button
                       (click)="onDeleteCollection(collection)"
                       class="p-2 rounded-xl text-text-gentle hover:bg-bg-danger hover:text-danger"
+                      [appTooltip]="'Delete Collection'"
                     >
                       <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
                     </button>

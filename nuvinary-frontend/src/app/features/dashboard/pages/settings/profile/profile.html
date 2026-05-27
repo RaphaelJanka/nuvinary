@@ -68,7 +68,12 @@
             </div>
           </div>
 
-          <app-button [disabled]="isDisabled()" label="Save Changes" type="submit"></app-button>
+          <app-button
+            [disabled]="isDisabled()"
+            label="Save Changes"
+            type="submit"
+            [appTooltip]="isDisabled() ? 'Nothing to change' : ''"
+          ></app-button>
         </form>
       </div>
     </div>

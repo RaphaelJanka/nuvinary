@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-angular';
 import { ScreenSizeService } from '../../shared/services/screen-size-service';
+import { NavItem } from '../../shared/models/nav-item.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,20 +21,35 @@ export class SidebarService {
   private readonly router = inject(Router);
   private readonly screenSizeService = inject(ScreenSizeService);
 
-  readonly dashboardNavItems = [
-    { label: 'My Gallery', icon: BookImage, route: '/dashboard/gallery' },
-    { label: 'Create', icon: PencilRuler, route: '/dashboard/create' },
-    { label: 'Studio', icon: Sparkles, route: '/dashboard/studio' },
-    { label: 'Community', icon: Earth, route: '/dashboard/community' },
+  readonly dashboardNavItems: NavItem[] = [
+    { label: 'My Gallery', icon: BookImage, route: '/dashboard/gallery', tooltip: 'Gallery' },
+    { label: 'Create', icon: PencilRuler, route: '/dashboard/create', tooltip: 'Create' },
+    { label: 'Studio', icon: Sparkles, route: '/dashboard/studio', tooltip: 'Studio' },
+    { label: 'Community', icon: Earth, route: '/dashboard/community', tooltip: 'Community' },
   ];
 
-  readonly settingsNavItems = [
-    { label: 'Profile Settings', icon: CircleUserRound, route: '/dashboard/settings/profile' },
-    { label: 'Account Overview', icon: ChartLine, route: '/dashboard/settings/overview' },
-    { label: 'Security & Password', icon: LockOpen, route: '/dashboard/settings/security' },
+  readonly settingsNavItems: NavItem[] = [
+    {
+      label: 'Profile Settings',
+      icon: CircleUserRound,
+      route: '/dashboard/settings/profile',
+      tooltip: 'Profile Settings',
+    },
+    {
+      label: 'Account Overview',
+      icon: ChartLine,
+      route: '/dashboard/settings/overview',
+      tooltip: 'Account Overview',
+    },
+    {
+      label: 'Security & Password',
+      icon: LockOpen,
+      route: '/dashboard/settings/security',
+      tooltip: 'Security',
+    },
   ];
 
-  readonly legalNavItems = [
+  readonly legalNavItems: NavItem[] = [
     { label: 'Legal Notice', route: '/legal/legal-notice' },
     { label: 'Privacy Policy', route: '/legal/privacy-policy' },
     { label: 'Terms of Service', route: '/legal/terms-of-service' },

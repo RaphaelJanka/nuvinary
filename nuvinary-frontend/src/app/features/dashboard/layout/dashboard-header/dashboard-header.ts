@@ -5,10 +5,11 @@ import { LucideAngularModule, Menu } from 'lucide-angular';
 import { UserMenu } from './user-menu/user-menu';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { UserInitialPipe } from '../../../../shared/pipes/user-initial.pipe';
+import { Tooltip } from '../../../../shared/directives/tooltip';
 
 @Component({
   selector: 'app-main-header',
-  imports: [LucideAngularModule, UserMenu, UserInitialPipe],
+  imports: [LucideAngularModule, UserMenu, UserInitialPipe, Tooltip],
   templateUrl: './dashboard-header.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

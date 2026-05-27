@@ -22,10 +22,11 @@ import { DialogService } from '../../../../shared/services/dialog-service';
 import { NgClass } from '@angular/common';
 import { toPng } from 'html-to-image';
 import { ScreenSizeService } from '../../../../shared/services/screen-size-service';
+import { Tooltip } from '../../../../shared/directives/tooltip';
 
 @Component({
   selector: 'app-studio',
-  imports: [PageLayout, LucideAngularModule, NgClass],
+  imports: [PageLayout, LucideAngularModule, NgClass, Tooltip],
   templateUrl: './studio.html',
   styleUrl: './studio.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,11 +51,13 @@ export class Studio {
       icon: () => Plus,
       action: () => this.dialogService.openStudioDialog(),
       className: () => 'bg-accent text-black shadow-lg',
+      tooltip: () => 'Add Image',
     },
     {
       icon: () => (this.isEditing ? Check : Pen),
       action: () => (this.isEditing = !this.isEditing),
       className: () => (this.isEditing ? 'text-white bg-accent-muted shadow-lg' : ''),
+      tooltip: () => (!this.isEditing ? 'Enter title' : 'Save title'),
     },
     {
       icon: () => RotateCwSquare,
@@ -64,24 +67,42 @@ export class Studio {
           ? 'rotate-90 disabled:opacity-10'
           : 'disabled:opacity-10',
       disabled: () => !this.screenSizeService.isDesktop(),
+      tooltip: () => (this.screenSizeService.isDesktop() ? 'Rotate Card' : 'Desktop only'),
     },
     {
       icon: () => SwatchBook,
       action: () => this.switchBackground(),
       iconClass: () => `transition-transform duration-500 ease-in-out`,
       iconStyle: () => `transform: rotate(${this.iconRotation()}deg)`,
+      tooltip: () => 'Swap Backgrounds',
     },
     {
       icon: () => Trash,
       action: () => this.clearStudio(),
       className: () => 'disabled:opacity-10',
       disabled: () => !this.selectedCreation() && this.storyTitle() === '',
+      tooltip: () =>
+        !this.selectedCreation() && this.storyTitle() === ''
+          ? 'Studio is already empty'
+          : 'Clear Card',
     },
     {
       icon: () => Download,
       action: () => this.exportAsImage(),
       className: () => 'disabled:opacity-10',
       disabled: () => !this.selectedCreation() || this.storyTitle() === '',
+      tooltip: () => {
+        if (!this.selectedCreation() && this.storyTitle() === '') {
+          return 'Select an asset and enter a title to export';
+        }
+        if (!this.selectedCreation()) {
+          return 'Select an asset to export';
+        }
+        if (this.storyTitle() === '') {
+          return 'Enter a title to export';
+        }
+        return 'Export Canvas as Image';
+      },
     },
   ];
 

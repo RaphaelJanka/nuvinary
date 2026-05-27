@@ -4,10 +4,11 @@ import { ArrowLeft, LucideAngularModule } from 'lucide-angular';
 import { SidebarService } from '../../../services/sidebar-service';
 
 import { NgTemplateOutlet } from '@angular/common';
+import { Tooltip } from '../../../../shared/directives/tooltip';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule, NgTemplateOutlet],
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule, NgTemplateOutlet, Tooltip],
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

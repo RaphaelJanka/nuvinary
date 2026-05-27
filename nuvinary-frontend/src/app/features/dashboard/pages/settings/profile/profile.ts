@@ -8,10 +8,11 @@ import { UserCredentialModel, UserService } from '../../../../services/user-serv
 import { Button } from '../../../../../shared/components/button/button';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
 import { verifyName } from '../../../../../shared/utils/validation-functions';
+import { Tooltip } from '../../../../../shared/directives/tooltip';
 
 @Component({
   selector: 'app-profile',
-  imports: [PageLayout, LucideAngularModule, UserInitialPipe, Button, FormInput],
+  imports: [PageLayout, LucideAngularModule, UserInitialPipe, Button, FormInput, Tooltip],
   templateUrl: './profile.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
