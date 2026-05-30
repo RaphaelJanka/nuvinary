@@ -3,7 +3,7 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cdk from 'aws-cdk-lib/core';
 
 export interface NuvinaryInfraBaseProps {
-  readonly subDomainName: string;
+  readonly subDomainName?: string;
   readonly isProd: boolean;
   readonly alarmTopic?: sns.ITopic;
 }

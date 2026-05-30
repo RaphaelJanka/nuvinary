@@ -7,6 +7,7 @@ import { StorageConstruct } from '../constructs/storage';
 import { NuvinaryStackProps, StorageLimits } from '../types/interfaces';
 import { createAlarmTopic } from '../utils/monitoring';
 import { getS3StorageLimit } from '../utils/config-helper';
+import { AuthConstruct } from '../constructs/auth';
 
 export class NuvinaryInfraStack extends cdk.Stack {
   readonly alarmTopic: sns.ITopic | undefined;
@@ -21,6 +22,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
     new WebsiteHostingConstruct(this, 'WebsiteHosting', {
       certificate: props.certificate,
       subDomainName: props.subDomainName,
+      isProd: props.isProd,
+      alarmTopic: this.alarmTopic,
+    });
+
+    new AuthConstruct(this, 'Auth', {
       isProd: props.isProd,
       alarmTopic: this.alarmTopic,
     });

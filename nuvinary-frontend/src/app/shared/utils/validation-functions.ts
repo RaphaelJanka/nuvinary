@@ -2,7 +2,8 @@ import { SchemaPath, validate } from '@angular/forms/signals';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CODE_PATTERN = /^\d{6}$/;
-const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{8,}$/;
+const PASSWORD_PATTERN =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_-])[A-Za-z\d@$!%*?&_-]{12,}$/;
 export const DELETE_PHRASE = 'Delete my account';
 
 export function verifyName(path: SchemaPath<string>, label: string) {
@@ -50,10 +51,10 @@ export function verifyPassword(path: SchemaPath<string>) {
       };
     }
 
-    if (value().length < 8) {
+    if (value().length < 12) {
       return {
         kind: 'password_too_short',
-        message: 'Password must be at least 8 characters long',
+        message: 'Password must be at least 12 characters long',
       };
     }
 
