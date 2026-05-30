@@ -5,6 +5,8 @@ import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import { WebsiteHostingConstruct } from '../constructs/website-hosting';
 import { StorageConstruct } from '../constructs/storage';
 import { NuvinaryStackProps, StorageLimits } from '../types/interfaces';
+import { createAlarmTopic } from '../utils/monitoring';
+import { getS3StorageLimit } from '../utils/config-helper';
 
 export class NuvinaryInfraStack extends cdk.Stack {
   readonly alarmTopic: sns.ITopic | undefined;
@@ -13,31 +15,8 @@ export class NuvinaryInfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: NuvinaryStackProps) {
     super(scope, id, props);
 
-    if (props.isProd) {
-      const topic = new sns.Topic(this, 'NuvinaryAlarmTopic', {
-        displayName: 'Nuvinary Alarms',
-      });
-      const alertEmail = process.env.ALERT_EMAIL;
-      if (!alertEmail) {
-        throw new Error(
-          'Error: Environment variable "ALERT_EMAIL" is not set!',
-        );
-      }
-      topic.addSubscription(new subscriptions.EmailSubscription(alertEmail));
-      this.alarmTopic = topic;
-    }
-
-    const storageConfig = this.node.tryGetContext(
-      's3StorageLimits',
-    ) as StorageLimits;
-
-    if (!storageConfig) {
-      throw new Error(
-        'Error: Context "s3StorageLimits" does not exist in cdk.json!',
-      );
-    }
-
-    this.storageLimit = props.isProd ? storageConfig.prod : storageConfig.dev;
+    this.alarmTopic = props.isProd ? createAlarmTopic(this) : undefined;
+    this.storageLimit = getS3StorageLimit(this, props.isProd);
 
     new WebsiteHostingConstruct(this, 'WebsiteHosting', {
       certificate: props.certificate,

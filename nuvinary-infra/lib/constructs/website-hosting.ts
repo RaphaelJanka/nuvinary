@@ -93,7 +93,7 @@ export class WebsiteHostingConstruct extends Construct {
         threshold: 1,
         evaluationPeriods: 1,
         alarmDescription:
-          'Alert: High rate of 5xx errors detected on CloudFront distribution. Potential availability issue.',
+          'High rate of 5xx errors detected on CloudFront distribution. Potential availability issue.',
       });
 
       errorAlarm.addAlarmAction(new cw_actions.SnsAction(props.alarmTopic));

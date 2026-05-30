@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib/core';
 import { NuvinaryCertificateStack } from '../lib/stacks/certificate-stack';
-import { createInfraStack } from '../lib/nuvinary-factory';
+import { createInfraStack } from '../lib/utils/stack-factory';
 
 const app = new cdk.App();
 

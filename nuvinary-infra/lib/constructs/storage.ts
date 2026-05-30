@@ -46,7 +46,7 @@ export class StorageConstruct extends Construct {
           metric: this.table.metricUserErrors(),
           threshold: 1,
           evaluationPeriods: 1,
-          alarmDescription: 'DynamoDB hat User-Fehler produziert!',
+          alarmDescription: 'DynamoDB produced user errors!',
         },
       );
 
@@ -70,6 +70,7 @@ export class StorageConstruct extends Construct {
         threshold: props.s3StorageLimitBytes,
         evaluationPeriods: 1,
         datapointsToAlarm: 1,
+        alarmDescription: 'S3 storage usage has exceeded the defined limit!',
       });
 
       s3StorageAlarm.addAlarmAction(new cw_actions.SnsAction(props.alarmTopic));
