@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=635256138522:domainName=raphael-janka.com:region=us-east-1": {
+    "Id": "/hostedzone/Z022185337ENFLP1EKEUN",
+    "Name": "raphael-janka.com."
+  },
+  "hosted-zone:account=635256138522:domainName=raphael-janka.com:region=eu-central-1": {
+    "Id": "/hostedzone/Z022185337ENFLP1EKEUN",
+    "Name": "raphael-janka.com."
+  }
+}
