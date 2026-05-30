@@ -7,12 +7,16 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
-
-export const domainName = 'raphael-janka.com';
+import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as cw_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
+import { getDomainName } from './config';
 
 interface NuvinaryStackProps extends cdk.StackProps {
   certificate: acm.ICertificate;
   subDomainName: string;
+  isProd: boolean;
 }
 
 export class NuvinaryCertificateStack extends cdk.Stack {
@@ -20,6 +24,8 @@ export class NuvinaryCertificateStack extends cdk.Stack {
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    const domainName = getDomainName(this);
 
     const zone = route53.HostedZone.fromLookup(this, 'CertificateHostedZone', {
       domainName: domainName,
@@ -35,6 +41,8 @@ export class NuvinaryCertificateStack extends cdk.Stack {
 export class NuvinaryInfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: NuvinaryStackProps) {
     super(scope, id, props);
+
+    const domainName = getDomainName(this);
 
     const zone = route53.HostedZone.fromLookup(this, 'HostedZone', {
       domainName: domainName,
@@ -81,7 +89,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
     );
 
     new s3deploy.BucketDeployment(this, 'DeployFrontend', {
-      sources: [s3deploy.Source.asset('../nuvinary-frontend/dist')],
+      sources: [
+        s3deploy.Source.asset(
+          '../nuvinary-frontend/dist/nuvinary-frontend/browser',
+        ),
+      ],
       destinationBucket: frontendDeploymentBucket,
       distribution: distribution,
       distributionPaths: ['/*'],
@@ -94,6 +106,33 @@ export class NuvinaryInfraStack extends cdk.Stack {
         new targets.CloudFrontTarget(distribution),
       ),
     });
+
+    if (props.isProd) {
+      const email = process.env.ALERT_EMAIL;
+      if (!email) {
+        throw new Error(
+          'Error: The environment variable ALERT_EMAIL is not set!',
+        );
+      }
+
+      const alarmTopic = new sns.Topic(this, 'NuvinaryAlarmTopic', {
+        displayName: 'Nuvinary Alarms',
+      });
+
+      alarmTopic.addSubscription(new subscriptions.EmailSubscription(email));
+
+      const errorAlarm = new cloudwatch.Alarm(this, 'CloudFront5xxAlarm', {
+        metric: distribution.metric5xxErrorRate({
+          period: cdk.Duration.minutes(5),
+        }),
+        threshold: 1,
+        evaluationPeriods: 1,
+        alarmDescription:
+          'Alert: High rate of 5xx errors detected on CloudFront distribution. Potential availability issue.',
+      });
+
+      errorAlarm.addAlarmAction(new cw_actions.SnsAction(alarmTopic));
+    }
 
     new cdk.CfnOutput(this, 'AngularFrontendUrl', {
       value: `https://${props.subDomainName}`,
