@@ -98,6 +98,10 @@
     "@aws-cdk/custom-resources:logApiResponseDataPropertyTrueDefault": false,
     "@aws-cdk/customresources:installLatestAwsSdkDefault": false,
     "@aws-cdk/s3-notifications:addS3TrustKeyPolicyForSnsSubscriptions": true,
-    "domainName": "raphael-janka.com"
+    "domainName": "raphael-janka.com",
+    "s3StorageLimits": {
+      "dev": 1073741824,
+      "prod": 5368709120
+    }
   }
 }
