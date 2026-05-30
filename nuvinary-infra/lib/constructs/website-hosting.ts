@@ -1,46 +1,28 @@
-import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib/core';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as cw_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
-import { getDomainName } from './config';
+import { getDomainName } from '../config';
 
-interface NuvinaryStackProps extends cdk.StackProps {
+interface WebsiteHostingProps {
   certificate: acm.ICertificate;
   subDomainName: string;
   isProd: boolean;
+  alertEmail?: string;
 }
 
-export class NuvinaryCertificateStack extends cdk.Stack {
-  public readonly certificate: acm.ICertificate;
-
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
-
-    const domainName = getDomainName(this);
-
-    const zone = route53.HostedZone.fromLookup(this, 'CertificateHostedZone', {
-      domainName: domainName,
-    });
-
-    this.certificate = new acm.Certificate(this, 'FrontendCertificate', {
-      domainName: `*.${domainName}`,
-      validation: acm.CertificateValidation.fromDns(zone),
-    });
-  }
-}
-
-export class NuvinaryInfraStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: NuvinaryStackProps) {
-    super(scope, id, props);
+export class WebsiteHosting extends Construct {
+  constructor(scope: Construct, id: string, props: WebsiteHostingProps) {
+    super(scope, id);
 
     const domainName = getDomainName(this);
 
@@ -108,8 +90,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     });
 
     if (props.isProd) {
-      const email = process.env.ALERT_EMAIL;
-      if (!email) {
+      if (!props.alertEmail) {
         throw new Error(
           'Error: The environment variable ALERT_EMAIL is not set!',
         );
@@ -119,7 +100,9 @@ export class NuvinaryInfraStack extends cdk.Stack {
         displayName: 'Nuvinary Alarms',
       });
 
-      alarmTopic.addSubscription(new subscriptions.EmailSubscription(email));
+      alarmTopic.addSubscription(
+        new subscriptions.EmailSubscription(props.alertEmail),
+      );
 
       const errorAlarm = new cloudwatch.Alarm(this, 'CloudFront5xxAlarm', {
         metric: distribution.metric5xxErrorRate({
@@ -132,11 +115,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
       });
 
       errorAlarm.addAlarmAction(new cw_actions.SnsAction(alarmTopic));
-    }
 
-    new cdk.CfnOutput(this, 'AngularFrontendUrl', {
-      value: `https://${props.subDomainName}`,
-      description: 'Official App-URL',
-    });
+      new cdk.CfnOutput(this, 'AngularFrontendUrl', {
+        value: `https://${props.subDomainName}`,
+        description: 'Official App-URL',
+      });
+    }
   }
 }

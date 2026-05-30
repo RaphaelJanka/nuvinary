@@ -1,6 +1,6 @@
 import * as cdk from 'aws-cdk-lib/core';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
-import { NuvinaryInfraStack } from './nuvinary-infra-stack';
+import { NuvinaryInfraStack } from './stacks/infra-stack';
 import { getDomainName } from './config';
 
 export function createInfraStack(
