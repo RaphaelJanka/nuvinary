@@ -8,20 +8,16 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as cw_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
 import { getDomainName } from '../config';
+import { WebsiteHostingConstructProps } from '../types/interfaces';
 
-interface WebsiteHostingProps {
-  certificate: acm.ICertificate;
-  subDomainName: string;
-  isProd: boolean;
-  alertEmail?: string;
-}
-
-export class WebsiteHosting extends Construct {
-  constructor(scope: Construct, id: string, props: WebsiteHostingProps) {
+export class WebsiteHostingConstruct extends Construct {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: WebsiteHostingConstructProps,
+  ) {
     super(scope, id);
 
     const domainName = getDomainName(this);
@@ -89,21 +85,7 @@ export class WebsiteHosting extends Construct {
       ),
     });
 
-    if (props.isProd) {
-      if (!props.alertEmail) {
-        throw new Error(
-          'Error: The environment variable ALERT_EMAIL is not set!',
-        );
-      }
-
-      const alarmTopic = new sns.Topic(this, 'NuvinaryAlarmTopic', {
-        displayName: 'Nuvinary Alarms',
-      });
-
-      alarmTopic.addSubscription(
-        new subscriptions.EmailSubscription(props.alertEmail),
-      );
-
+    if (props.alarmTopic) {
       const errorAlarm = new cloudwatch.Alarm(this, 'CloudFront5xxAlarm', {
         metric: distribution.metric5xxErrorRate({
           period: cdk.Duration.minutes(5),
@@ -111,15 +93,15 @@ export class WebsiteHosting extends Construct {
         threshold: 1,
         evaluationPeriods: 1,
         alarmDescription:
-          'Alert: High rate of 5xx errors detected on CloudFront distribution. Potential availability issue.',
+          'High rate of 5xx errors detected on CloudFront distribution. Potential availability issue.',
       });
 
-      errorAlarm.addAlarmAction(new cw_actions.SnsAction(alarmTopic));
-
-      new cdk.CfnOutput(this, 'AngularFrontendUrl', {
-        value: `https://${props.subDomainName}`,
-        description: 'Official App-URL',
-      });
+      errorAlarm.addAlarmAction(new cw_actions.SnsAction(props.alarmTopic));
     }
+
+    new cdk.CfnOutput(this, 'AngularFrontendUrl', {
+      value: `https://${props.subDomainName}`,
+      description: 'Official App-URL',
+    });
   }
 }
