@@ -2,16 +2,9 @@ import { Construct } from 'constructs';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cdk from 'aws-cdk-lib';
-import * as sns from 'aws-cdk-lib/aws-sns';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
 import * as cw_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
-
-interface StorageConstructProps {
-  subDomainName: string;
-  isProd: boolean;
-  alarmTopic?: sns.ITopic;
-  s3StorageLimitBytes: number;
-}
+import { StorageConstructProps } from '../types/interfaces';
 
 export class StorageConstruct extends Construct {
   readonly table: dynamodb.Table;

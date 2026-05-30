@@ -1,19 +1,15 @@
 import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
-import { WebsiteHosting } from '../constructs/website-hosting';
+import { WebsiteHostingConstruct } from '../constructs/website-hosting';
 import { StorageConstruct } from '../constructs/storage';
-
-interface NuvinaryStackProps extends cdk.StackProps {
-  certificate: acm.ICertificate;
-  subDomainName: string;
-  isProd: boolean;
-}
+import { NuvinaryStackProps, StorageLimits } from '../types/interfaces';
 
 export class NuvinaryInfraStack extends cdk.Stack {
   readonly alarmTopic: sns.ITopic | undefined;
+  readonly storageLimit: number;
+
   constructor(scope: Construct, id: string, props: NuvinaryStackProps) {
     super(scope, id, props);
 
@@ -24,17 +20,26 @@ export class NuvinaryInfraStack extends cdk.Stack {
       const alertEmail = process.env.ALERT_EMAIL;
       if (!alertEmail) {
         throw new Error(
-          'Error: The environment variable ALERT_EMAIL is not set!',
+          'Error: Environment variable "ALERT_EMAIL" is not set!',
         );
       }
       topic.addSubscription(new subscriptions.EmailSubscription(alertEmail));
       this.alarmTopic = topic;
     }
 
-    const storageConfig = this.node.tryGetContext('s3StorageLimits');
-    const storageLimit = props.isProd ? storageConfig.prod : storageConfig.dev;
+    const storageConfig = this.node.tryGetContext(
+      's3StorageLimits',
+    ) as StorageLimits;
 
-    new WebsiteHosting(this, 'WebsiteHosting', {
+    if (!storageConfig) {
+      throw new Error(
+        'Error: Context "s3StorageLimits" does not exist in cdk.json!',
+      );
+    }
+
+    this.storageLimit = props.isProd ? storageConfig.prod : storageConfig.dev;
+
+    new WebsiteHostingConstruct(this, 'WebsiteHosting', {
       certificate: props.certificate,
       subDomainName: props.subDomainName,
       isProd: props.isProd,
@@ -45,7 +50,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
       subDomainName: props.subDomainName,
       isProd: props.isProd,
       alarmTopic: this.alarmTopic,
-      s3StorageLimitBytes: storageLimit,
+      s3StorageLimitBytes: this.storageLimit,
     });
   }
 }

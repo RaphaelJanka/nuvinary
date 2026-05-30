@@ -8,19 +8,16 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
-import * as sns from 'aws-cdk-lib/aws-sns';
 import * as cw_actions from 'aws-cdk-lib/aws-cloudwatch-actions';
 import { getDomainName } from '../config';
+import { WebsiteHostingConstructProps } from '../types/interfaces';
 
-interface WebsiteHostingProps {
-  certificate: acm.ICertificate;
-  subDomainName: string;
-  isProd: boolean;
-  alarmTopic?: sns.ITopic;
-}
-
-export class WebsiteHosting extends Construct {
-  constructor(scope: Construct, id: string, props: WebsiteHostingProps) {
+export class WebsiteHostingConstruct extends Construct {
+  constructor(
+    scope: Construct,
+    id: string,
+    props: WebsiteHostingConstructProps,
+  ) {
     super(scope, id);
 
     const domainName = getDomainName(this);
