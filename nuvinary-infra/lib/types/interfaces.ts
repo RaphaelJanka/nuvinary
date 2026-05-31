@@ -3,21 +3,26 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cdk from 'aws-cdk-lib/core';
 
 export interface NuvinaryInfraBaseProps {
-  readonly subDomainName?: string;
   readonly isProd: boolean;
   readonly alarmTopic?: sns.ITopic;
 }
 
 export interface NuvinaryStackProps
-  extends cdk.StackProps, Omit<NuvinaryInfraBaseProps, 'alarmTopic'> {
+  extends cdk.StackProps, DomainConstructProps {
   readonly certificate: acm.ICertificate;
 }
 
-export interface WebsiteHostingConstructProps extends NuvinaryInfraBaseProps {
+export interface DomainConstructProps extends NuvinaryInfraBaseProps {
+  readonly subDomainName: string;
+}
+
+export interface AuthConstructProps extends NuvinaryInfraBaseProps {}
+
+export interface WebsiteHostingConstructProps extends DomainConstructProps {
   readonly certificate: acm.ICertificate;
 }
 
-export interface StorageConstructProps extends NuvinaryInfraBaseProps {
+export interface StorageConstructProps extends DomainConstructProps {
   readonly s3StorageLimitBytes: number;
 }
 

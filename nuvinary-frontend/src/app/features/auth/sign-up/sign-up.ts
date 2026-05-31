@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { form, maxLength } from '@angular/forms/signals';
 import { UserRegistrationForm } from '../../../core/auth/auth.interfaces';
 import {
+  verifyCode,
   verifyConfirmPassword,
   verifyEmail,
   verifyName,
@@ -20,6 +28,7 @@ import { Button } from '../../../shared/components/button/button';
 })
 export class SignUp {
   private readonly authService = inject(AuthService);
+  protected readonly pendingUserEmail = this.authService.pendingUserEmail;
   private readonly signUpModel = signal<UserRegistrationForm>({
     firstName: '',
     lastName: '',
@@ -32,14 +41,21 @@ export class SignUp {
     verifyName(schema.firstName, 'First name');
     verifyName(schema.lastName, 'Last name');
     verifyEmail(schema.email);
-    // verifyCode(schema.code);
     verifyPassword(schema.password);
     verifyConfirmPassword(schema.confirmPassword, schema.password);
     maxLength(schema.firstName, 20);
     maxLength(schema.lastName, 20);
     maxLength(schema.email, 40);
-    // maxLength(schema.code, 6);
     maxLength(schema.password, 20);
+  });
+
+  private readonly confirmSignUpModel = signal<{ code: string }>({
+    code: '',
+  });
+
+  protected readonly confirmForm = form(this.confirmSignUpModel, (schema) => {
+    verifyCode(schema.code);
+    maxLength(schema.code, 6);
   });
 
   private resendTimer = signal(0);
@@ -50,19 +66,53 @@ export class SignUp {
   });
 
   protected readonly canResend = computed(() => this.resendTimer() === 0);
+  private intervalId: ReturnType<typeof setInterval> | null = null;
 
-  protected onSendCode() {
+  constructor() {
+    effect((onCleanup) => {
+      const email = this.pendingUserEmail();
+      if (email) {
+        this.startResendTimer();
+      }
+      onCleanup(() => this.stopTimer());
+    });
+  }
+
+  private startResendTimer() {
+    if (this.resendTimer() > 0) return;
+
     this.resendTimer.set(60);
-    const interval = setInterval(() => {
+    this.intervalId = setInterval(() => {
       this.resendTimer.update((s) => s - 1);
-      if (this.resendTimer() <= 0) clearInterval(interval);
+      if (this.resendTimer() <= 0) this.stopTimer();
     }, 1000);
   }
 
-  onSubmit(event: Event) {
+  private stopTimer() {
+    if (this.intervalId !== null) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  }
+
+  protected onResendCode() {
+    if (this.canResend()) {
+      this.authService.resendCode(this.pendingUserEmail()!);
+      this.startResendTimer();
+    }
+  }
+
+  onSignUp(event: Event) {
     event.preventDefault();
     if (this.signUpForm().valid()) {
       this.authService.signUp(this.signUpModel());
+    }
+  }
+
+  onConfirm(event: Event) {
+    event.preventDefault();
+    if (this.confirmForm().valid()) {
+      this.authService.confirmSignUp(this.confirmSignUpModel().code);
     }
   }
 }

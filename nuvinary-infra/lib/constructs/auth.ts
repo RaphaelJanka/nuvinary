@@ -2,13 +2,16 @@ import { Construct } from 'constructs';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as cdk from 'aws-cdk-lib/core';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
-import { NuvinaryInfraBaseProps } from '../types/interfaces';
+import {
+  AuthConstructProps,
+  NuvinaryInfraBaseProps,
+} from '../types/interfaces';
 
 export class AuthConstruct extends Construct {
   readonly userPool: cognito.UserPool;
   readonly userPoolClient: cognito.UserPoolClient;
 
-  constructor(scope: Construct, id: string, props: NuvinaryInfraBaseProps) {
+  constructor(scope: Construct, id: string, props: AuthConstructProps) {
     super(scope, id);
 
     this.userPool = new cognito.UserPool(this, 'NuvinaryUserPool', {

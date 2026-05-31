@@ -39,6 +39,6 @@ export class NuvinaryInfraStack extends cdk.Stack {
       s3StorageLimitBytes: this.storageLimit,
     });
 
-    const lambdaFactory = new NuvinaryLambdaFactory(this, 'LambdaFactory');
+    // const lambdaFactory = new NuvinaryLambdaFactory(this, 'LambdaFactory');
   }
 }
