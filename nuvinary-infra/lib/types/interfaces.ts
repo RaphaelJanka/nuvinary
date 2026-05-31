@@ -1,6 +1,7 @@
 import * as sns from 'aws-cdk-lib/aws-sns';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cdk from 'aws-cdk-lib/core';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 
 export interface NuvinaryInfraBaseProps {
   readonly isProd: boolean;
@@ -16,7 +17,9 @@ export interface DomainConstructProps extends NuvinaryInfraBaseProps {
   readonly subDomainName: string;
 }
 
-export interface AuthConstructProps extends NuvinaryInfraBaseProps {}
+export interface AuthConstructProps extends NuvinaryInfraBaseProps {
+  postConfirmationFn: lambda.IFunction;
+}
 
 export interface WebsiteHostingConstructProps extends DomainConstructProps {
   readonly certificate: acm.ICertificate;

@@ -27,18 +27,26 @@ export class NuvinaryInfraStack extends cdk.Stack {
       alarmTopic: this.alarmTopic,
     });
 
-    new AuthConstruct(this, 'Auth', {
-      isProd: props.isProd,
-      alarmTopic: this.alarmTopic,
-    });
-
-    new StorageConstruct(this, 'NuvinaryStorage', {
+    const storage = new StorageConstruct(this, 'NuvinaryStorage', {
       subDomainName: props.subDomainName,
       isProd: props.isProd,
       alarmTopic: this.alarmTopic,
       s3StorageLimitBytes: this.storageLimit,
     });
 
-    // const lambdaFactory = new NuvinaryLambdaFactory(this, 'LambdaFactory');
+    const lambdaFactory = new NuvinaryLambdaFactory(this, 'LambdaFactory', {
+      table: storage.table,
+    });
+
+    const postConfirmAuthFn = lambdaFactory.createFunction('PostConfirm', {
+      entry: '../nuvinary-backend/src/triggers/post-confirmation.ts',
+      handler: 'handler',
+    });
+
+    new AuthConstruct(this, 'Auth', {
+      isProd: props.isProd,
+      alarmTopic: this.alarmTopic,
+      postConfirmationFn: postConfirmAuthFn,
+    });
   }
 }

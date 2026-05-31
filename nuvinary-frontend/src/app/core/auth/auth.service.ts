@@ -1,15 +1,7 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { LoginData, User, UserRegistrationForm } from './auth.interfaces';
+import { User, UserRegistrationForm } from './auth.interfaces';
 import { NotificationService } from '../../shared/services/notification-service';
-import {
-  signIn,
-  signUp,
-  signOut,
-  getCurrentUser,
-  AuthError,
-  confirmSignUp,
-  resendSignUpCode,
-} from 'aws-amplify/auth';
+import { signUp, signOut, AuthError, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -111,7 +103,8 @@ export class AuthService {
         options: {
           userAttributes: {
             email: userData.email,
-            name: `${userData.firstName} ${userData.lastName}`,
+            given_name: userData.firstName,
+            family_name: userData.lastName,
           },
         },
       });

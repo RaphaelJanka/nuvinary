@@ -2,10 +2,7 @@ import { Construct } from 'constructs';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as cdk from 'aws-cdk-lib/core';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
-import {
-  AuthConstructProps,
-  NuvinaryInfraBaseProps,
-} from '../types/interfaces';
+import { AuthConstructProps } from '../types/interfaces';
 
 export class AuthConstruct extends Construct {
   readonly userPool: cognito.UserPool;
@@ -49,6 +46,11 @@ export class AuthConstruct extends Construct {
         userPassword: true,
       },
     });
+
+    this.userPool.addTrigger(
+      cognito.UserPoolOperation.POST_CONFIRMATION,
+      props.postConfirmationFn,
+    );
 
     if (props.alarmTopic) {
       const signInThrottlesMetric = new cloudwatch.Metric({
