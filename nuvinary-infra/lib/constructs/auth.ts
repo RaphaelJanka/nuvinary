@@ -25,10 +25,9 @@ export class AuthConstruct extends Construct {
         requireSymbols: true,
       },
       standardAttributes: {
-        email: {
-          required: true,
-          mutable: true,
-        },
+        email: { required: true, mutable: true },
+        givenName: { required: true, mutable: true },
+        familyName: { required: true, mutable: true },
       },
       userVerification: {
         emailSubject: 'Verify your Nuvinary account',

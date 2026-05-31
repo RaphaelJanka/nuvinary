@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { form, maxLength } from '@angular/forms/signals';
 import { UserRegistrationForm } from '../../../core/auth/auth.interfaces';
 import {
-  verifyCode,
   verifyConfirmPassword,
   verifyEmail,
   verifyName,
@@ -27,20 +26,19 @@ export class SignUp {
     email: '',
     password: '',
     confirmPassword: '',
-    code: '',
   });
 
   protected readonly signUpForm = form(this.signUpModel, (schema) => {
     verifyName(schema.firstName, 'First name');
     verifyName(schema.lastName, 'Last name');
     verifyEmail(schema.email);
-    verifyCode(schema.code);
+    // verifyCode(schema.code);
     verifyPassword(schema.password);
     verifyConfirmPassword(schema.confirmPassword, schema.password);
     maxLength(schema.firstName, 20);
     maxLength(schema.lastName, 20);
     maxLength(schema.email, 40);
-    maxLength(schema.code, 6);
+    // maxLength(schema.code, 6);
     maxLength(schema.password, 20);
   });
 

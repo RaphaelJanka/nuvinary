@@ -53,14 +53,13 @@ export class AuthService {
 
   login(credentials: LoginData): boolean {
     this._authErrorSignal.set(null);
+    console.log('credentials', credentials);
+    this.setUser(testUser);
+    return true;
 
-    if (credentials.email === testUser.email && credentials.password === testUser.password) {
-      this.setUser(testUser);
-      return true;
-    }
     console.error('Login failed');
-    this._authErrorSignal.set('Invalid email or password');
-    return false;
+    // this._authErrorSignal.set('Invalid email or password');
+    // return false;
   }
 
   logOut() {

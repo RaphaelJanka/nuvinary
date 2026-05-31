@@ -9,16 +9,6 @@
 
   <app-form-input [field]="signUpForm.email" purpose="email"></app-form-input>
 
-  <app-form-input [field]="signUpForm.code" purpose="code">
-    <app-button
-      [disabled]="!canResend()"
-      (click)="onSendCode()"
-      [label]="resendButtonLabel()"
-      variant="secondary"
-    >
-    </app-button>
-  </app-form-input>
-
   <app-form-input [field]="signUpForm.password" purpose="password"></app-form-input>
 
   <app-form-input [field]="signUpForm.confirmPassword" purpose="confirmPassword"></app-form-input>

@@ -11,7 +11,6 @@ export interface LoginData extends Pick<BaseUser, 'email'> {
 export interface UserRegistrationForm extends BaseUser {
   password: string;
   confirmPassword: string;
-  code: string;
 }
 
 export interface SignUpRequestDTO extends Omit<UserRegistrationForm, 'confirmPassword'> {
@@ -28,6 +27,4 @@ export interface User extends BaseUser {
   createdAt: string;
   displayName: string;
   avatarColor: string;
-  // Remove after AWS Cognito integration
-  password?: string;
 }
