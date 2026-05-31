@@ -25,3 +25,10 @@ export interface StorageLimits {
   readonly dev: number;
   readonly prod: number;
 }
+
+export interface NuvinaryLambdaProps {
+  entry: string;
+  handler?: string;
+  memorySize?: number;
+  timeOut?: cdk.Duration;
+}

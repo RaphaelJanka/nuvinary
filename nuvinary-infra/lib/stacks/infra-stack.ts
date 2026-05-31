@@ -8,6 +8,7 @@ import { NuvinaryStackProps, StorageLimits } from '../types/interfaces';
 import { createAlarmTopic } from '../utils/monitoring';
 import { getS3StorageLimit } from '../utils/config-helper';
 import { AuthConstruct } from '../constructs/auth';
+import { NuvinaryLambdaFactory } from '../constructs/lambda-factory';
 
 export class NuvinaryInfraStack extends cdk.Stack {
   readonly alarmTopic: sns.ITopic | undefined;
@@ -37,5 +38,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
       alarmTopic: this.alarmTopic,
       s3StorageLimitBytes: this.storageLimit,
     });
+
+    const lambdaFactory = new NuvinaryLambdaFactory(this, 'LambdaFactory');
   }
 }
