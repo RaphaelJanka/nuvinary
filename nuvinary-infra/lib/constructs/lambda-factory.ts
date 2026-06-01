@@ -4,6 +4,7 @@ import { NuvinaryLambdaProps } from '../types/interfaces';
 import { Duration } from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import * as path from 'path';
 
 const LAMBDA_DEFAULTS = {
   MEMORY_SIZE: 512,
@@ -32,6 +33,7 @@ export class NuvinaryLambdaFactory extends Construct {
       environment: {
         TABLE_NAME: this.table.tableName,
       },
+      projectRoot: path.join(__dirname, '../../../'),
     });
 
     this.table.grantReadWriteData(fn);
