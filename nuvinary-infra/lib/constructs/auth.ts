@@ -2,13 +2,13 @@ import { Construct } from 'constructs';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as cdk from 'aws-cdk-lib/core';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
-import { NuvinaryInfraBaseProps } from '../types/interfaces';
+import { AuthConstructProps } from '../types/interfaces';
 
 export class AuthConstruct extends Construct {
   readonly userPool: cognito.UserPool;
   readonly userPoolClient: cognito.UserPoolClient;
 
-  constructor(scope: Construct, id: string, props: NuvinaryInfraBaseProps) {
+  constructor(scope: Construct, id: string, props: AuthConstructProps) {
     super(scope, id);
 
     this.userPool = new cognito.UserPool(this, 'NuvinaryUserPool', {
@@ -25,10 +25,9 @@ export class AuthConstruct extends Construct {
         requireSymbols: true,
       },
       standardAttributes: {
-        email: {
-          required: true,
-          mutable: true,
-        },
+        email: { required: true, mutable: true },
+        givenName: { required: true, mutable: true },
+        familyName: { required: true, mutable: true },
       },
       userVerification: {
         emailSubject: 'Verify your Nuvinary account',
@@ -47,6 +46,11 @@ export class AuthConstruct extends Construct {
         userPassword: true,
       },
     });
+
+    this.userPool.addTrigger(
+      cognito.UserPoolOperation.POST_CONFIRMATION,
+      props.postConfirmationFn,
+    );
 
     if (props.alarmTopic) {
       const signInThrottlesMetric = new cloudwatch.Metric({

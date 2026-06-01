@@ -1,7 +1,8 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { LoginData, SignUpRequestDTO, User, UserRegistrationForm } from './auth.interfaces';
-import { testUser } from '../../test/testdata/user';
+import { User, UserRegistrationForm } from './auth.interfaces';
 import { NotificationService } from '../../shared/services/notification-service';
+import { signUp, signOut, AuthError, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,10 @@ import { NotificationService } from '../../shared/services/notification-service'
 export class AuthService {
   readonly STORAGE_KEY = 'nuvinary_user';
   private readonly notificationService = inject(NotificationService);
+  private readonly router = inject(Router);
+
+  private readonly _pendingUserEmailSignal = signal<string | null>(null);
+  pendingUserEmail = this._pendingUserEmailSignal.asReadonly();
 
   private readonly _authUserSignal = signal<User | null>(this.getUserFromLocalStorage());
   authUser = this._authUserSignal.asReadonly();
@@ -51,32 +56,98 @@ export class AuthService {
     this._authUserSignal.set(user);
   }
 
-  login(credentials: LoginData): boolean {
-    this._authErrorSignal.set(null);
+  // async login(credentials: LoginData): Promise<boolean> {
+  //   try {
+  //     const { isSignedIn } = await signIn({
+  //       username: credentials.email,
+  //       password: credentials.password
+  //     });
 
-    if (credentials.email === testUser.email && credentials.password === testUser.password) {
-      this.setUser(testUser);
-      return true;
-    }
-    console.error('Login failed');
-    this._authErrorSignal.set('Invalid email or password');
-    return false;
-  }
+  //     if (isSignedIn) {
+  //       const user = await getCurrentUser();
+  //       this.setUser(user);
+  //       return true;
+  //     }
+  //     return false;
+  //   } catch (err: any) {
+  //     this.notificationService.show(err.message, 'error');
+  //     return false;
+  //   }
+  // }
 
-  logOut() {
+  // login(credentials: LoginData): boolean {
+  //   this._authErrorSignal.set(null);
+  //   console.log('credentials', credentials);
+  //   this.setUser(testUser);
+  //   return true;
+
+  //   console.error('Login failed');
+  //   // this._authErrorSignal.set('Invalid email or password');
+  //   // return false;
+  // }
+
+  async logOut() {
+    await signOut();
     this._authUserSignal.set(null);
   }
 
-  signUp(userData: UserRegistrationForm) {
-    const color = this.avatarColors[Math.floor(Math.random() * this.avatarColors.length)];
-    const newUser: SignUpRequestDTO = {
-      ...userData,
-      avatarColor: color,
-      displayName: `${userData.firstName} ${userData.lastName}`,
-    };
-    console.log('User created:', newUser);
+  // logOut() {
+  //   this._authUserSignal.set(null);
+  // }
 
-    this.notificationService.show('Sign-up successful!', 'success');
+  async signUp(userData: UserRegistrationForm): Promise<void> {
+    try {
+      await signUp({
+        username: userData.email,
+        password: userData.password,
+        options: {
+          userAttributes: {
+            email: userData.email,
+            given_name: userData.firstName,
+            family_name: userData.lastName,
+          },
+        },
+      });
+
+      this._pendingUserEmailSignal.set(userData.email);
+      this.notificationService.show(
+        'Registration started. Please check your emails for the confirmation code.',
+        'success',
+      );
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
+    }
+  }
+
+  async resendCode(email: string): Promise<void> {
+    try {
+      await resendSignUpCode({ username: email });
+      this.notificationService.show(
+        'Confirmation code resent. Please check your emails.',
+        'success',
+      );
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
+    }
+  }
+
+  async confirmSignUp(code: string) {
+    try {
+      await confirmSignUp({
+        username: this._pendingUserEmailSignal()!,
+        confirmationCode: code,
+      });
+      this._pendingUserEmailSignal.set(null);
+      await this.router.navigate(['/auth/signin']);
+      this.notificationService.show('Registration confirmed. You can now sign in.', 'success');
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+    }
   }
 
   resetPassword(email: string) {
