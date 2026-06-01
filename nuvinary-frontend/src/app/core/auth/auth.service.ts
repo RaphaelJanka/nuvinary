@@ -142,7 +142,7 @@ export class AuthService {
         confirmationCode: code,
       });
       this._pendingUserEmailSignal.set(null);
-      this.router.navigate(['/auth/signin']);
+      await this.router.navigate(['/auth/signin']);
       this.notificationService.show('Registration confirmed. You can now sign in.', 'success');
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
