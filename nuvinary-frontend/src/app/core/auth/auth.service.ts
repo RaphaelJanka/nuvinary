@@ -124,7 +124,10 @@ export class AuthService {
   async resendCode(email: string): Promise<void> {
     try {
       await resendSignUpCode({ username: email });
-      this.notificationService.show('Code erneut gesendet!', 'success');
+      this.notificationService.show(
+        'Confirmation code resent. Please check your emails.',
+        'success',
+      );
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
@@ -140,6 +143,7 @@ export class AuthService {
       });
       this._pendingUserEmailSignal.set(null);
       this.router.navigate(['/auth/signin']);
+      this.notificationService.show('Registration confirmed. You can now sign in.', 'success');
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
