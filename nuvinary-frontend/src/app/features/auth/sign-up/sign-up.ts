@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { form, maxLength } from '@angular/forms/signals';
 import { UserRegistrationForm } from '../../../core/auth/auth.interfaces';
 import {
@@ -66,46 +59,40 @@ export class SignUp {
   });
 
   protected readonly canResend = computed(() => this.resendTimer() === 0);
-  private intervalId: ReturnType<typeof setInterval> | null = null;
-
-  constructor() {
-    effect((onCleanup) => {
-      const email = this.pendingUserEmail();
-      if (email) {
-        this.startResendTimer();
-      }
-      onCleanup(() => this.stopTimer());
-    });
-  }
 
   private startResendTimer() {
-    if (this.resendTimer() > 0) return;
-
     this.resendTimer.set(60);
-    this.intervalId = setInterval(() => {
+
+    const tick = () => {
+      if (this.resendTimer() <= 0) return;
       this.resendTimer.update((s) => s - 1);
-      if (this.resendTimer() <= 0) this.stopTimer();
-    }, 1000);
+      if (this.resendTimer() > 0) {
+        setTimeout(tick, 1000);
+      }
+    };
+    setTimeout(tick, 1000);
   }
 
-  private stopTimer() {
-    if (this.intervalId !== null) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-  }
-
-  protected onResendCode() {
+  protected async onResendCode() {
     if (this.canResend()) {
-      this.authService.resendCode(this.pendingUserEmail()!);
-      this.startResendTimer();
+      try {
+        await this.authService.resendCode(this.pendingUserEmail()!);
+        this.startResendTimer();
+      } catch (error) {
+        console.error('Error resending code:', error);
+      }
     }
   }
 
-  onSignUp(event: Event) {
+  async onSignUp(event: Event) {
     event.preventDefault();
     if (this.signUpForm().valid()) {
-      this.authService.signUp(this.signUpModel());
+      try {
+        await this.authService.signUp(this.signUpModel());
+        this.startResendTimer();
+      } catch (error) {
+        console.error('Error signing up:', error);
+      }
     }
   }
 

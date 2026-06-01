@@ -95,7 +95,7 @@ export class AuthService {
   //   this._authUserSignal.set(null);
   // }
 
-  async signUp(userData: UserRegistrationForm) {
+  async signUp(userData: UserRegistrationForm): Promise<void> {
     try {
       await signUp({
         username: userData.email,
@@ -115,24 +115,20 @@ export class AuthService {
         'success',
       );
     } catch (err: unknown) {
-      if (err instanceof AuthError) {
-        this.notificationService.show(err.message, 'error');
-      } else {
-        this.notificationService.show('An unknown error has occurred', 'error');
-      }
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
     }
   }
 
-  async resendCode(email: string) {
+  async resendCode(email: string): Promise<void> {
     try {
       await resendSignUpCode({ username: email });
       this.notificationService.show('Code erneut gesendet!', 'success');
     } catch (err: unknown) {
-      if (err instanceof AuthError) {
-        this.notificationService.show(err.message, 'error');
-      } else {
-        this.notificationService.show('An unknown error has occurred', 'error');
-      }
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
     }
   }
 
@@ -145,25 +141,10 @@ export class AuthService {
       this._pendingUserEmailSignal.set(null);
       this.router.navigate(['/auth/signin']);
     } catch (err: unknown) {
-      if (err instanceof AuthError) {
-        this.notificationService.show(err.message, 'error');
-      } else {
-        this.notificationService.show('An unknown error has occurred', 'error');
-      }
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
     }
   }
-
-  // signUp(userData: UserRegistrationForm) {
-  //   const color = this.avatarColors[Math.floor(Math.random() * this.avatarColors.length)];
-  //   const newUser: SignUpRequestDTO = {
-  //     ...userData,
-  //     avatarColor: color,
-  //     displayName: `${userData.firstName} ${userData.lastName}`,
-  //   };
-  //   console.log('User created:', newUser);
-
-  //   this.notificationService.show('Sign-up successful!', 'success');
-  // }
 
   resetPassword(email: string) {
     console.log('Password reset requested for email:', email);

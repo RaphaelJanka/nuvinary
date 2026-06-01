@@ -21,23 +21,32 @@
     <app-button [disabled]="signUpForm().invalid()" type="submit" label="Next"></app-button>
   </form>
 } @else {
-  <form (submit)="onConfirm($event)" class="flex flex-col gap-4">
-    <app-form-input [field]="confirmForm.code" purpose="code">
-      <app-button
-        [disabled]="!canResend()"
-        (click)="onResendCode()"
-        [label]="resendButtonLabel()"
-        variant="secondary"
-      >
-      </app-button>
-    </app-form-input>
+  <div class="animate-in fade-in duration-300">
+    <form (submit)="onConfirm($event)" class="flex flex-col gap-4">
+      <div class="mb-6 text-center">
+        <h2 class="text-2xl font-bold mb-2">Verify your account</h2>
+        <p class="text-sm">
+          We've sent a verification code to
+          <span class="font-semibold text-primary">{{ pendingUserEmail() }}.</span>
+        </p>
+      </div>
+      <app-form-input [field]="confirmForm.code" purpose="code">
+        <app-button
+          [disabled]="!canResend()"
+          (click)="onResendCode()"
+          [label]="resendButtonLabel()"
+          variant="secondary"
+        >
+        </app-button>
+      </app-form-input>
 
-    <app-button
-      [disabled]="confirmForm().invalid()"
-      type="submit"
-      label="Confirm & Sign Up"
-    ></app-button>
-  </form>
+      <app-button
+        [disabled]="confirmForm().invalid()"
+        type="submit"
+        label="Confirm & Sign Up"
+      ></app-button>
+    </form>
+  </div>
 }
 
 <div class="mt-8 text-center">
