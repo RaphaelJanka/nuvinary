@@ -34,9 +34,15 @@ export interface StorageLimits {
   readonly prod: number;
 }
 
+export interface LambdaPermissions {
+  dynamoDb?: 'read' | 'write' | 'readWrite';
+  ses?: boolean;
+}
+
 export interface NuvinaryLambdaProps {
   entry: string;
   handler?: string;
+  permissions?: LambdaPermissions;
   memorySize?: number;
   timeOut?: cdk.Duration;
 }

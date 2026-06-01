@@ -1,7 +1,6 @@
 import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
 import * as sns from 'aws-cdk-lib/aws-sns';
-import * as iam from 'aws-cdk-lib/aws-iam';
 import { WebsiteHostingConstruct } from '../constructs/website-hosting';
 import { StorageConstruct } from '../constructs/storage';
 import { NuvinaryStackProps, StorageLimits } from '../types/interfaces';
@@ -41,16 +40,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const postConfirmAuthFn = lambdaFactory.createFunction('PostConfirm', {
       entry: '../nuvinary-backend/src/triggers/post-confirmation.ts',
       handler: 'handler',
+      permissions: {
+        dynamoDb: 'readWrite',
+        ses: true,
+      },
     });
-
-    postConfirmAuthFn.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: ['ses:SendEmail', 'ses:SendRawEmail'],
-        resources: [
-          'arn:aws:ses:eu-central-1:635256138522:identity/dev.project.notifications@gmail.com',
-        ],
-      }),
-    );
 
     new AuthConstruct(this, 'Auth', {
       isProd: props.isProd,
