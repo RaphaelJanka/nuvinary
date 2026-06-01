@@ -135,6 +135,17 @@ export const PRIVACY_CONTENT = `
   users on the basis of Art. 6 (1)(b) GDPR (performance of a contract).
 </p>
 
+<h3>Administrative System Notifications</h3>
+<p>
+  To ensure the security and technical administration of our services, we receive 
+  automated, technical system notifications upon user registration. These emails 
+  are used exclusively for monitoring system operations and contain only the 
+  user ID (sub) and the timestamp of the registration. No clear-text personal data 
+  (such as names or email addresses) is transmitted in these notifications. 
+  Processing is based on our legitimate interest in effective system administration 
+  pursuant to Art. 6 (1)(f) GDPR.
+</p>
+
 <hr />
 
 <h2>3. General Information and Mandatory Information</h2>
