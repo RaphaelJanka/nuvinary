@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { form, maxLength } from '@angular/forms/signals';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { LoginData } from '../../../core/auth/auth.interfaces';
 import { FormInput } from '../../../shared/components/form-input/form-input';
@@ -15,7 +15,6 @@ import { Button } from '../../../shared/components/button/button';
 })
 export class SignIn {
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
   private readonly loginModel = signal<LoginData>({
     email: '',
     password: '',

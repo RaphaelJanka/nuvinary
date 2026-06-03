@@ -59,7 +59,7 @@ export class AuthService {
     try {
       return userJson ? JSON.parse(userJson) : null;
     } catch (error) {
-      console.error('Error parsing user from localStorage:', error);
+      console.error('AuthService: Error parsing user from localStorage:', error);
       return null;
     }
   }
@@ -68,7 +68,6 @@ export class AuthService {
     try {
       await getCurrentUser();
     } catch {
-      this.router.navigate(['/auth/signin']);
       this.setUser(null);
     }
   }
@@ -99,18 +98,15 @@ export class AuthService {
     }
   }
 
-  async checkAuthStatus() {
-    try {
-      await getCurrentUser();
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   async logOut() {
-    await signOut();
-    this._authUserSignal.set(null);
+    this.setUser(null);
+    try {
+      await signOut();
+      this.notificationService.show('Logged out successfully', 'info');
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+    }
   }
 
   async signUp(userData: UserRegistrationForm): Promise<void> {
@@ -160,7 +156,7 @@ export class AuthService {
         confirmationCode: code,
       });
       this._pendingUserEmailSignal.set(null);
-      await this.router.navigate(['/auth/signin']);
+      this.router.navigate(['/auth/signin']);
       this.notificationService.show('Registration confirmed. You can now sign in.', 'success');
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
