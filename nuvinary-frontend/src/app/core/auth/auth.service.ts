@@ -1,8 +1,17 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { User, UserRegistrationForm } from './auth.interfaces';
+import { LoginData, User, UserRegistrationForm } from './auth.interfaces';
 import { NotificationService } from '../../shared/services/notification-service';
-import { signUp, signOut, AuthError, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
+import {
+  signUp,
+  signOut,
+  AuthError,
+  confirmSignUp,
+  resendSignUpCode,
+  getCurrentUser,
+  signIn,
+} from 'aws-amplify/auth';
 import { Router } from '@angular/router';
+import { UserService } from '../../features/services/user-service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +20,7 @@ export class AuthService {
   readonly STORAGE_KEY = 'nuvinary_user';
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly userService = inject(UserService);
 
   private readonly _pendingUserEmailSignal = signal<string | null>(null);
   pendingUserEmail = this._pendingUserEmailSignal.asReadonly();
@@ -40,6 +50,8 @@ export class AuthService {
         localStorage.removeItem(this.STORAGE_KEY);
       }
     });
+
+    this.initSession();
   }
 
   getUserFromLocalStorage(): User | null {
@@ -52,48 +64,54 @@ export class AuthService {
     }
   }
 
+  async initSession() {
+    try {
+      await getCurrentUser();
+    } catch {
+      this.router.navigate(['/auth/signin']);
+      this.setUser(null);
+    }
+  }
+
   setUser(user: User | null) {
     this._authUserSignal.set(user);
   }
 
-  // async login(credentials: LoginData): Promise<boolean> {
-  //   try {
-  //     const { isSignedIn } = await signIn({
-  //       username: credentials.email,
-  //       password: credentials.password
-  //     });
+  async login(credentials: LoginData) {
+    try {
+      await signIn({
+        username: credentials.email,
+        password: credentials.password,
+      });
+      const fullProfile = await this.userService.getUserProfile();
+      this.setUser(fullProfile);
+      await this.router.navigate(['/dashboard']);
+      this.notificationService.show('Login successful!', 'success');
+    } catch (err: unknown) {
+      let message = 'An unknown error has occurred';
 
-  //     if (isSignedIn) {
-  //       const user = await getCurrentUser();
-  //       this.setUser(user);
-  //       return true;
-  //     }
-  //     return false;
-  //   } catch (err: any) {
-  //     this.notificationService.show(err.message, 'error');
-  //     return false;
-  //   }
-  // }
+      if (err instanceof AuthError) {
+        message = err.message;
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
+      this.notificationService.show(message, 'error');
+    }
+  }
 
-  // login(credentials: LoginData): boolean {
-  //   this._authErrorSignal.set(null);
-  //   console.log('credentials', credentials);
-  //   this.setUser(testUser);
-  //   return true;
-
-  //   console.error('Login failed');
-  //   // this._authErrorSignal.set('Invalid email or password');
-  //   // return false;
-  // }
+  async checkAuthStatus() {
+    try {
+      await getCurrentUser();
+      return true;
+    } catch {
+      return false;
+    }
+  }
 
   async logOut() {
     await signOut();
     this._authUserSignal.set(null);
   }
-
-  // logOut() {
-  //   this._authUserSignal.set(null);
-  // }
 
   async signUp(userData: UserRegistrationForm): Promise<void> {
     try {

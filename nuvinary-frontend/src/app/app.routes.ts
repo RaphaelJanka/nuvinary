@@ -15,6 +15,7 @@ export const routes: Routes = [
       {
         path: 'signin',
         title: 'Sign In',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/auth/sign-in/sign-in').then((c) => c.SignIn),
       },
       {

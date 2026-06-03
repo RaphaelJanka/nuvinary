@@ -21,7 +21,7 @@ export class NotificationService {
 
     setTimeout(() => {
       this.remove(id);
-    }, 3000);
+    }, 8000);
   }
 
   remove(id: number) {

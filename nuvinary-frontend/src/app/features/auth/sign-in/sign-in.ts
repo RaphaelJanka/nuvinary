@@ -28,15 +28,14 @@ export class SignIn {
     maxLength(loginSchema.email, 40);
   });
 
-  protected onSubmit(event: Event) {
+  protected async onSubmit(event: Event) {
     event.preventDefault();
-    // if (this.loginForm().valid()) {
-    //   const success = this.authService.login(this.loginModel());
-    //   if (success) {
-    //     this.loginModel.set({ email: '', password: '' });
-    //     this.loginForm().reset();
-    //     this.router.navigate(['/dashboard']);
-    //   }
-    // }
+    if (this.loginForm().valid()) {
+      try {
+        await this.authService.login(this.loginModel());
+      } catch (error) {
+        console.error('Error signing up:', error);
+      }
+    }
   }
 }

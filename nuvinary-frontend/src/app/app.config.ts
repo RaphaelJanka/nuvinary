@@ -13,6 +13,14 @@ Amplify.configure({
       userPoolClientId: environment.cognito.userPoolClientId,
     },
   },
+  API: {
+    REST: {
+      NuvinaryApi: {
+        endpoint: environment.api.endpoint,
+        region: environment.api.region,
+      },
+    },
+  },
 });
 
 export const appConfig: ApplicationConfig = {
