@@ -13,8 +13,13 @@
   >
     Forgot Password?
   </a>
-
-  <app-button [disabled]="loginForm().invalid()" label="Sign In" type="submit"></app-button>
+  <div class="h-15">
+    @if (isLoading()) {
+      <app-loader />
+    } @else {
+      <app-button [disabled]="loginForm().invalid()" label="Sign In" type="submit"></app-button>
+    }
+  </div>
 </form>
 
 <div class="mt-8 text-center">

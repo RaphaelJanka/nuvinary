@@ -12,16 +12,18 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { RouterLink } from '@angular/router';
 import { Button } from '../../../shared/components/button/button';
+import { Loader } from '../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-sign-up',
-  imports: [FormInput, RouterLink, Button],
+  imports: [FormInput, RouterLink, Button, Loader],
   templateUrl: './sign-up.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUp {
   private readonly authService = inject(AuthService);
   protected readonly pendingUserEmail = this.authService.pendingUserEmail;
+  protected readonly isLoading = this.authService.isLoading;
   private readonly signUpModel = signal<UserRegistrationForm>({
     firstName: '',
     lastName: '',

@@ -31,6 +31,8 @@ export class AuthService {
   private readonly _authErrorSignal = signal<string | null>(null);
   authError = this._authErrorSignal.asReadonly();
 
+  readonly isLoading = signal(false);
+
   readonly avatarColors = [
     '#D97706',
     '#1D4ED8',
@@ -77,6 +79,7 @@ export class AuthService {
   }
 
   async login(credentials: LoginData) {
+    this.isLoading.set(true);
     try {
       await signIn({
         username: credentials.email,
@@ -84,9 +87,11 @@ export class AuthService {
       });
       const fullProfile = await this.userService.getUserProfile();
       this.setUser(fullProfile);
-      await this.router.navigate(['/dashboard']);
+      this.router.navigate(['/dashboard']);
+      this.isLoading.set(false);
       this.notificationService.show('Login successful!', 'success');
     } catch (err: unknown) {
+      this.isLoading.set(false);
       let message = 'An unknown error has occurred';
 
       if (err instanceof AuthError) {
@@ -110,6 +115,7 @@ export class AuthService {
   }
 
   async signUp(userData: UserRegistrationForm): Promise<void> {
+    this.isLoading.set(true);
     try {
       await signUp({
         username: userData.email,
@@ -124,11 +130,13 @@ export class AuthService {
       });
 
       this._pendingUserEmailSignal.set(userData.email);
+      this.isLoading.set(false);
       this.notificationService.show(
         'Registration started. Please check your emails for the confirmation code.',
         'success',
       );
     } catch (err: unknown) {
+      this.isLoading.set(false);
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
       throw err;
@@ -136,13 +144,16 @@ export class AuthService {
   }
 
   async resendCode(email: string): Promise<void> {
+    this.isLoading.set(true);
     try {
       await resendSignUpCode({ username: email });
       this.notificationService.show(
         'Confirmation code resent. Please check your emails.',
         'success',
       );
+      this.isLoading.set(false);
     } catch (err: unknown) {
+      this.isLoading.set(false);
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
       throw err;

@@ -5,6 +5,7 @@ import { Amplify } from 'aws-amplify';
 import { routes } from './app.routes';
 import { PageTitleStrategy } from './app.title-strategy';
 import { environment } from '../environments/environment';
+import { provideLottieOptions } from 'ngx-lottie';
 
 Amplify.configure({
   Auth: {
@@ -29,5 +30,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
     { provide: TitleStrategy, useClass: PageTitleStrategy },
+    provideLottieOptions({
+      player: () => import('lottie-web'),
+    }),
   ],
 };

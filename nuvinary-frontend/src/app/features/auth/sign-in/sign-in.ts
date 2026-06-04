@@ -6,15 +6,17 @@ import { LoginData } from '../../../core/auth/auth.interfaces';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { verifyEmail, verifyPassword } from '../../../shared/utils/validation-functions';
 import { Button } from '../../../shared/components/button/button';
+import { Loader } from '../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [RouterLink, FormInput, Button],
+  imports: [RouterLink, FormInput, Button, Loader],
   templateUrl: './sign-in.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignIn {
   private readonly authService = inject(AuthService);
+  protected readonly isLoading = this.authService.isLoading;
   private readonly loginModel = signal<LoginData>({
     email: '',
     password: '',
