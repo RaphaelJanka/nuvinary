@@ -25,7 +25,7 @@ export class AuthService {
   private readonly _pendingUserEmailSignal = signal<string | null>(null);
   pendingUserEmail = this._pendingUserEmailSignal.asReadonly();
 
-  private readonly _authUserSignal = signal<User | null>(this.getUserFromLocalStorage());
+  private readonly _authUserSignal = signal<User | null>(null);
   authUser = this._authUserSignal.asReadonly();
 
   private readonly _authErrorSignal = signal<string | null>(null);
@@ -52,8 +52,6 @@ export class AuthService {
         localStorage.removeItem(this.STORAGE_KEY);
       }
     });
-
-    this.initSession();
   }
 
   getUserFromLocalStorage(): User | null {
@@ -69,6 +67,13 @@ export class AuthService {
   async initSession() {
     try {
       await getCurrentUser();
+      const cachedUser = this.getUserFromLocalStorage();
+      if (cachedUser) {
+        this.setUser(cachedUser);
+      } else {
+        const fullProfile = await this.userService.getUserProfile();
+        this.setUser(fullProfile);
+      }
     } catch {
       this.setUser(null);
     }
