@@ -10,6 +10,8 @@ import {
   getCurrentUser,
   signIn,
   updatePassword,
+  resetPassword,
+  confirmResetPassword,
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
 import { UserService } from '../../features/services/user-service';
@@ -94,10 +96,9 @@ export class AuthService {
       const fullProfile = await this.userService.getUserProfile();
       this.setUser(fullProfile);
       this.router.navigate(['/dashboard']);
-      this.isLoading.set(false);
+
       this.notificationService.show('Login successful!', 'success');
     } catch (err: unknown) {
-      this.isLoading.set(false);
       let message = 'An unknown error has occurred';
 
       if (err instanceof AuthError) {
@@ -106,6 +107,9 @@ export class AuthService {
         message = err.message;
       }
       this.notificationService.show(message, 'error');
+      throw err;
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
@@ -117,6 +121,7 @@ export class AuthService {
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
+      throw err;
     }
   }
 
@@ -136,16 +141,16 @@ export class AuthService {
       });
 
       this._pendingUserEmailSignal.set(userData.email);
-      this.isLoading.set(false);
       this.notificationService.show(
         'Registration started. Please check your emails for the confirmation code.',
         'success',
       );
     } catch (err: unknown) {
-      this.isLoading.set(false);
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
       throw err;
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
@@ -167,6 +172,7 @@ export class AuthService {
   }
 
   async confirmSignUp(code: string) {
+    this.isLoading.set(true);
     try {
       await confirmSignUp({
         username: this._pendingUserEmailSignal()!,
@@ -178,8 +184,64 @@ export class AuthService {
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
+      throw err;
+    } finally {
+      this.isLoading.set(false);
     }
   }
+
+  // requesting passowrd reset
+
+  async requestPasswordReset(email: string) {
+    this.isLoading.set(true);
+    try {
+      await resetPassword({ username: email });
+      this.notificationService.show(
+        'Please check your emails for the confirmation code.',
+        'success',
+      );
+      this._pendingUserEmailSignal.set(email);
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async resendRequestCode() {
+    const email = this.pendingUserEmail();
+    if (!email) {
+      this.notificationService.show('No email found. Please restart the process.', 'error');
+      throw new Error();
+    }
+
+    await this.requestPasswordReset(email);
+  }
+
+  // confirm password reset
+
+  async confirmPasswordReset(code: string, newPassword: string) {
+    this.isLoading.set(true);
+    try {
+      await confirmResetPassword({
+        username: this.pendingUserEmail()!,
+        confirmationCode: code,
+        newPassword,
+      });
+      this.notificationService.show('Passwort erfolgreich zurückgesetzt.', 'success');
+      this.router.navigate(['/auth/signin']);
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  // Update current password
 
   async changePassword(oldPassword: string, newPassword: string) {
     this.isLoading.set(true);
@@ -189,16 +251,13 @@ export class AuthService {
         newPassword,
       });
       this.notificationService.show('Password successfully changed.', 'success');
+      this._pendingUserEmailSignal.set(null);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Fehler beim Ändern des Passworts';
+      const message = err instanceof Error ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
+      throw err;
     } finally {
       this.isLoading.set(false);
     }
-  }
-
-  resetPassword(email: string) {
-    console.log('Password reset requested for email:', email);
-    this.notificationService.show('Password reset link sent to your email!', 'success');
   }
 }
