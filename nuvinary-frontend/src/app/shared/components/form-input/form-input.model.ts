@@ -6,6 +6,8 @@ export type InputTypes =
   | 'displayName'
   | 'email'
   | 'password'
+  | 'currentPassword'
+  | 'newPassword'
   | 'confirmPassword'
   | 'code'
   | 'updateEmail'
@@ -28,7 +30,17 @@ export const INPUT_CONFIGS: Record<InputTypes, InputConfig> = {
   displayName: { label: 'Display Name', placeholder: 'Enter your display name', type: 'text' },
   email: { label: 'Email Address', placeholder: 'Enter your email address', type: 'email' },
   password: { label: 'Password', placeholder: 'Enter your password', type: 'password' },
-  confirmPassword: { label: 'Password', placeholder: 'Confirm your password', type: 'password' },
+  currentPassword: {
+    label: 'Current Password',
+    placeholder: 'Enter your current password',
+    type: 'password',
+  },
+  newPassword: { label: 'New Password', placeholder: 'Enter your new password', type: 'password' },
+  confirmPassword: {
+    label: 'Confirm Password',
+    placeholder: 'Confirm your new password',
+    type: 'password',
+  },
   code: { label: 'Code', placeholder: 'Enter 6-digit code', type: 'text', content: true },
   updateEmail: {
     label: 'Update Email',
