@@ -68,6 +68,43 @@ export function verifyPassword(path: SchemaPath<string>) {
   });
 }
 
+export function verifyNewPassword(path: SchemaPath<string>, matchingPath: SchemaPath<string>) {
+  validate(path, ({ value, valueOf }) => {
+    const newPassword = value();
+    const oldPassword = valueOf(matchingPath);
+
+    if (!newPassword) {
+      return {
+        kind: 'password_empty',
+        message: 'Password is required.',
+      };
+    }
+
+    if (newPassword.length < 12) {
+      return {
+        kind: 'password_too_short',
+        message: 'Password must be at least 12 characters long',
+      };
+    }
+
+    if (!PASSWORD_PATTERN.test(newPassword)) {
+      return {
+        kind: 'password_pattern',
+        message: 'Must include uppercase, lowercase, number, and special character',
+      };
+    }
+
+    if (newPassword === oldPassword) {
+      return {
+        kind: 'newPassword_match_oldPassword',
+        message: 'The new password must be different from your current password.',
+      };
+    }
+
+    return null;
+  });
+}
+
 export function verifyConfirmPassword(path: SchemaPath<string>, matchingPath: SchemaPath<string>) {
   validate(path, ({ value, valueOf }) => {
     const confirmPassword = value();

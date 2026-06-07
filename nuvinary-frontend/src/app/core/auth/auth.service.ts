@@ -9,6 +9,7 @@ import {
   resendSignUpCode,
   getCurrentUser,
   signIn,
+  updatePassword,
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
 import { UserService } from '../../features/services/user-service';
@@ -177,6 +178,22 @@ export class AuthService {
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
+    }
+  }
+
+  async changePassword(oldPassword: string, newPassword: string) {
+    this.isLoading.set(true);
+    try {
+      await updatePassword({
+        oldPassword,
+        newPassword,
+      });
+      this.notificationService.show('Password successfully changed.', 'success');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Fehler beim Ändern des Passworts';
+      this.notificationService.show(message, 'error');
+    } finally {
+      this.isLoading.set(false);
     }
   }
 
