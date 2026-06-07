@@ -8,6 +8,7 @@ import { createAlarmTopic } from '../utils/monitoring';
 import { getS3StorageLimit } from '../utils/config-helper';
 import { AuthConstruct } from '../constructs/auth';
 import { NuvinaryLambdaFactory } from '../constructs/lambda-factory';
+import { ApiConstruct } from '../constructs/api';
 
 export class NuvinaryInfraStack extends cdk.Stack {
   readonly alarmTopic: sns.ITopic | undefined;
@@ -46,10 +47,30 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     });
 
-    new AuthConstruct(this, 'Auth', {
+    const auth = new AuthConstruct(this, 'Auth', {
       isProd: props.isProd,
       alarmTopic: this.alarmTopic,
       postConfirmationFn: postConfirmAuthFn,
+    });
+
+    const getUserProfileFn = lambdaFactory.createFunction('GetUserProfile', {
+      entry: '../nuvinary-backend/src/api/get-user.ts',
+      handler: 'handler',
+      permissions: {
+        dynamoDb: 'read',
+      },
+    });
+
+    new ApiConstruct(this, 'NuvinaryApi', {
+      stageName: props.isProd ? 'prod' : 'dev',
+      userPool: auth.userPool,
+      routes: [
+        {
+          fetchType: 'GET',
+          path: '/me',
+          fn: getUserProfileFn,
+        },
+      ],
     });
   }
 }

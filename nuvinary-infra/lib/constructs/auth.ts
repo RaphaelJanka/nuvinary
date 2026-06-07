@@ -43,7 +43,7 @@ export class AuthConstruct extends Construct {
       userPoolClientName: 'nuvinary-web-app-client',
       generateSecret: false,
       authFlows: {
-        userPassword: true,
+        userSrp: true,
       },
     });
 

@@ -2,15 +2,16 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cdk from 'aws-cdk-lib/core';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-
-export interface NuvinaryInfraBaseProps {
-  readonly isProd: boolean;
-  readonly alarmTopic?: sns.ITopic;
-}
+import * as cognito from 'aws-cdk-lib/aws-cognito';
 
 export interface NuvinaryStackProps
   extends cdk.StackProps, DomainConstructProps {
   readonly certificate: acm.ICertificate;
+}
+
+export interface NuvinaryInfraBaseProps {
+  readonly isProd: boolean;
+  readonly alarmTopic?: sns.ITopic;
 }
 
 export interface DomainConstructProps extends NuvinaryInfraBaseProps {
@@ -45,4 +46,16 @@ export interface NuvinaryLambdaProps {
   permissions?: LambdaPermissions;
   memorySize?: number;
   timeOut?: cdk.Duration;
+}
+
+export interface ApiRoute {
+  fetchType: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  path: string;
+  fn: lambda.IFunction;
+}
+
+export interface ApiConstructProps {
+  stageName: string;
+  userPool: cognito.UserPool;
+  routes: ApiRoute[];
 }

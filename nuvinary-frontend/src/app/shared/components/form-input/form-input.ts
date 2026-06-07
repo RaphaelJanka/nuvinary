@@ -15,6 +15,7 @@ export class FormInput {
   readonly field = input.required<() => FieldState<string>>();
   readonly state = computed(() => this.field()());
   protected readonly isSuccessState = computed(() => this.state().valid() && this.state().dirty());
+  readonly autocomplete = input<string>('off');
 
   readonly purpose = input.required<InputTypes>();
   protected readonly config = computed(() => {
