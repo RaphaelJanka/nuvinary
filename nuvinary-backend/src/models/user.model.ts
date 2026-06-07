@@ -1,4 +1,6 @@
 export interface User {
+  PK: string;
+  SK: string;
   uid: string;
   email: string;
   firstName: string;

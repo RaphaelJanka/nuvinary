@@ -4,8 +4,16 @@
 </p>
 
 <form (submit)="onSubmit($event)" class="flex flex-col gap-4">
-  <app-form-input [field]="loginForm.email" purpose="email"></app-form-input>
-  <app-form-input [field]="loginForm.password" purpose="password"></app-form-input>
+  <app-form-input
+    [field]="loginForm.email"
+    purpose="email"
+    autocomplete="username"
+  ></app-form-input>
+  <app-form-input
+    [field]="loginForm.password"
+    purpose="password"
+    autocomplete="current-password"
+  ></app-form-input>
 
   <a
     class="flex text-[11px] justify-end -mt-2 me-4 font-semibold hover:text-accent transition-colors"
@@ -13,8 +21,13 @@
   >
     Forgot Password?
   </a>
-
-  <app-button [disabled]="loginForm().invalid()" label="Sign In" type="submit"></app-button>
+  <div class="h-15">
+    @if (isLoading()) {
+      <app-loader />
+    } @else {
+      <app-button [disabled]="loginForm().invalid()" label="Sign In" type="submit"></app-button>
+    }
+  </div>
 </form>
 
 <div class="mt-8 text-center">

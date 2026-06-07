@@ -18,7 +18,15 @@
 
     <app-form-input [field]="signUpForm.confirmPassword" purpose="confirmPassword"></app-form-input>
 
-    <app-button [disabled]="signUpForm().invalid()" type="submit" label="Next"></app-button>
+    @if (isLoading()) {
+      <div class="h-15">
+        <app-loader />
+      </div>
+    } @else {
+      <div class="h-15">
+        <app-button [disabled]="signUpForm().invalid()" type="submit" label="Next"></app-button>
+      </div>
+    }
   </form>
 } @else {
   <div class="animate-in fade-in duration-300">
@@ -39,12 +47,17 @@
         >
         </app-button>
       </app-form-input>
-
-      <app-button
-        [disabled]="confirmForm().invalid()"
-        type="submit"
-        label="Confirm & Sign Up"
-      ></app-button>
+      <div class="h-15">
+        @if (isLoading()) {
+          <app-loader />
+        } @else {
+          <app-button
+            [disabled]="confirmForm().invalid()"
+            type="submit"
+            label="Confirm & Sign Up"
+          ></app-button>
+        }
+      </div>
     </form>
   </div>
 }

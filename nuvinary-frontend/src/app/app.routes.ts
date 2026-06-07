@@ -7,6 +7,7 @@ export const routes: Routes = [
     path: '',
     title: 'Welcome',
     component: Hero,
+    pathMatch: 'full',
   },
   {
     path: 'auth',
@@ -15,6 +16,7 @@ export const routes: Routes = [
       {
         path: 'signin',
         title: 'Sign In',
+        canActivate: [authGuard],
         loadComponent: () => import('./features/auth/sign-in/sign-in').then((c) => c.SignIn),
       },
       {
@@ -25,6 +27,7 @@ export const routes: Routes = [
       {
         path: 'reset-password',
         title: 'Reset Password',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/auth/reset-password/reset-password').then((c) => c.ResetPassword),
       },
@@ -116,5 +119,5 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '/auth/signin', pathMatch: 'full' },
 ];

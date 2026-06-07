@@ -1,8 +1,17 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { User, UserRegistrationForm } from './auth.interfaces';
+import { LoginData, User, UserRegistrationForm } from './auth.interfaces';
 import { NotificationService } from '../../shared/services/notification-service';
-import { signUp, signOut, AuthError, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
+import {
+  signUp,
+  signOut,
+  AuthError,
+  confirmSignUp,
+  resendSignUpCode,
+  getCurrentUser,
+  signIn,
+} from 'aws-amplify/auth';
 import { Router } from '@angular/router';
+import { UserService } from '../../features/services/user-service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +20,18 @@ export class AuthService {
   readonly STORAGE_KEY = 'nuvinary_user';
   private readonly notificationService = inject(NotificationService);
   private readonly router = inject(Router);
+  private readonly userService = inject(UserService);
 
   private readonly _pendingUserEmailSignal = signal<string | null>(null);
   pendingUserEmail = this._pendingUserEmailSignal.asReadonly();
 
-  private readonly _authUserSignal = signal<User | null>(this.getUserFromLocalStorage());
+  private readonly _authUserSignal = signal<User | null>(null);
   authUser = this._authUserSignal.asReadonly();
 
   private readonly _authErrorSignal = signal<string | null>(null);
   authError = this._authErrorSignal.asReadonly();
+
+  readonly isLoading = signal(false);
 
   readonly avatarColors = [
     '#D97706',
@@ -47,8 +59,23 @@ export class AuthService {
     try {
       return userJson ? JSON.parse(userJson) : null;
     } catch (error) {
-      console.error('Error parsing user from localStorage:', error);
+      console.error('AuthService: Error parsing user from localStorage:', error);
       return null;
+    }
+  }
+
+  async initSession() {
+    try {
+      await getCurrentUser();
+      const cachedUser = this.getUserFromLocalStorage();
+      if (cachedUser) {
+        this.setUser(cachedUser);
+      } else {
+        const fullProfile = await this.userService.getUserProfile();
+        this.setUser(fullProfile);
+      }
+    } catch {
+      this.setUser(null);
     }
   }
 
@@ -56,46 +83,44 @@ export class AuthService {
     this._authUserSignal.set(user);
   }
 
-  // async login(credentials: LoginData): Promise<boolean> {
-  //   try {
-  //     const { isSignedIn } = await signIn({
-  //       username: credentials.email,
-  //       password: credentials.password
-  //     });
+  async login(credentials: LoginData) {
+    this.isLoading.set(true);
+    try {
+      await signIn({
+        username: credentials.email,
+        password: credentials.password,
+      });
+      const fullProfile = await this.userService.getUserProfile();
+      this.setUser(fullProfile);
+      this.router.navigate(['/dashboard']);
+      this.isLoading.set(false);
+      this.notificationService.show('Login successful!', 'success');
+    } catch (err: unknown) {
+      this.isLoading.set(false);
+      let message = 'An unknown error has occurred';
 
-  //     if (isSignedIn) {
-  //       const user = await getCurrentUser();
-  //       this.setUser(user);
-  //       return true;
-  //     }
-  //     return false;
-  //   } catch (err: any) {
-  //     this.notificationService.show(err.message, 'error');
-  //     return false;
-  //   }
-  // }
-
-  // login(credentials: LoginData): boolean {
-  //   this._authErrorSignal.set(null);
-  //   console.log('credentials', credentials);
-  //   this.setUser(testUser);
-  //   return true;
-
-  //   console.error('Login failed');
-  //   // this._authErrorSignal.set('Invalid email or password');
-  //   // return false;
-  // }
-
-  async logOut() {
-    await signOut();
-    this._authUserSignal.set(null);
+      if (err instanceof AuthError) {
+        message = err.message;
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
+      this.notificationService.show(message, 'error');
+    }
   }
 
-  // logOut() {
-  //   this._authUserSignal.set(null);
-  // }
+  async logOut() {
+    this.setUser(null);
+    try {
+      await signOut();
+      this.notificationService.show('Logged out successfully', 'info');
+    } catch (err: unknown) {
+      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+    }
+  }
 
   async signUp(userData: UserRegistrationForm): Promise<void> {
+    this.isLoading.set(true);
     try {
       await signUp({
         username: userData.email,
@@ -110,11 +135,13 @@ export class AuthService {
       });
 
       this._pendingUserEmailSignal.set(userData.email);
+      this.isLoading.set(false);
       this.notificationService.show(
         'Registration started. Please check your emails for the confirmation code.',
         'success',
       );
     } catch (err: unknown) {
+      this.isLoading.set(false);
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
       throw err;
@@ -122,13 +149,16 @@ export class AuthService {
   }
 
   async resendCode(email: string): Promise<void> {
+    this.isLoading.set(true);
     try {
       await resendSignUpCode({ username: email });
       this.notificationService.show(
         'Confirmation code resent. Please check your emails.',
         'success',
       );
+      this.isLoading.set(false);
     } catch (err: unknown) {
+      this.isLoading.set(false);
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
       throw err;
@@ -142,7 +172,7 @@ export class AuthService {
         confirmationCode: code,
       });
       this._pendingUserEmailSignal.set(null);
-      await this.router.navigate(['/auth/signin']);
+      this.router.navigate(['/auth/signin']);
       this.notificationService.show('Registration confirmed. You can now sign in.', 'success');
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
