@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { AuthService } from '../../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../../shared/components/page-layout/page-layout';
 import { FormsModule } from '@angular/forms';
@@ -9,6 +16,7 @@ import {
   verifyEmail,
   verifyAccountDeletion,
   verifyNewPassword,
+  verifyCode,
 } from '../../../../../shared/utils/validation-functions';
 import { UserService } from '../../../../services/user-service';
 import { Button } from '../../../../../shared/components/button/button';
@@ -31,14 +39,35 @@ export class Security {
   private readonly authService = inject(AuthService);
   protected readonly user = this.authService.authUser;
   private readonly userService = inject(UserService);
+  protected readonly isLoading = this.authService.isLoading;
 
-  protected readonly isChangingMailAddress = signal(false);
+  protected readonly isRequestingEmail = signal(false);
+  protected readonly isConfirmingEmail = signal(false);
+
   private readonly emailModel = signal({
     email: '',
   });
+
   protected emailUpdateForm = form(this.emailModel, (schema) => {
     verifyEmail(schema.email);
     maxLength(schema.email, 40);
+  });
+
+  private readonly emailConfirmationModel = signal({
+    code: '',
+  });
+
+  private resendTimer = signal(0);
+
+  protected readonly resendButtonLabel = computed(() => {
+    if (this.resendTimer() > 0) return `Resend in ${this.resendTimer()}s`;
+    return 'Send Code';
+  });
+
+  protected readonly canResend = computed(() => this.resendTimer() === 0);
+
+  protected emailConfirmationForm = form(this.emailConfirmationModel, (schema) => {
+    verifyCode(schema.code);
   });
 
   protected readonly isChangingPassword = signal(false);
@@ -56,13 +85,6 @@ export class Security {
     verifyConfirmPassword(schema.confirmPassword, schema.newPassword);
   });
 
-  // private resendTimer = signal(0);
-  // protected readonly resendButtonLabel = computed(() => {
-  //   if (this.resendTimer() > 0) return `Resend in ${this.resendTimer()}s`;
-  //   return 'Resend Code';
-  // });
-  // protected readonly canResend = computed(() => this.resendTimer() === 0);
-
   protected readonly DELETE_PHRASE = DELETE_PHRASE;
 
   protected readonly isDeleting = signal(false);
@@ -70,32 +92,61 @@ export class Security {
     phrase: '',
   });
 
-  protected readonly isLoading = this.authService.isLoading;
-
   protected accountDeletionForm = form(this.accountDeletionModel, (schema) => {
     verifyAccountDeletion(schema.phrase);
     maxLength(schema.phrase, 40);
   });
 
-  protected onUpdateMail(event: Event) {
+  protected async onUpdateMail(event: Event) {
     event.preventDefault();
     if (this.emailUpdateForm().valid()) {
-      this.userService.updateEmail(this.emailModel().email);
+      try {
+        await this.authService.requestEmailUpdate(this.emailModel().email);
+
+        this.isConfirmingEmail.set(true);
+        this.startResendTimer();
+      } catch (error) {
+        console.error('Error updating email:', error);
+      }
     }
   }
 
-  // protected onResetPassword() {
-  //   this.isChangingPassword.set(true);
-  //   this.onSendCode();
-  // }
+  protected async onConfirmEmailUpdate(event: Event) {
+    event.preventDefault();
+    if (this.emailConfirmationForm().valid()) {
+      try {
+        await this.authService.confirmEmailUpdate(this.emailConfirmationModel().code);
+        this.userService.updateEmail(this.emailModel().email);
+        this.onCancel('email');
+      } catch (error) {
+        console.error('Error confirming email:', error);
+      }
+    }
+  }
 
-  // protected onSendCode() {
-  //   this.resendTimer.set(60);
-  //   const interval = setInterval(() => {
-  //     this.resendTimer.update((s) => s - 1);
-  //     if (this.resendTimer() <= 0) clearInterval(interval);
-  //   }, 1000);
-  // }
+  protected async onResendCode() {
+    if (this.canResend()) {
+      try {
+        await this.authService.requestEmailUpdate(this.emailModel().email);
+        this.startResendTimer();
+      } catch (error) {
+        console.error('Error resending code:', error);
+      }
+    }
+  }
+
+  private startResendTimer() {
+    this.resendTimer.set(60);
+
+    const tick = () => {
+      if (this.resendTimer() <= 0) return;
+      this.resendTimer.update((s) => s - 1);
+      if (this.resendTimer() > 0) {
+        setTimeout(tick, 1000);
+      }
+    };
+    setTimeout(tick, 1000);
+  }
 
   protected async onChangePassword(event: Event) {
     event.preventDefault();
@@ -131,8 +182,11 @@ export class Security {
   protected onCancel(actionType: CancelActions) {
     switch (actionType) {
       case 'email':
-        this.isChangingMailAddress.set(false);
+        this.isRequestingEmail.set(false);
+        this.isConfirmingEmail.set(false);
         this.resetForm(this.emailUpdateForm, this.emailModel, { email: '' });
+        this.resetForm(this.emailConfirmationForm, this.emailConfirmationModel, { code: '' });
+        this.resendTimer.set(0);
         break;
       case 'password':
         this.isChangingPassword.set(false);

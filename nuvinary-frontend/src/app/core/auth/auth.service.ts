@@ -12,6 +12,8 @@ import {
   updatePassword,
   resetPassword,
   confirmResetPassword,
+  updateUserAttribute,
+  confirmUserAttribute,
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
 import { UserService } from '../../features/services/user-service';
@@ -234,6 +236,46 @@ export class AuthService {
       this.router.navigate(['/auth/signin']);
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  // Update email
+  async requestEmailUpdate(newEmail: string) {
+    this.isLoading.set(true);
+    try {
+      await updateUserAttribute({
+        userAttribute: {
+          attributeKey: 'email',
+          value: newEmail,
+        },
+      });
+      this.notificationService.show(
+        'Please check your emails for the confirmation code.',
+        'success',
+      );
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An unknown error has occurred';
+      this.notificationService.show(message, 'error');
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  async confirmEmailUpdate(code: string) {
+    this.isLoading.set(true);
+    try {
+      await confirmUserAttribute({
+        userAttributeKey: 'email',
+        confirmationCode: code,
+      });
+      this.notificationService.show('Email successfully updated.', 'success');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
       throw err;
     } finally {

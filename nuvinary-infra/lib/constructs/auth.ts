@@ -39,6 +39,14 @@ export class AuthConstruct extends Construct {
         : cdk.RemovalPolicy.DESTROY,
     });
 
+    const cfnUserPool = this.userPool.node.defaultChild as cognito.CfnUserPool;
+    cfnUserPool.emailConfiguration = {
+      emailSendingAccount: 'COGNITO_DEFAULT',
+    };
+    cfnUserPool.userAttributeUpdateSettings = {
+      attributesRequireVerificationBeforeUpdate: ['email'],
+    };
+
     this.userPoolClient = this.userPool.addClient('NuvinaryAppClient', {
       userPoolClientName: 'nuvinary-web-app-client',
       generateSecret: false,
