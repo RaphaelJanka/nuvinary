@@ -167,7 +167,7 @@ export class AuthService {
     }
   }
 
-  async resendCode(email: string): Promise<void> {
+  async resendSignUpCode(email: string): Promise<void> {
     this.isLoading.set(true);
     try {
       await resendSignUpCode({ username: email });
@@ -223,7 +223,7 @@ export class AuthService {
     }
   }
 
-  async resendRequestCode() {
+  async resendPasswordResetCode() {
     const email = this.pendingUserEmail();
     if (!email) {
       this.notificationService.show('No email found. Please restart the process.', 'error');
