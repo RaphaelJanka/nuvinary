@@ -61,9 +61,9 @@
                   <form (submit)="onConfirmEmailUpdate($event)" class="xs:max-w-[50%]">
                     <app-form-input [field]="emailConfirmationForm.code" purpose="code">
                       <app-button
-                        [disabled]="!canResend()"
+                        [disabled]="!this.resendHandler.canResend()"
                         (click)="onResendCode()"
-                        [label]="resendButtonLabel()"
+                        [label]="this.resendHandler.resendButtonLabel()"
                         variant="secondary"
                       ></app-button>
                     </app-form-input>

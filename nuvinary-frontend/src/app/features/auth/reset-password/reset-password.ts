@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, WritableSignal } from '@angular/core';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
-import { form, maxLength } from '@angular/forms/signals';
+import { FieldTree, form, maxLength } from '@angular/forms/signals';
 import {
   verifyCode,
   verifyConfirmPassword,
@@ -11,6 +11,7 @@ import {
 } from '../../../shared/utils/validation-functions';
 import { Button } from '../../../shared/components/button/button';
 import { Loader } from '../../../shared/components/loader/loader';
+import { ResendHandler } from '../../../shared/utils/resend-handler';
 
 @Component({
   selector: 'app-reset-password',
@@ -21,22 +22,27 @@ import { Loader } from '../../../shared/components/loader/loader';
 export class ResetPassword {
   private readonly authService = inject(AuthService);
   protected readonly isLoading = this.authService.isLoading;
+  protected readonly resendHandler = new ResendHandler();
 
-  private readonly requestResetModel = signal<{ email: string }>({
+  protected readonly isResetting = signal(false);
+
+  // -------------- request password reset ------------------------
+
+  private readonly requestPasswordResetModel = signal<{ email: string }>({
     email: '',
   });
+  protected readonly requestResetForm = form(this.requestPasswordResetModel, (schema) => {
+    verifyEmail(schema.email);
+    maxLength(schema.email, 40);
+  });
+
+  // -------------- reset password ------------------------
 
   private readonly resetPasswordModel = signal<{ code: ''; password: ''; confirmPassword: '' }>({
     code: '',
     password: '',
     confirmPassword: '',
   });
-
-  protected readonly requestResetForm = form(this.requestResetModel, (schema) => {
-    verifyEmail(schema.email);
-    maxLength(schema.email, 40);
-  });
-
   protected readonly resetPasswordForm = form(this.resetPasswordModel, (schema) => {
     verifyCode(schema.code);
     verifyPassword(schema.password);
@@ -46,55 +52,26 @@ export class ResetPassword {
     maxLength(schema.confirmPassword, 20);
   });
 
-  protected readonly isResetting = signal(false);
-
-  private resendTimer = signal(0);
-
-  protected readonly resendButtonLabel = computed(() => {
-    if (this.resendTimer() > 0) return `Resend in ${this.resendTimer()}s`;
-    return 'Send Code';
-  });
-
-  protected async onResendCode() {
-    if (this.canResend()) {
-      try {
-        await this.authService.resendRequestCode();
-        this.startResendTimer();
-      } catch (error) {
-        console.error('Error resending code:', error);
-        this.isResetting.set(true);
-      }
-    }
-  }
+  // -------------- functions ------------------------
 
   protected async onRequest(event: Event) {
     event.preventDefault();
     if (this.requestResetForm().valid()) {
       try {
-        await this.authService.requestPasswordReset(this.requestResetModel().email);
+        await this.authService.requestPasswordReset(this.requestPasswordResetModel().email);
         this.isResetting.set(true);
-        this.startResendTimer();
-        this.requestResetModel.set({ email: '' });
-        this.requestResetForm().reset();
+        this.resendHandler.startTimer();
+        this.resetForm(this.requestResetForm, this.requestPasswordResetModel, { email: '' });
       } catch (err) {
         console.error('Error:', err);
       }
     }
   }
 
-  protected readonly canResend = computed(() => this.resendTimer() === 0);
-
-  private startResendTimer() {
-    this.resendTimer.set(60);
-
-    const tick = () => {
-      if (this.resendTimer() <= 0) return;
-      this.resendTimer.update((s) => s - 1);
-      if (this.resendTimer() > 0) {
-        setTimeout(tick, 1000);
-      }
-    };
-    setTimeout(tick, 1000);
+  protected async onResendCode() {
+    this.resendHandler.execute(async () => {
+      await this.authService.resendPasswordResetCode();
+    });
   }
 
   protected async onReset(event: Event) {
@@ -105,11 +82,24 @@ export class ResetPassword {
           this.resetPasswordModel().code,
           this.resetPasswordModel().password,
         );
-        this.resetPasswordModel.set({ code: '', password: '', confirmPassword: '' });
-        this.resetPasswordForm().reset();
+        this.resetForm(this.resetPasswordForm, this.resetPasswordModel, {
+          code: '',
+          password: '',
+          confirmPassword: '',
+        });
+        this.resendHandler.reset();
       } catch (err) {
         console.error('Error:', err);
       }
     }
+  }
+
+  private resetForm<T>(
+    form: FieldTree<T, string | number>,
+    model: WritableSignal<T>,
+    initialState: T,
+  ) {
+    form().reset();
+    model.set(initialState);
   }
 }

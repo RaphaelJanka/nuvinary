@@ -40,9 +40,9 @@
       </div>
       <app-form-input [field]="confirmForm.code" purpose="code">
         <app-button
-          [disabled]="!canResend()"
+          [disabled]="!this.resendHandler.canResend()"
           (click)="onResendCode()"
-          [label]="resendButtonLabel()"
+          [label]="this.resendHandler.resendButtonLabel()"
           variant="secondary"
         >
         </app-button>
