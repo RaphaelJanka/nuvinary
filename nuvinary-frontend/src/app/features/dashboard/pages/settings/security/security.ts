@@ -38,6 +38,7 @@ type CancelActions = 'email' | 'password' | 'account';
 export class Security {
   private readonly authService = inject(AuthService);
   protected readonly user = this.authService.authUser;
+  protected readonly authEmail = this.authService.authEmail;
   private readonly userService = inject(UserService);
   protected readonly isLoading = this.authService.isLoading;
 

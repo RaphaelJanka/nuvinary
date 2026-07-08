@@ -2,7 +2,6 @@ export interface User {
   PK: string;
   SK: string;
   uid: string;
-  email: string;
   firstName: string;
   lastName: string;
   credits: number;

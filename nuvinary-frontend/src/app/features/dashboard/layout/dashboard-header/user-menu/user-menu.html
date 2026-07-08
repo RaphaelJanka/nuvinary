@@ -4,7 +4,7 @@
   <div class="p-1 border-b border-border-gentle">
     <div class="flex flex-col items-start justify-center w-full h-14 ps-2 font-bold text-primary">
       {{ authUser()?.firstName }} {{ authUser()?.lastName }}
-      <span class="text-xs text-text-main">{{ authUser()?.email }}</span>
+      <span class="text-xs text-text-main">{{ authEmail() }}</span>
     </div>
   </div>
 

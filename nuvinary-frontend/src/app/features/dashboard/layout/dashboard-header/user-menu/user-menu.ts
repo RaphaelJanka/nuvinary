@@ -22,6 +22,7 @@ export class UserMenu {
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef);
   protected readonly authUser = this.authService.authUser;
+  protected readonly authEmail = this.authService.authEmail;
   protected readonly logOutIcon = LogOut;
 
   readonly closeMenu = output<void>();
@@ -57,6 +58,5 @@ export class UserMenu {
 
   protected onLogOut(): void {
     this.authService.logOut();
-    this.router.navigate(['/login']);
   }
 }

@@ -33,7 +33,7 @@ export class UserService {
     const response = await restOperation.response;
     const data = (await response.body.json()) as unknown as User;
 
-    if (!data.uid || !data.email) {
+    if (!data.uid) {
       throw new Error('Invalid user data received');
     }
     return data;
