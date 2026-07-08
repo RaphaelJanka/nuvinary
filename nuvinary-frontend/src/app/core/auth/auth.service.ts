@@ -14,6 +14,7 @@ import {
   confirmResetPassword,
   updateUserAttribute,
   confirmUserAttribute,
+  fetchUserAttributes,
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
 import { UserService } from '../../features/services/user-service';
@@ -32,6 +33,9 @@ export class AuthService {
 
   private readonly _authUserSignal = signal<User | null>(null);
   authUser = this._authUserSignal.asReadonly();
+
+  private readonly _authEmailSignal = signal<string>('');
+  authEmail = this._authEmailSignal.asReadonly();
 
   private readonly _authErrorSignal = signal<string | null>(null);
   authError = this._authErrorSignal.asReadonly();
@@ -69,6 +73,11 @@ export class AuthService {
     }
   }
 
+  async updateAuthContext() {
+    const attributes = await fetchUserAttributes();
+    this._authEmailSignal.set(attributes.email || '');
+  }
+
   async initSession() {
     try {
       await getCurrentUser();
@@ -79,6 +88,7 @@ export class AuthService {
         const fullProfile = await this.userService.getUserProfile();
         this.setUser(fullProfile);
       }
+      await this.updateAuthContext();
     } catch {
       this.setUser(null);
     }
@@ -98,8 +108,8 @@ export class AuthService {
       const fullProfile = await this.userService.getUserProfile();
       this.setUser(fullProfile);
       this.router.navigate(['/dashboard']);
-
       this.notificationService.show('Login successful!', 'success');
+      await this.updateAuthContext();
     } catch (err: unknown) {
       let message = 'An unknown error has occurred';
 
@@ -120,6 +130,7 @@ export class AuthService {
     try {
       await signOut();
       this.notificationService.show('Logged out successfully', 'info');
+      this.router.navigate(['/login']);
     } catch (err: unknown) {
       const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');
@@ -273,7 +284,8 @@ export class AuthService {
         userAttributeKey: 'email',
         confirmationCode: code,
       });
-      this.notificationService.show('Email successfully updated.', 'success');
+      this.notificationService.show('Email updated. Please login again.', 'info');
+      await this.logOut();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'An unknown error has occurred';
       this.notificationService.show(message, 'error');

@@ -23,6 +23,7 @@ export class Profile {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
   protected readonly user = this.authService.authUser;
+  protected readonly authEmail = this.authService.authEmail;
   protected readonly avatarColors = this.authService.avatarColors;
   protected readonly selectedAvatarColor = signal(this.user()?.avatarColor);
   protected readonly icons = {

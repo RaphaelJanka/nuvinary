@@ -4,7 +4,8 @@ export interface BaseUser {
   lastName: string;
 }
 
-export interface LoginData extends Pick<BaseUser, 'email'> {
+export interface LoginData {
+  email: string;
   password: string;
 }
 
@@ -18,9 +19,8 @@ export interface SignUpRequestDTO extends Omit<UserRegistrationForm, 'confirmPas
   displayName: string;
 }
 
-export interface User extends BaseUser {
+export interface User {
   uid: string;
-  email: string;
   firstName: string;
   lastName: string;
   credits: number;
