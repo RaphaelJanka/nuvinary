@@ -105,7 +105,6 @@ export class Security {
     if (this.emailConfirmationForm().valid()) {
       try {
         await this.authService.confirmEmailUpdate(this.emailConfirmationModel().code);
-        this.userService.updateEmail(this.emailModel().email);
         this.resendHandler.reset();
         this.onCancel('email');
       } catch (error) {

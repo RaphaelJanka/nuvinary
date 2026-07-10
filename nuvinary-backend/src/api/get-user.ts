@@ -1,9 +1,7 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
+import { GetCommand } from '@aws-sdk/lib-dynamodb';
+import { createResponse, docClient } from '@shared/api-utils.js';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-
-const client = new DynamoDBClient({});
-const docClient = DynamoDBDocumentClient.from(client);
+import { create } from 'node:domain';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -15,11 +13,7 @@ export const handler = async (
   };
 
   if (!userId) {
-    return {
-      statusCode: 401,
-      headers: headers,
-      body: JSON.stringify({ message: 'User ID not found' }),
-    };
+    return createResponse(401, { message: 'User ID not found' });
   }
 
   try {
@@ -32,17 +26,9 @@ export const handler = async (
         },
       }),
     );
-
-    return {
-      statusCode: 200,
-      headers: headers,
-      body: JSON.stringify(user.Item),
-    };
+    return createResponse(200, user.Item);
   } catch (err) {
-    return {
-      statusCode: 500,
-      headers: headers,
-      body: JSON.stringify({ message: 'Error fetching user profile' }),
-    };
+    console.error('Error fetching user profile:', err);
+    return createResponse(500, { message: 'Error fetching user profile' });
   }
 };

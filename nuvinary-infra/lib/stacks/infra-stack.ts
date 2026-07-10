@@ -61,6 +61,17 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     });
 
+    const updateUserProfileFn = lambdaFactory.createFunction(
+      'UpdateUserProfile',
+      {
+        entry: '../nuvinary-backend/src/api/update-user.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
     new ApiConstruct(this, 'NuvinaryApi', {
       stageName: props.isProd ? 'prod' : 'dev',
       userPool: auth.userPool,
@@ -69,6 +80,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'GET',
           path: '/me',
           fn: getUserProfileFn,
+        },
+        {
+          fetchType: 'PUT',
+          path: '/users/{uid}',
+          fn: updateUserProfileFn,
         },
       ],
     });

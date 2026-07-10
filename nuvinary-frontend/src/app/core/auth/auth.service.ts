@@ -42,16 +42,6 @@ export class AuthService {
 
   readonly isLoading = signal(false);
 
-  readonly avatarColors = [
-    '#D97706',
-    '#1D4ED8',
-    '#047857',
-    '#7C3AED',
-    '#BE123C',
-    '#334155',
-    '#0F766E',
-  ];
-
   constructor() {
     effect(() => {
       const user = this.authUser();
