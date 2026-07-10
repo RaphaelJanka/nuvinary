@@ -68,12 +68,18 @@
             </div>
           </div>
 
-          <app-button
-            [disabled]="isDisabled()"
-            label="Save Changes"
-            type="submit"
-            [appTooltip]="isDisabled() ? 'Nothing to change' : ''"
-          ></app-button>
+          <div class="h-15">
+            @if (isLoading) {
+              <app-loader />
+            } @else {
+              <app-button
+                [disabled]="isDisabled()"
+                label="Save Changes"
+                type="submit"
+                [appTooltip]="isDisabled() ? 'Nothing to change' : ''"
+              ></app-button>
+            }
+          </div>
         </form>
       </div>
     </div>

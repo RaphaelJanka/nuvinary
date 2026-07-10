@@ -10,6 +10,13 @@ export interface User {
   avatarColor: string;
 }
 
+export interface UserUpdateDto {
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  avatarColor: string;
+}
+
 export const AVATAR_COLORS = [
   '#D97706',
   '#1D4ED8',
