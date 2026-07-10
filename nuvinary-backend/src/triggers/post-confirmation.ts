@@ -1,24 +1,21 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand } from '@aws-sdk/lib-dynamodb';
 import { AVATAR_COLORS, User } from '../models/user.model.js';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { PostConfirmationTriggerEvent } from 'aws-lambda';
+import { docClient } from '@shared/api-utils.js';
 
 const sesClient = new SESClient({ region: 'eu-central-1' });
-const client = new DynamoDBClient({});
-const docClient = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event: PostConfirmationTriggerEvent) => {
-  const { sub, email, given_name, family_name } = event.request.userAttributes;
+  const { sub, given_name, family_name } = event.request.userAttributes;
 
   const newUser: User = {
     PK: `USER#${sub}`,
     SK: `METADATA`,
     uid: sub,
-    email: email,
     firstName: given_name,
     lastName: family_name,
-    displayName: `${given_name} ${family_name || ''}`.trim(),
+    displayName: `${given_name} ${family_name}`.trim(),
     credits: 10,
     avatarColor:
       AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)],
