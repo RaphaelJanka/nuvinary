@@ -1,0 +1,111 @@
+stages:
+  - build
+  # - test
+  - deploy
+  - semantic_release
+
+# --- Templates ---
+
+# --- Cache Setup ---
+
+.node_setup:
+  image: node:20
+  cache:
+    key:
+      files:
+        - nuvinary-frontend/package-lock.json
+        - nuvinary-backend/package-lock.json
+        - nuvinary-infra/package-lock.json
+    paths:
+      - nuvinary-frontend/node_modules
+      - nuvinary-backend/node_modules
+      - nuvinary-infra/node_modules
+
+# --- Jobs ---
+
+## Build Jobs
+
+build_frontend:
+  extends: .node_setup
+  stage: build
+  script:
+    - cd nuvinary-frontend
+    - echo "export const PRIVATE_CONFIG = {
+        NAME: '$LEGAL_NAME_B64',
+        STREET: '$LEGAL_STREET_B64',
+        CITY: '$LEGAL_CITY_B64',
+        PHONE: '$LEGAL_PHONE_B64',
+        EMAIL: '$LEGAL_EMAIL_B64'
+      };" > src/app/features/legal/legal-privacy-data.ts
+    - echo "export const environment = {
+        production: $( [ '$CI_COMMIT_BRANCH' == 'main' ] && echo false || echo true ),
+        cognito: {
+          userPoolId: '$COGNITO_USER_POOL_ID',
+          userPoolClientId: '$COGNITO_USER_POOL_CLIENT_ID',
+        },
+        api: {
+          endpoint: '$API_ENDPOINT',
+          region: 'eu-central-1',
+        },
+      };" > src/environments/environment.ts
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - nuvinary-frontend/dist/nuvinary-frontend/browser/
+    expire_in: 1 week
+
+build_backend:
+  extends: .node_setup
+  stage: build
+  script:
+    - cd nuvinary-backend
+    - npm ci
+
+build_infra:
+  extends: .node_setup
+  stage: build
+  script:
+    - cd nuvinary-infra
+    - npm ci
+    - npx cdk synth
+  artifacts:
+    paths:
+      - nuvinary-infra/cdk.out/
+    expire_in: 1 week
+
+# # Deploy Jobs
+
+deploy_dev:
+  stage: deploy
+  environment:
+    name: dev
+  script:
+    - echo "Deploying to dev environment"
+    - cd nuvinary-infra
+    - npx cdk deploy NuvinaryInfraStack-dev --require-approval never 
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  when: manual
+
+deploy_prod:
+  stage: deploy
+  environment:
+    name: prod
+  script:
+    - echo "Deploying to prod environment"
+    - cd nuvinary-infra
+    - npx cdk deploy NuvinaryInfraStack-prod --require-approval never 
+  rules:
+    - if: $CI_COMMIT_TAG
+  when: manual
+
+## Semantic Release Job
+
+semantic_release:
+  stage: semantic_release
+  script:
+    - npx semantic-release
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  when: manual
