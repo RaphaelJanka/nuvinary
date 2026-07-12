@@ -63,7 +63,12 @@ build_backend:
 build_infra:
   extends: .node_setup
   stage: build
+  needs:
+    - job: build_frontend
+      artifacts: true
   script:
+    - mkdir -p nuvinary-frontend/dist/nuvinary-frontend/browser
+    - cp -r nuvinary-frontend/dist/nuvinary-frontend/browser/* nuvinary-frontend/dist/nuvinary-frontend/browser/
     - cd nuvinary-infra
     - npm ci
     - npx cdk synth
