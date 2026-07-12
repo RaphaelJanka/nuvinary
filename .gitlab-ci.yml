@@ -11,11 +11,7 @@ stages:
 .node_setup:
   image: node:20
   cache:
-    key:
-      files:
-        - nuvinary-frontend/package-lock.json
-        - nuvinary-backend/package-lock.json
-        - nuvinary-infra/package-lock.json
+    key: nuvinary-dependencies
     paths:
       - nuvinary-frontend/node_modules
       - nuvinary-backend/node_modules
