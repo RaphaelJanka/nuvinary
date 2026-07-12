@@ -37,6 +37,9 @@ export class NuvinaryLambdaFactory extends Construct {
         TABLE_NAME: this.table.tableName,
       },
       projectRoot: path.join(__dirname, '../../../'),
+      bundling: {
+        dockerImage: undefined,
+      },
     });
 
     if (props.permissions?.dynamoDb === 'read') {
