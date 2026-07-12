@@ -63,6 +63,8 @@ build_backend:
 build_infra:
   extends: .node_setup
   stage: build
+  variables:
+    SKIP_DOCKER_BUILD: "true"
   needs:
     - job: build_frontend
       artifacts: true
