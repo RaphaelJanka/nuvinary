@@ -67,8 +67,6 @@ build_infra:
     - job: build_frontend
       artifacts: true
   script:
-    - mkdir -p nuvinary-frontend/dist/nuvinary-frontend/browser
-    - cp -r nuvinary-frontend/dist/nuvinary-frontend/browser/* nuvinary-frontend/dist/nuvinary-frontend/browser/
     - cd nuvinary-infra
     - npm ci
     - npx cdk synth
