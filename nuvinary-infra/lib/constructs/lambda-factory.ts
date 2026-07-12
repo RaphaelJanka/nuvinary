@@ -38,7 +38,6 @@ export class NuvinaryLambdaFactory extends Construct {
       },
       projectRoot: path.join(__dirname, '../../../'),
       bundling: {
-        dockerImage: undefined,
         forceDockerBundling: false,
       },
     });
