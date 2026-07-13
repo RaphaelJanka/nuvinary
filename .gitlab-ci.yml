@@ -63,7 +63,7 @@ build_infra:
       artifacts: true
   script:
     - cd nuvinary-infra
-    - npx cdk synth
+    - ../node_modules/.bin/cdk synth
     - echo "Infrastructure synthesized successfully!"
   artifacts:
     paths:
