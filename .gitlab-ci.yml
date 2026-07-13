@@ -11,8 +11,8 @@ stages:
 .node_setup:
   image: node:20
   before_script:
+    - npm install -g npm@latest
     - npm ci
-    - npm rebuild lightningcss
   cache:
     key: nuvinary-repo-cache
     paths:
