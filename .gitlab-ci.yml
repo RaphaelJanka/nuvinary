@@ -13,7 +13,7 @@ stages:
   before_script:
     - npm ci
   cache:
-    key: nuvinary-monorepo-cache
+    key: nuvinary-cache
     paths:
       - node_modules/
 
