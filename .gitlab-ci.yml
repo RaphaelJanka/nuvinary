@@ -2,7 +2,7 @@ stages:
   - build
   # - test
   - deploy
-  - semantic_release
+  # - semantic_release
 
 # --- Templates ---
 
@@ -10,12 +10,12 @@ stages:
 
 .node_setup:
   image: node:20
+  before_script:
+    - npm ci
   cache:
-    key: nuvinary-dependencies
+    key: nuvinary-monorepo-cache
     paths:
-      - nuvinary-frontend/node_modules
-      - nuvinary-backend/node_modules
-      - nuvinary-infra/node_modules
+      - node_modules/
 
 # --- Jobs ---
 
@@ -26,6 +26,7 @@ build_frontend:
   stage: build
   script:
     - cd nuvinary-frontend
+    - echo "Generating legal privacy data..."
     - |
       echo "export const PRIVATE_CONFIG = {
         NAME: '$LEGAL_NAME_B64',
@@ -34,6 +35,7 @@ build_frontend:
         PHONE: '$LEGAL_PHONE_B64',
         EMAIL: '$LEGAL_EMAIL_B64'
       };" > src/app/features/legal/legal-privacy-data.ts
+    - echo "Generating environment configuration..."
     - |
       echo "export const environment = {
         production: $( [ '$CI_COMMIT_BRANCH' == 'main' ] && echo false || echo true ),
@@ -46,19 +48,12 @@ build_frontend:
           region: 'eu-central-1',
         },
       };" > src/environments/environment.ts
-    - npm ci
     - npm run build
+    - echo "Frontend build completed successfully!"
   artifacts:
     paths:
       - nuvinary-frontend/dist/nuvinary-frontend/browser/
     expire_in: 1 week
-
-build_backend:
-  extends: .node_setup
-  stage: build
-  script:
-    - cd nuvinary-backend
-    - npm ci
 
 build_infra:
   extends: .node_setup
@@ -68,8 +63,8 @@ build_infra:
       artifacts: true
   script:
     - cd nuvinary-infra
-    - npm ci
     - npx cdk synth
+    - echo "Infrastructure synthesized successfully!"
   artifacts:
     paths:
       - nuvinary-infra/cdk.out/
@@ -78,6 +73,7 @@ build_infra:
 # # Deploy Jobs
 
 deploy_dev:
+  extends: .node_setup
   stage: deploy
   environment:
     name: dev
@@ -90,6 +86,7 @@ deploy_dev:
   when: manual
 
 deploy_prod:
+  extends: .node_setup
   stage: deploy
   environment:
     name: prod
@@ -103,10 +100,10 @@ deploy_prod:
 
 ## Semantic Release Job
 
-semantic_release:
-  stage: semantic_release
-  script:
-    - npx semantic-release
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  when: manual
+# semantic_release:
+#   stage: semantic_release
+#   script:
+#     - npx semantic-release
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "main"
+#   when: manual

@@ -1,0 +1,14 @@
+{
+  "name": "nuvinary-monorepo",
+  "private": true,
+  "workspaces": [
+    "nuvinary-backend",
+    "nuvinary-frontend",
+    "nuvinary-infra"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "aws-cdk": "2.1125.0",
+    "typescript": "~5.9.3"
+  }
+}
