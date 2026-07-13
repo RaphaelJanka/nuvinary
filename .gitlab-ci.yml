@@ -13,7 +13,7 @@ stages:
   before_script:
     - npm ci
   cache:
-    key: nuvinary-cache
+    key: nuvinary-repo-cache
     paths:
       - node_modules/
 
@@ -63,7 +63,7 @@ build_infra:
       artifacts: true
   script:
     - cd nuvinary-infra
-    - ../node_modules/.bin/cdk synth
+    - npx cdk synth
     - echo "Infrastructure synthesized successfully!"
   artifacts:
     paths:
