@@ -11,10 +11,8 @@ stages:
 .node_setup:
   image: node:20
   before_script:
-    - npm install -g npm@latest
-    - npm ci
   cache:
-    key: nuvinary-repo-cache
+    key: nuvinary-repo-cache-v1
     paths:
       - node_modules/
 
@@ -26,6 +24,7 @@ build_frontend:
   extends: .node_setup
   stage: build
   script:
+    - npm install
     - cd nuvinary-frontend
     - echo "Generating legal privacy data..."
     - |
@@ -63,6 +62,7 @@ build_infra:
     - job: build_frontend
       artifacts: true
   script:
+    - npm install
     - cd nuvinary-infra
     - npx cdk synth
     - echo "Infrastructure synthesized successfully!"
