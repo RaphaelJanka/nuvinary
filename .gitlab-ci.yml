@@ -12,7 +12,7 @@ stages:
   image: node:20
   before_script:
   cache:
-    key: nuvinary-repo-cache-v6
+    key: nuvinary-repo-cache-v7
     paths:
       - node_modules/
 
