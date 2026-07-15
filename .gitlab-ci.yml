@@ -12,7 +12,7 @@ stages:
   image: node:20
   before_script:
   cache:
-    key: nuvinary-repo-cache-v2
+    key: nuvinary-repo-cache-v3
     paths:
       - node_modules/
 
@@ -24,8 +24,8 @@ build_frontend:
   extends: .node_setup
   stage: build
   script:
+    - rm -rf node_modules package-lock.json
     - npm install
-    - npm install --force @lightningcss/linux-x64-gnu
     - cd nuvinary-frontend
     - echo "Generating legal privacy data..."
     - |
