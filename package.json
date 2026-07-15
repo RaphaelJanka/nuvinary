@@ -7,7 +7,6 @@
     "nuvinary-infra"
   ],
   "devDependencies": {
-    "aws-cdk": "latest",
     "esbuild": "^0.28.1",
     "typescript": "~5.9.3"
   }
