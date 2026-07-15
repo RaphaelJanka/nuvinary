@@ -63,6 +63,7 @@ build_infra:
     - job: build_frontend
       artifacts: true
   script:
+    - rm -rf node_modules package-lock.json
     - npm install
     - cd nuvinary-infra
     - npx cdk synth
