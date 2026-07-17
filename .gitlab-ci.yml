@@ -1,0 +1,190 @@
+stages:
+  - build
+  # - test
+  - deploy
+  # - semantic_release
+
+# --- Templates ---
+
+# --- Cache Setup ---
+
+.node_setup:
+  image: node:20
+  before_script:
+    - npm ci
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - node_modules/
+
+# --- Jobs ---
+
+## Build Jobs
+
+build_frontend_dev:
+  extends: .node_setup
+  stage: build
+  environment:
+    name: dev
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - cd nuvinary-frontend
+    - echo "Generating legal privacy data..."
+    - |
+      echo "export const PRIVATE_CONFIG = {
+        NAME: '$LEGAL_NAME_B64',
+        STREET: '$LEGAL_STREET_B64',
+        CITY: '$LEGAL_CITY_B64',
+        PHONE: '$LEGAL_PHONE_B64',
+        EMAIL: '$LEGAL_EMAIL_B64'
+      };" > src/app/features/legal/legal-privacy-data.ts
+    - echo "Generating environment configuration..."
+    - |
+      echo "export const environment = {
+        production: false,
+        cognito: {
+          userPoolId: '$COGNITO_USER_POOL_ID',
+          userPoolClientId: '$COGNITO_USER_POOL_CLIENT_ID',
+        },
+        api: {
+          endpoint: '$API_ENDPOINT',
+          region: 'eu-central-1',
+        },
+      };" > src/environments/environment.ts
+    - npm run build
+    - echo "Frontend build completed successfully!"
+  artifacts:
+    paths:
+      - nuvinary-frontend/dist/nuvinary-frontend/browser/
+    expire_in: 1 week
+
+build_frontend_prod:
+  extends: .node_setup
+  stage: build
+  environment:
+    name: prod
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - cd nuvinary-frontend
+    - echo "Generating legal privacy data..."
+    - |
+      echo "export const PRIVATE_CONFIG = {
+        NAME: '$LEGAL_NAME_B64',
+        STREET: '$LEGAL_STREET_B64',
+        CITY: '$LEGAL_CITY_B64',
+        PHONE: '$LEGAL_PHONE_B64',
+        EMAIL: '$LEGAL_EMAIL_B64'
+      };" > src/app/features/legal/legal-privacy-data.ts
+    - echo "Generating environment configuration..."
+    - |
+      echo "export const environment = {
+        production: true,
+        cognito: {
+          userPoolId: '$COGNITO_USER_POOL_ID',
+          userPoolClientId: '$COGNITO_USER_POOL_CLIENT_ID',
+        },
+        api: {
+          endpoint: '$API_ENDPOINT',
+          region: 'eu-central-1',
+        },
+      };" > src/environments/environment.ts
+    - npm run build
+    - echo "Frontend build completed successfully!"
+  artifacts:
+    paths:
+      - nuvinary-frontend/dist/nuvinary-frontend/browser/
+    expire_in: 1 week
+
+build_infra:
+  extends: .node_setup
+  stage: build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_TAG
+  needs:
+    - job: build_frontend_dev
+      artifacts: true
+      optional: true
+    - job: build_frontend_prod
+      artifacts: true
+      optional: true
+  script:
+    - cd nuvinary-infra
+    - npx cdk synth
+    - echo "Infrastructure synthesized successfully!"
+  artifacts:
+    paths:
+      - nuvinary-infra/cdk.out/
+    expire_in: 1 week
+
+# # Deploy Jobs
+
+deploy_dev:
+  extends: .node_setup
+  stage: deploy
+  environment:
+    name: dev
+  needs:
+    - job: build_frontend_dev
+      artifacts: true
+    - job: build_infra
+      artifacts: true
+  id_tokens:
+    AWS_ID_TOKEN:
+      aud: https://gitlab.com
+  before_script:
+    - !reference [.node_setup, before_script]
+    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
+  variables:
+    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
+    AWS_DEFAULT_REGION: eu-central-1
+  script:
+    - echo "Deploying to dev environment"
+    - cd nuvinary-infra
+    - npx cdk deploy NuvinaryInfraStack-dev --require-approval never
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  when: manual
+
+deploy_prod:
+  extends: .node_setup
+  stage: deploy
+  environment:
+    name: prod
+  needs:
+    - job: build_frontend_prod
+      artifacts: true
+    - job: build_infra
+      artifacts: true
+  id_tokens:
+    AWS_ID_TOKEN:
+      aud: https://gitlab.com
+  before_script:
+    - !reference [.node_setup, before_script]
+    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
+  variables:
+    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
+    AWS_DEFAULT_REGION: eu-central-1
+  script:
+    - echo "Deploying to prod environment"
+    - cd nuvinary-infra
+    - npx cdk deploy NuvinaryInfraStack-prod --require-approval never
+  rules:
+    - if: $CI_COMMIT_TAG
+  when: manual
+
+## Semantic Release Job
+
+# semantic_release:
+#   stage: semantic_release
+#   script:
+#     - npx semantic-release
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "main"
+#   when: manual
