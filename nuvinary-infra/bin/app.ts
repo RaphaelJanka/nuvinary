@@ -10,7 +10,7 @@ const certStack = new NuvinaryCertificateStack(
   'NuvinaryCertificateStack',
   {
     env: {
-      account: process.env.CDK_DEFAULT_ACCOUNT,
+      account: process.env.AWS_ACCOUNT_ID,
       region: 'us-east-1',
     },
     crossRegionReferences: true,
