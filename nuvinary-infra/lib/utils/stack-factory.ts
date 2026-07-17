@@ -11,7 +11,7 @@ export function createInfraStack(
   const domainName = getDomainName(app);
   const config = {
     subDomain: stage === 'prod' ? 'nuvinary' : `nuvinary-${stage}`,
-    env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: 'eu-central-1' },
+    env: { account: process.env.AWS_ACCOUNT_ID, region: 'eu-central-1' },
   };
 
   return new NuvinaryInfraStack(app, `NuvinaryInfraStack-${stage}`, {

@@ -74,11 +74,11 @@ build_frontend_prod:
     - echo "Generating legal privacy data..."
     - |
       echo "export const PRIVATE_CONFIG = {
-        NAME: '$LEGAL_NAME_B64',
+        NAME: '$LEGAL_NAME_BASE_64',
         STREET: '$LEGAL_STREET_B64',
-        CITY: '$LEGAL_CITY_B64',
-        PHONE: '$LEGAL_PHONE_B64',
-        EMAIL: '$LEGAL_EMAIL_B64'
+        CITY: '$LEGAL_CITY_BASE_64',
+        PHONE: '$LEGAL_PHONE_BASE_64',
+        EMAIL: '$LEGAL_EMAIL'
       };" > src/app/features/legal/legal-privacy-data.ts
     - echo "Generating environment configuration..."
     - |
