@@ -8,6 +8,7 @@ import { Collection } from '../../features/dashboard/pages/models/collection.mod
 import { CreationDetails } from '../components/creation-details/creation-details';
 import { ConfirmDialogData } from '../models/dialog-data.model';
 import { StudioDialog } from '../components/dialogs/studio-dialog/studio-dialog';
+import { CreationResultDialog } from '../components/dialogs/creation-result-dialog/creation-result-dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -36,6 +37,13 @@ export class DialogService {
     const creationSignal = this.creationService.getCreationSignalById(creation);
     this.dialog.open(CreationDetails, {
       data: creationSignal,
+      maxWidth: '95vw',
+    });
+  }
+
+  openCreationResult(creation: Creation) {
+    this.dialog.open(CreationResultDialog, {
+      data: creation,
       maxWidth: '95vw',
     });
   }

@@ -1,27 +1,20 @@
-export type CreationStatus = 'generating' | 'completed' | 'failed' | 'canceled';
-
 export interface Creation {
   id: string;
   title: string;
   url: string;
-  createdAt: Date;
+  createdAt: string;
 
-  dimensions: { width: number; height: number };
-  progress: number;
-  fileSize: number;
   isPublic: boolean;
-  status: CreationStatus;
 
   createdBy: {
     id: string;
-    name: string;
-    avatarUrl: string;
+    displayName: string;
+    avatarColor: string;
   };
 
   aiMetadata: {
     model: string;
     prompt: string;
-    steps: number;
     cfgScale: number;
   };
 }

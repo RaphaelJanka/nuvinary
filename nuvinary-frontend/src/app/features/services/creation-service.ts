@@ -1,8 +1,12 @@
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
+import { ApiError } from 'aws-amplify/api';
 import { AuthService } from '../../core/auth/auth.service';
 import { Creation } from '../../shared/models/creation.model';
 import { mockCreationList } from '../../test/testdata/creations';
 import { NotificationService } from '../../shared/services/notification-service';
+import { ApiBody, ApiService } from '../../core/api/api.service';
+
+const DEFAULT_GENERATE_ERROR_MESSAGE = 'Failed to generate your creation';
 
 export interface CreationModel {
   prompt: string;
@@ -14,6 +18,7 @@ export interface CreationModel {
 })
 export class CreationService {
   private readonly authService = inject(AuthService);
+  private readonly apiService = inject(ApiService);
   private readonly currentUser = this.authService.authUser;
   private readonly notificationService = inject(NotificationService);
 
@@ -37,20 +42,40 @@ export class CreationService {
     );
   }
 
-  addCreation(creationModel: CreationModel) {
-    console.log(creationModel);
+  async generateCreation(creationModel: CreationModel): Promise<Creation> {
+    const creationPayload: ApiBody = {
+      prompt: creationModel.prompt,
+      title: creationModel.title,
+    };
 
-    // for later:
+    try {
+      const restOperation = await this.apiService.executePostOperation(
+        '/creations',
+        creationPayload,
+      );
+      const response = await restOperation.response;
+      const creation = (await response.body.json()) as unknown as Creation;
+      this.notificationService.show('Creation generated', 'success');
+      return creation;
+    } catch (err) {
+      const message = this.extractGenerateErrorMessage(err);
+      this.notificationService.show(message, 'error');
+      throw new Error(message);
+    }
+  }
 
-    // Bevor wir das teure Bildmodell anfragen, schicken wir den Prompt an ein günstiges Text-Modell.
-
-    // Die Logik dahinter:
-
-    // Check: "Ist dieser Text ein beschreibender Bild-Prompt?"
-
-    // Reaktion: Wenn ja -> Weiter zur Bildgenerierung.
-
-    // Reaktion: Wenn nein -> Die KI antwortet im Dialog: "Hmm, that sounds a bit cryptic. Could you describe your vision with a few more details so I can create something amazing?"
+  private extractGenerateErrorMessage(err: unknown): string {
+    if (err instanceof ApiError && err.response?.body) {
+      try {
+        const body = JSON.parse(err.response.body) as { message?: string };
+        if (body.message) {
+          return body.message;
+        }
+      } catch {
+        // response body wasn't JSON, fall through to the default message
+      }
+    }
+    return DEFAULT_GENERATE_ERROR_MESSAGE;
   }
 
   updateTitle(id: string, newTitle: string) {

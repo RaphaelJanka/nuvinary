@@ -13,8 +13,6 @@ export class CreationCard {
   readonly creation = input.required<Creation>();
 
   protected onOpenDetailsDialog() {
-    if (this.creation().status === 'completed') {
-      this.dialogService.openCreationDetails(this.creation());
-    }
+    this.dialogService.openCreationDetails(this.creation());
   }
 }

@@ -1,0 +1,162 @@
+import { randomUUID } from 'node:crypto';
+import {
+  BedrockRuntimeClient,
+  InvokeModelCommand,
+  ValidationException,
+} from '@aws-sdk/client-bedrock-runtime';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { createResponse, docClient } from '@shared/api-utils.js';
+import {
+  CreationItem,
+  CreationResponse,
+  GenerateCreationDto,
+} from '../models/creation.model.js';
+import { User } from '../models/user.model.js';
+
+const bedrockClient = new BedrockRuntimeClient({ region: 'us-east-1' });
+const s3Client = new S3Client({});
+
+const MODEL_ID = 'amazon.nova-canvas-v1:0';
+const IMAGE_SIZE = 1024;
+const CFG_SCALE = 8.0;
+const PRESIGNED_URL_TTL_SECONDS = 3600;
+
+interface NovaCanvasResponse {
+  images?: string[];
+  error?: string;
+}
+
+export const handler = async (
+  event: APIGatewayProxyEvent,
+): Promise<APIGatewayProxyResult> => {
+  const userId = event.requestContext.authorizer?.claims.sub;
+  if (!userId) {
+    return createResponse(401, { message: 'User ID not found' });
+  }
+
+  const body = JSON.parse(event.body || '{}') as GenerateCreationDto;
+  if (!body.title?.trim() || !body.prompt?.trim()) {
+    return createResponse(400, { message: 'Title and prompt are required' });
+  }
+
+  try {
+    const userResult = await docClient.send(
+      new GetCommand({
+        TableName: process.env.TABLE_NAME,
+        Key: { PK: `USER#${userId}`, SK: 'METADATA' },
+      }),
+    );
+    const user = userResult.Item as User | undefined;
+    if (!user) {
+      return createResponse(404, { message: 'User not found' });
+    }
+
+    const bedrockResponse = await bedrockClient.send(
+      new InvokeModelCommand({
+        modelId: MODEL_ID,
+        contentType: 'application/json',
+        accept: 'application/json',
+        body: JSON.stringify({
+          taskType: 'TEXT_IMAGE',
+          textToImageParams: {
+            text: body.prompt,
+          },
+          imageGenerationConfig: {
+            numberOfImages: 1,
+            quality: 'standard',
+            height: IMAGE_SIZE,
+            width: IMAGE_SIZE,
+            cfgScale: CFG_SCALE,
+          },
+        }),
+      }),
+    );
+
+    const novaCanvasResponse = JSON.parse(
+      new TextDecoder().decode(bedrockResponse.body),
+    ) as NovaCanvasResponse;
+
+    if (novaCanvasResponse.error || !novaCanvasResponse.images?.[0]) {
+      console.error('Nova Canvas returned no image', novaCanvasResponse);
+      return createResponse(422, {
+        message:
+          novaCanvasResponse.error ??
+          'Your prompt could not be turned into an image.',
+      });
+    }
+
+    const imageBuffer = Buffer.from(novaCanvasResponse.images[0], 'base64');
+    const id = randomUUID();
+    const imageKey = `creations/${userId}/${id}.png`;
+
+    await s3Client.send(
+      new PutObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: imageKey,
+        Body: imageBuffer,
+        ContentType: 'image/png',
+      }),
+    );
+
+    const creationItem: CreationItem = {
+      PK: `USER#${userId}`,
+      SK: `CREATION#${id}`,
+      id,
+      title: body.title,
+      imageKey,
+      createdAt: new Date().toISOString(),
+      isPublic: false,
+      createdBy: {
+        id: userId,
+        displayName: user.displayName,
+        avatarColor: user.avatarColor,
+      },
+      aiMetadata: {
+        model: MODEL_ID,
+        prompt: body.prompt,
+        cfgScale: CFG_SCALE,
+      },
+    };
+
+    await docClient.send(
+      new PutCommand({
+        TableName: process.env.TABLE_NAME,
+        Item: creationItem,
+      }),
+    );
+
+    const url = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: imageKey,
+      }),
+      { expiresIn: PRESIGNED_URL_TTL_SECONDS },
+    );
+
+    const creation: CreationResponse = {
+      id: creationItem.id,
+      title: creationItem.title,
+      url,
+      createdAt: creationItem.createdAt,
+      isPublic: creationItem.isPublic,
+      createdBy: creationItem.createdBy,
+      aiMetadata: creationItem.aiMetadata,
+    };
+
+    return createResponse(200, creation);
+  } catch (err) {
+    if (err instanceof ValidationException) {
+      return createResponse(400, { message: err.message });
+    }
+    console.error('Error generating image:', err);
+    return createResponse(500, { message: 'Error generating image' });
+  }
+};
