@@ -25,5 +25,14 @@
       class="my-4 font-bold text-sm text-center md:text-base text-white/70 uppercase tracking-widest"
       >{{ outroLine }}</span
     >
+    <span class="font-bold text-[10px] text-center uppercase tracking-widest"
+      >It's already waiting for you in
+      <a
+        routerLink="/dashboard/gallery"
+        (click)="dialogRef.close()"
+        class="text-accent hover:text-accent-light"
+        >"My Gallery"</a
+      >.</span
+    >
   </div>
 </div>

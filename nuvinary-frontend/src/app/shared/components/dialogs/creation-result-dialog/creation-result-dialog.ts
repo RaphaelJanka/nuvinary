@@ -1,5 +1,6 @@
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { LucideAngularModule, X } from 'lucide-angular';
 import { Creation } from '../../../models/creation.model';
 
@@ -21,7 +22,7 @@ const pickRandom = (lines: string[]): string => lines[Math.floor(Math.random() *
 
 @Component({
   selector: 'app-creation-result-dialog',
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterLink],
   templateUrl: './creation-result-dialog.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
