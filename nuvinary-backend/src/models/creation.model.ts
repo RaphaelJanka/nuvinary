@@ -34,3 +34,7 @@ export interface CreationResponse {
   createdBy: CreationItem['createdBy'];
   aiMetadata: CreationItem['aiMetadata'];
 }
+
+export interface GenerateCreationResponse extends CreationResponse {
+  remainingCredits: number;
+}

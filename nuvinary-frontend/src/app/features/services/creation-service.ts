@@ -54,7 +54,15 @@ export class CreationService {
         creationPayload,
       );
       const response = await restOperation.response;
-      const creation = (await response.body.json()) as unknown as Creation;
+      const { remainingCredits, ...creation } = (await response.body.json()) as unknown as Creation & {
+        remainingCredits: number;
+      };
+
+      const user = this.currentUser();
+      if (user) {
+        this.authService.setUser({ ...user, credits: remainingCredits });
+      }
+
       this.notificationService.show('Creation generated', 'success');
       return creation;
     } catch (err) {

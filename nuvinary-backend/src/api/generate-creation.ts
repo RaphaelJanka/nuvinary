@@ -10,13 +10,14 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
+import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResponse, docClient } from '@shared/api-utils.js';
 import {
   CreationItem,
-  CreationResponse,
   GenerateCreationDto,
+  GenerateCreationResponse,
 } from '../models/creation.model.js';
 import { User } from '../models/user.model.js';
 
@@ -56,6 +57,9 @@ export const handler = async (
     const user = userResult.Item as User | undefined;
     if (!user) {
       return createResponse(404, { message: 'User not found' });
+    }
+    if (user.credits <= 0) {
+      return createResponse(403, { message: 'No credits remaining' });
     }
 
     const bedrockResponse = await bedrockClient.send(
@@ -132,6 +136,27 @@ export const handler = async (
       }),
     );
 
+    let remainingCredits = user.credits - 1;
+    try {
+      const updateResult = await docClient.send(
+        new UpdateCommand({
+          TableName: process.env.TABLE_NAME,
+          Key: { PK: `USER#${userId}`, SK: 'METADATA' },
+          UpdateExpression: 'SET credits = credits - :one',
+          ConditionExpression: 'credits > :zero',
+          ExpressionAttributeValues: { ':one': 1, ':zero': 0 },
+          ReturnValues: 'UPDATED_NEW',
+        }),
+      );
+      remainingCredits = updateResult.Attributes?.credits ?? remainingCredits;
+    } catch (err) {
+      if (err instanceof ConditionalCheckFailedException) {
+        remainingCredits = 0;
+      } else {
+        throw err;
+      }
+    }
+
     const url = await getSignedUrl(
       s3Client,
       new GetObjectCommand({
@@ -141,7 +166,7 @@ export const handler = async (
       { expiresIn: PRESIGNED_URL_TTL_SECONDS },
     );
 
-    const creation: CreationResponse = {
+    const creation: GenerateCreationResponse = {
       id: creationItem.id,
       title: creationItem.title,
       url,
@@ -149,6 +174,7 @@ export const handler = async (
       isPublic: creationItem.isPublic,
       createdBy: creationItem.createdBy,
       aiMetadata: creationItem.aiMetadata,
+      remainingCredits,
     };
 
     return createResponse(200, creation);
