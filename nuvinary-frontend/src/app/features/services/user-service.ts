@@ -3,6 +3,7 @@ import { NotificationService } from '../../shared/services/notification-service'
 import { User } from '../../core/auth/auth.interfaces';
 import { get, put } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
+import { ApiBody } from '../../core/api/api.service';
 
 export interface UserCredentialModel {
   firstName: string;
@@ -10,8 +11,6 @@ export interface UserCredentialModel {
   displayName: string;
   color: string;
 }
-
-type ApiBody = Record<string, string | number | boolean>;
 
 @Injectable({
   providedIn: 'root',

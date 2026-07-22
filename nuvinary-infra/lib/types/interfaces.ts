@@ -37,7 +37,9 @@ export interface StorageLimits {
 
 export interface LambdaPermissions {
   dynamoDb?: 'read' | 'write' | 'readWrite';
+  s3?: 'read' | 'write' | 'readWrite';
   ses?: boolean;
+  bedrock?: boolean;
 }
 
 export interface NuvinaryLambdaProps {
