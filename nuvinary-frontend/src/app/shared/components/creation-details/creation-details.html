@@ -156,14 +156,15 @@
         class="relative overflow-hidden flex items-center gap-3 p-4 rounded-3xl border border-border-light border-s-0 bg-white shadow-sm leading-relaxed transition-colors hover:border-primary-subtle"
       >
         <div class="absolute top-0 left-0 w-1 h-full bg-primary-muted"></div>
-        <img
-          [src]="creation().createdBy.avatarUrl"
-          [alt]="creation().createdBy.name"
-          class="z-10 w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
-        />
+        <div
+          class="z-10 flex items-center justify-center w-12 h-12 rounded-full border-2 border-white shadow-sm"
+          [style.background-color]="creation().createdBy.avatarColor"
+        >
+          <span class="text-sm font-bold text-white">{{ createdByInitial() }}</span>
+        </div>
         <div class="flex flex-col">
           <span class="font-black text-base text-text-strong tracking-tight leading-tight">
-            {{ creation().createdBy.name }}
+            {{ creation().createdBy.displayName }}
           </span>
           <span class="font-bold text-[10px] text-primary uppercase tracking-wider opacity-80">
             Verified Creator
@@ -207,18 +208,12 @@
           <lucide-icon [img]="icons.layersIcon" class="w-4 h-4"></lucide-icon>
           <span class="font-black text-[10px] uppercase tracking-wider">Parameters</span>
         </div>
-        <p class="font-black text-xs text-text-strong">
-          {{ creation().aiMetadata.steps }} Steps <span class="mx-1 text-text-gentle">|</span>
-          {{ creation().aiMetadata.cfgScale }} CFG
-        </p>
+        <p class="font-black text-xs text-text-strong">{{ creation().aiMetadata.cfgScale }} CFG</p>
       </div>
     </div>
 
-    <div
-      class="flex items-center justify-between mt-auto pt-6 font-bold text-[10px] uppercase tracking-[0.15em]"
-    >
+    <div class="mt-auto pt-6 font-bold text-[10px] uppercase tracking-[0.15em]">
       <span>ID: {{ creation().id }}</span>
-      <span>{{ creation().fileSize / 1000000 | number: '1.1-2' }} MB</span>
     </div>
   </section>
 </div>

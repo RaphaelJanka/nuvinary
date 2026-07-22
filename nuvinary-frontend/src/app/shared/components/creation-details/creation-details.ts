@@ -60,6 +60,9 @@ export class CreationDetails {
   protected readonly canEdit = computed(() => {
     return this.router.url.includes('/gallery');
   });
+  protected readonly createdByInitial = computed(() =>
+    this.creation().createdBy.displayName.charAt(0).toUpperCase(),
+  );
   protected readonly icons = {
     layersIcon: Layers,
     cpuIcon: Cpu,

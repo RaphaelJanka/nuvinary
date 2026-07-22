@@ -36,6 +36,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
 
     const lambdaFactory = new NuvinaryLambdaFactory(this, 'LambdaFactory', {
       table: storage.table,
+      bucket: storage.bucket,
     });
 
     const postConfirmAuthFn = lambdaFactory.createFunction('PostConfirm', {
@@ -72,6 +73,16 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     );
 
+    const generateCreationFn = lambdaFactory.createFunction('GenerateCreation', {
+      entry: '../nuvinary-backend/src/api/generate-creation.ts',
+      handler: 'handler',
+      permissions: {
+        bedrock: true,
+        dynamoDb: 'readWrite',
+        s3: 'readWrite',
+      },
+    });
+
     new ApiConstruct(this, 'NuvinaryApi', {
       stageName: props.isProd ? 'prod' : 'dev',
       userPool: auth.userPool,
@@ -85,6 +96,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'PUT',
           path: '/users/{uid}',
           fn: updateUserProfileFn,
+        },
+        {
+          fetchType: 'POST',
+          path: '/creations',
+          fn: generateCreationFn,
         },
       ],
     });

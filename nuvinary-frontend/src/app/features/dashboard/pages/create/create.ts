@@ -2,14 +2,26 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { typeWriter } from './typewriter.helper';
 import { ArrowRight, CloudUpload, LucideAngularModule } from 'lucide-angular';
 import { CreationModel, CreationService } from '../../../services/creation-service';
-import { form, maxLength, required, submit, FormField } from '@angular/forms/signals';
+import { form, maxLength, required, FormField } from '@angular/forms/signals';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import { Button } from '../../../../shared/components/button/button';
+import { DialogService } from '../../../../shared/services/dialog-service';
+import { Loader } from '../../../../shared/components/loader/loader';
+
+const THINKING_DELAY_MS = 1500;
+const LOADING_MESSAGE_INTERVAL_MS = 2500;
+const LOADING_MESSAGES = [
+  'Mixing the pixels...',
+  'Consulting the digital muse...',
+  'Adding a dash of magic...',
+  'Sharpening the details...',
+  'Almost there...',
+];
 
 @Component({
   selector: 'app-create',
-  imports: [LucideAngularModule, FormField, PageLayout, Button],
+  imports: [LucideAngularModule, FormField, PageLayout, Button, Loader],
   templateUrl: './create.html',
   styleUrl: './create.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,14 +32,17 @@ import { Button } from '../../../../shared/components/button/button';
 export class Create {
   private readonly creationService = inject(CreationService);
   private readonly authService = inject(AuthService);
+  private readonly dialogService = inject(DialogService);
   protected readonly authUser = this.authService.authUser();
+
   private readonly creationModel = signal<CreationModel>(
     this.creationService.getDefaultCreationModel(),
   );
-
-  protected readonly creationForm = form(this.creationModel, (fieldPath) => {
-    required(fieldPath.prompt);
-    maxLength(fieldPath.title, 20);
+  protected readonly creationForm = form(this.creationModel, (creationSchema) => {
+    required(creationSchema.prompt);
+    required(creationSchema.title);
+    maxLength(creationSchema.title, 20);
+    maxLength(creationSchema.prompt, 250);
   });
 
   protected readonly displayedUserGreeting = signal('');
@@ -35,8 +50,11 @@ export class Create {
   protected readonly currentStep = signal<'prompt' | 'title'>('prompt');
   protected readonly isTyping = signal(false);
   protected readonly isThinking = signal(false);
+  protected readonly isLoading = signal(false);
+  protected readonly loadingMessage = signal(LOADING_MESSAGES[0]);
+  private loadingMessageInterval?: ReturnType<typeof setInterval>;
 
-  private readonly userGreeting = `Hi, ${this.authUser?.firstName}!`;
+  private readonly userGreeting = `Hi, ${this.authUser?.firstName ?? 'there'}!`;
   private readonly greetings = [
     'Time to create a vision. Describe your image...',
     "Let's bring your imagination to life. What should I draw?",
@@ -49,111 +67,96 @@ export class Create {
 
   constructor() {
     this.isTyping.set(true);
-    // Erster Text
     typeWriter(
       this.userGreeting,
       (g) => this.displayedUserGreeting.set(g),
       () => {
-        // Zweiter Text nach kurzer Pause starten
         setTimeout(() => this.setMessage(), 400);
       },
     );
   }
 
-  private setMessage() {
+  /** Types `text` into `displayedText`, mimicking the assistant "speaking". */
+  private say(text: string, onComplete?: () => void) {
     this.isTyping.set(true);
-    const text = this.greetings[Math.floor(Math.random() * this.greetings.length)];
     typeWriter(
       text,
       (t) => this.displayedText.set(t),
       () => {
-        this.isTyping.set(false); // Jetzt sind beide Zeilen fertig
+        this.isTyping.set(false);
+        onComplete?.();
       },
     );
   }
 
+  private startLoadingMessages() {
+    let index = 0;
+    this.loadingMessage.set(LOADING_MESSAGES[0]);
+    this.loadingMessageInterval = setInterval(() => {
+      index = (index + 1) % LOADING_MESSAGES.length;
+      this.loadingMessage.set(LOADING_MESSAGES[index]);
+    }, LOADING_MESSAGE_INTERVAL_MS);
+  }
+
+  private stopLoadingMessages() {
+    clearInterval(this.loadingMessageInterval);
+  }
+
+  private setMessage() {
+    const text = this.greetings[Math.floor(Math.random() * this.greetings.length)];
+    this.say(text);
+  }
+
   protected async onSetTitle() {
-    const promptValue = this.creationForm.prompt().value();
-    // Mocking for later with short thinking time (AI Validation)
     this.isThinking.set(true);
-    this.isTyping.set(true);
     this.displayedText.set('');
 
-    await new Promise((r) => setTimeout(r, 1500));
-    const looksLikeGibberish = promptValue.length < 10 || !promptValue.includes(' ');
+    await new Promise((r) => setTimeout(r, THINKING_DELAY_MS));
 
-    if (looksLikeGibberish) {
-      this.isThinking.set(false);
-      typeWriter(
-        "That's a bit cryptic! Could you describe your vision with a few more words?",
-        (t) => this.displayedText.set(t),
-        () => this.isTyping.set(false),
-      );
-    } else {
-      this.isThinking.set(false);
-      this.currentStep.set('title');
-      typeWriter(
-        'That sounds like a great vision! Now, what should we call this piece?',
-        (t) => this.displayedText.set(t),
-        () => this.isTyping.set(false),
-      );
-    }
+    this.isThinking.set(false);
+    this.currentStep.set('title');
+    this.say('That sounds like a great vision! Now, what should we call this piece?');
   }
 
   protected onBack() {
     this.currentStep.set('prompt');
     this.displayedText.set('');
-    this.resetForm();
+    this.creationModel.update((model) => ({
+      ...model,
+      title: '',
+    }));
     this.setMessage();
   }
 
-  protected onSubmit(event: Event) {
+  protected async onSubmit(event: Event) {
     event.preventDefault();
-
     if (this.currentStep() !== 'title') {
       return;
     }
+    if (!this.creationForm().valid()) {
+      return;
+    }
+    this.isLoading.set(true);
+    this.startLoadingMessages();
+    this.isThinking.set(true);
+    this.displayedText.set('');
 
-    // Mock creation. Later via AI
-    submit(this.creationForm, async () => {
-      const currentTitle = this.creationForm.title().value();
-      const currentPrompt = this.creationForm.prompt().value();
-
-      // If title is empty -> will be generated by AI
-      if (!currentTitle || currentTitle.trim() === '') {
-        this.isThinking.set(true);
-        this.isTyping.set(true);
-        this.displayedText.set('');
-        console.log(currentPrompt);
-
-        // Simulation of title creation
-        await new Promise((r) => setTimeout(r, 1200));
-        const magicTitle = 'Neon Dreams';
-
-        this.creationModel.update((model) => ({
-          ...model,
-          title: magicTitle,
-        }));
-        this.isThinking.set(false);
-        await new Promise<void>((resolve) => {
-          typeWriter(
-            `I named it "${magicTitle}" for you. Generating now...`,
-            (t) => this.displayedText.set(t),
-            () => {
-              this.isTyping.set(false);
-              resolve();
-            },
-          );
-        });
-      }
-
-      const finalModel = this.creationModel();
-      this.creationService.addCreation(finalModel);
-      console.log('Generating Image with:', finalModel);
-
-      // Reset after geneartion
-      // this.resetForm();
-    });
+    try {
+      const creation = await this.creationService.generateCreation(this.creationModel());
+      this.resetForm();
+      this.say(`I named it "${creation.title}" for you. Take a look!`, () => {
+        this.dialogService.openCreationResult(creation);
+      });
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : 'Something went wrong while generating your image.';
+      this.currentStep.set('prompt');
+      this.say(message);
+    } finally {
+      this.stopLoadingMessages();
+      this.isThinking.set(false);
+      this.isLoading.set(false);
+    }
   }
 
   private resetForm() {
