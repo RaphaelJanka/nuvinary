@@ -15,6 +15,5 @@ export interface Creation {
   aiMetadata: {
     model: string;
     prompt: string;
-    cfgScale: number;
   };
 }

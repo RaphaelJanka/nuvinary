@@ -21,17 +21,17 @@ import {
 } from '../models/creation.model.js';
 import { User } from '../models/user.model.js';
 
-const bedrockClient = new BedrockRuntimeClient({ region: 'us-east-1' });
+const bedrockClient = new BedrockRuntimeClient({ region: 'us-west-2' });
 const s3Client = new S3Client({});
 
-const MODEL_ID = 'amazon.nova-canvas-v1:0';
-const IMAGE_SIZE = 1024;
-const CFG_SCALE = 8.0;
+const MODEL_ID = 'stability.stable-image-core-v1:1';
+const ASPECT_RATIO = '1:1';
+const OUTPUT_FORMAT = 'png';
 const PRESIGNED_URL_TTL_SECONDS = 3600;
 
-interface NovaCanvasResponse {
+interface StableImageResponse {
   images?: string[];
-  error?: string;
+  finish_reasons?: (string | null)[];
 }
 
 export const handler = async (
@@ -68,35 +68,26 @@ export const handler = async (
         contentType: 'application/json',
         accept: 'application/json',
         body: JSON.stringify({
-          taskType: 'TEXT_IMAGE',
-          textToImageParams: {
-            text: body.prompt,
-          },
-          imageGenerationConfig: {
-            numberOfImages: 1,
-            quality: 'standard',
-            height: IMAGE_SIZE,
-            width: IMAGE_SIZE,
-            cfgScale: CFG_SCALE,
-          },
+          prompt: body.prompt,
+          aspect_ratio: ASPECT_RATIO,
+          output_format: OUTPUT_FORMAT,
         }),
       }),
     );
 
-    const novaCanvasResponse = JSON.parse(
+    const stableImageResponse = JSON.parse(
       new TextDecoder().decode(bedrockResponse.body),
-    ) as NovaCanvasResponse;
+    ) as StableImageResponse;
+    const finishReason = stableImageResponse.finish_reasons?.[0];
 
-    if (novaCanvasResponse.error || !novaCanvasResponse.images?.[0]) {
-      console.error('Nova Canvas returned no image', novaCanvasResponse);
+    if (finishReason || !stableImageResponse.images?.[0]) {
+      console.error('Stable Image Core returned no image', stableImageResponse);
       return createResponse(422, {
-        message:
-          novaCanvasResponse.error ??
-          'Your prompt could not be turned into an image.',
+        message: finishReason ?? 'Your prompt could not be turned into an image.',
       });
     }
 
-    const imageBuffer = Buffer.from(novaCanvasResponse.images[0], 'base64');
+    const imageBuffer = Buffer.from(stableImageResponse.images[0], 'base64');
     const id = randomUUID();
     const imageKey = `creations/${userId}/${id}.png`;
 
@@ -125,7 +116,6 @@ export const handler = async (
       aiMetadata: {
         model: MODEL_ID,
         prompt: body.prompt,
-        cfgScale: CFG_SCALE,
       },
     };
 

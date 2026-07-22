@@ -9,9 +9,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'A dense forest with neon purple glowing mushrooms, cinematic lighting, 8k',
-      cfgScale: 7.5,
     },
   },
   {
@@ -22,9 +21,8 @@ export const mockCreationList: Creation[] = [
     isPublic: false,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Minimalist villa in the alps, glass facade, sunset, architectural photography',
-      cfgScale: 9.0,
     },
   },
   {
@@ -35,9 +33,8 @@ export const mockCreationList: Creation[] = [
     isPublic: false,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'A cute robot drinking coffee in a futuristic cafe',
-      cfgScale: 7.0,
     },
   },
   {
@@ -48,9 +45,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Swirling liquid gold and silk, abstract 3d render, soft studio lighting',
-      cfgScale: 12.0,
     },
   },
   {
@@ -61,9 +57,8 @@ export const mockCreationList: Creation[] = [
     isPublic: false,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'A dreamlike landscape blending ocean and sky, soft pastel colors',
-      cfgScale: 7.0,
     },
   },
   {
@@ -74,9 +69,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Cybernetic samurai standing under neon signs, rainy street, blue and pink lighting',
-      cfgScale: 10.0,
     },
   },
   {
@@ -87,9 +81,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Astronaut floating in a garden of nebulae, ethereal lighting, surrealism',
-      cfgScale: 8.0,
     },
   },
   {
@@ -100,9 +93,8 @@ export const mockCreationList: Creation[] = [
     isPublic: false,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Underwater city made of glass, bioluminescent sea life, deep blue tones',
-      cfgScale: 7.0,
     },
   },
   {
@@ -113,9 +105,8 @@ export const mockCreationList: Creation[] = [
     isPublic: false,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Close up of a 1950s film camera, wooden table, soft morning light, bokeh',
-      cfgScale: 6.5,
     },
   },
   {
@@ -126,9 +117,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Infinite sand dunes under a giant moon, crystal clear starry sky',
-      cfgScale: 8.5,
     },
   },
   {
@@ -139,9 +129,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '202', displayName: 'Eco Artist', avatarColor: '#047857' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Old steam train puffing smoke in a heavy snowstorm, black and white photography',
-      cfgScale: 7.0,
     },
   },
   {
@@ -152,9 +141,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '303', displayName: 'CyberDoc', avatarColor: '#1D4ED8' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Futuristic doctor with holographic interface, cyberpunk clinic, soft teal lighting',
-      cfgScale: 8.5,
     },
   },
   {
@@ -165,10 +153,9 @@ export const mockCreationList: Creation[] = [
     isPublic: false,
     createdBy: { id: '404', displayName: 'NatureLover', avatarColor: '#0F766E' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt:
         'Cozy wooden cabin by a lake at night, stars reflecting in water, warm light from windows',
-      cfgScale: 6.0,
     },
   },
   {
@@ -179,9 +166,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '505', displayName: 'PixelPainter', avatarColor: '#D97706' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Colorful pop art illustration of a cool cat wearing sunglasses, Andy Warhol style',
-      cfgScale: 9.5,
     },
   },
   {
@@ -192,9 +178,8 @@ export const mockCreationList: Creation[] = [
     isPublic: true,
     createdBy: { id: '606', displayName: 'SpaceArchitect', avatarColor: '#BE123C' },
     aiMetadata: {
-      model: 'amazon.nova-canvas-v1:0',
+      model: 'stability.stable-image-core-v1:1',
       prompt: 'Futuristic dome city on Mars, red dust storm in background, rovers driving, sci-fi',
-      cfgScale: 11.0,
     },
   },
 ];
