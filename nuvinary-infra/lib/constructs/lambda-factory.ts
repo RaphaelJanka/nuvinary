@@ -23,8 +23,8 @@ export class NuvinaryLambdaFactory extends Construct {
   private readonly bucket?: s3.IBucket;
   private static readonly SES_NOTIFICATION_ARN =
     'arn:aws:ses:eu-central-1:635256138522:identity/dev.project.notifications@gmail.com';
-  private static readonly NOVA_CANVAS_MODEL_ARN =
-    'arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-canvas-v1:0';
+  private static readonly STABLE_IMAGE_CORE_MODEL_ARN =
+    'arn:aws:bedrock:us-west-2::foundation-model/stability.stable-image-core-v1:1';
 
   constructor(scope: Construct, id: string, props: LambdaFactoryProps) {
     super(scope, id);
@@ -84,7 +84,7 @@ export class NuvinaryLambdaFactory extends Construct {
       fn.addToRolePolicy(
         new iam.PolicyStatement({
           actions: ['bedrock:InvokeModel'],
-          resources: [NuvinaryLambdaFactory.NOVA_CANVAS_MODEL_ARN],
+          resources: [NuvinaryLambdaFactory.STABLE_IMAGE_CORE_MODEL_ARN],
         }),
       );
     }

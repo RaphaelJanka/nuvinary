@@ -19,7 +19,6 @@ export interface CreationItem {
   aiMetadata: {
     model: string;
     prompt: string;
-    cfgScale: number;
   };
   GSI1PK?: string;
   GSI1SK?: string;

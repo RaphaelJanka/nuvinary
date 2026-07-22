@@ -14,7 +14,6 @@ import {
   Cpu,
   FileText,
   Globe,
-  Layers,
   Lock,
   LucideAngularModule,
   Maximize,
@@ -64,7 +63,6 @@ export class CreationDetails {
     this.creation().createdBy.displayName.charAt(0).toUpperCase(),
   );
   protected readonly icons = {
-    layersIcon: Layers,
     cpuIcon: Cpu,
     lockIcon: Lock,
     globeIcon: Globe,

@@ -15,9 +15,8 @@ export const mockCollections: Collection[] = [
         isPublic: true,
         createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
         aiMetadata: {
-          model: 'amazon.nova-canvas-v1:0',
+          model: 'stability.stable-image-core-v1:1',
           prompt: 'Swirling liquid gold and silk, abstract 3d render, soft studio lighting',
-          cfgScale: 12.0,
         },
       },
     ],
@@ -37,9 +36,8 @@ export const mockCollections: Collection[] = [
         isPublic: true,
         createdBy: { id: '101', displayName: 'Test User', avatarColor: '#7C3AED' },
         aiMetadata: {
-          model: 'amazon.nova-canvas-v1:0',
+          model: 'stability.stable-image-core-v1:1',
           prompt: 'A dense forest with neon purple glowing mushrooms, cinematic lighting, 8k',
-          cfgScale: 7.5,
         },
       },
     ],

@@ -190,26 +190,14 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-4">
-      <div
-        class="p-5 rounded-3xl border border-border-light bg-white shadow-sm transition-colors hover:border-primary-subtle"
-      >
-        <div class="flex items-center gap-2 mb-2 text-text-gentle">
-          <lucide-icon [img]="icons.cpuIcon" class="w-4 h-4"></lucide-icon>
-          <span class="font-black text-[10px] uppercase tracking-wider">AI Engine</span>
-        </div>
-        <p class="font-black text-xs text-text-strong">{{ creation().aiMetadata.model }}</p>
+    <div
+      class="p-5 rounded-3xl border border-border-light bg-white shadow-sm transition-colors hover:border-primary-subtle"
+    >
+      <div class="flex items-center gap-2 mb-2 text-text-gentle">
+        <lucide-icon [img]="icons.cpuIcon" class="w-4 h-4"></lucide-icon>
+        <span class="font-black text-[10px] uppercase tracking-wider">AI Engine</span>
       </div>
-
-      <div
-        class="p-5 rounded-3xl border border-border-light bg-white shadow-sm transition-colors hover:border-primary-subtle"
-      >
-        <div class="flex items-center gap-2 mb-2 text-text-gentle">
-          <lucide-icon [img]="icons.layersIcon" class="w-4 h-4"></lucide-icon>
-          <span class="font-black text-[10px] uppercase tracking-wider">Parameters</span>
-        </div>
-        <p class="font-black text-xs text-text-strong">{{ creation().aiMetadata.cfgScale }} CFG</p>
-      </div>
+      <p class="font-black text-xs text-text-strong">{{ creation().aiMetadata.model }}</p>
     </div>
 
     <div class="mt-auto pt-6 font-bold text-[10px] uppercase tracking-[0.15em]">
