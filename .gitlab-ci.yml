@@ -159,6 +159,7 @@ diff_dev:
       artifacts: true
   script:
     - cd nuvinary-infra
+    - node -e "console.log(JSON.parse(Buffer.from(process.env.AWS_ID_TOKEN.split('.')[1], 'base64url').toString()))"
     - npx cdk diff --app cdk.out NuvinaryInfraStack-dev
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
