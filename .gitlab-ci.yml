@@ -20,6 +20,17 @@ stages:
     paths:
       - node_modules/
 
+.aws_auth:
+  id_tokens:
+    AWS_ID_TOKEN:
+      aud: https://gitlab.com
+  before_script:
+    - !reference [.node_setup, before_script]
+    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
+  variables:
+    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
+    AWS_DEFAULT_REGION: eu-central-1
+
 # --- Jobs ---
 
 ## Build Jobs
@@ -139,22 +150,13 @@ build_infra_prod:
 ## Diff Jobs
 
 diff_dev:
-  extends: .node_setup
+  extends: [.node_setup, .aws_auth]
   stage: diff
   environment:
     name: dev
   needs:
     - job: build_infra_dev
       artifacts: true
-  id_tokens:
-    AWS_ID_TOKEN:
-      aud: https://gitlab.com
-  before_script:
-    - !reference [.node_setup, before_script]
-    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
-  variables:
-    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
-    AWS_DEFAULT_REGION: eu-central-1
   script:
     - cd nuvinary-infra
     - npx cdk diff --app cdk.out NuvinaryInfraStack-dev || true
@@ -163,22 +165,13 @@ diff_dev:
     - if: $CI_COMMIT_BRANCH == "main"
 
 diff_prod:
-  extends: .node_setup
+  extends: [.node_setup, .aws_auth]
   stage: diff
   environment:
     name: prod
   needs:
     - job: build_infra_prod
       artifacts: true
-  id_tokens:
-    AWS_ID_TOKEN:
-      aud: https://gitlab.com
-  before_script:
-    - !reference [.node_setup, before_script]
-    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
-  variables:
-    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
-    AWS_DEFAULT_REGION: eu-central-1
   script:
     - cd nuvinary-infra
     - npx cdk diff --app cdk.out NuvinaryInfraStack-prod || true
@@ -188,7 +181,7 @@ diff_prod:
 # # Deploy Jobs
 
 deploy_dev:
-  extends: .node_setup
+  extends: [.node_setup, .aws_auth]
   stage: deploy
   environment:
     name: dev
@@ -197,15 +190,6 @@ deploy_dev:
       artifacts: true
     - job: build_infra_dev
       artifacts: true
-  id_tokens:
-    AWS_ID_TOKEN:
-      aud: https://gitlab.com
-  before_script:
-    - !reference [.node_setup, before_script]
-    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
-  variables:
-    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
-    AWS_DEFAULT_REGION: eu-central-1
   script:
     - echo "Deploying to dev environment"
     - cd nuvinary-infra
@@ -216,7 +200,7 @@ deploy_dev:
   when: manual
 
 deploy_prod:
-  extends: .node_setup
+  extends: [.node_setup, .aws_auth]
   stage: deploy
   environment:
     name: prod
@@ -225,15 +209,6 @@ deploy_prod:
       artifacts: true
     - job: build_infra_prod
       artifacts: true
-  id_tokens:
-    AWS_ID_TOKEN:
-      aud: https://gitlab.com
-  before_script:
-    - !reference [.node_setup, before_script]
-    - echo "$AWS_ID_TOKEN" > /tmp/aws_token
-  variables:
-    AWS_WEB_IDENTITY_TOKEN_FILE: /tmp/aws_token
-    AWS_DEFAULT_REGION: eu-central-1
   script:
     - echo "Deploying to prod environment"
     - cd nuvinary-infra
