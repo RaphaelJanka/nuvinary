@@ -10,7 +10,7 @@ export const handler = async (
   const userId = event.requestContext.authorizer?.claims.sub;
 
   if (!userId) {
-    return createResponse(403, { message: 'Unauthorized' });
+    return createResponse(401, { message: 'User ID not found' });
   }
 
   const creationId = event.pathParameters?.id;

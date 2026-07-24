@@ -9,6 +9,7 @@ const DEFAULT_GENERATE_ERROR_MESSAGE = 'Failed to generate your creation';
 const DEFAULT_LOAD_ERROR_MESSAGE = 'Failed to load your creations';
 const DEFAULT_TITLE_CHANGE_ERROR_MESSAGE = 'Failed to change title';
 const DEFAULT_VISIBILITY_CHANGE_ERROR_MESSAGE = 'Failed to change visibility';
+const DEFAULT_DELETE_CREATION_ERROR_MESSAGE = 'Failed to delete creation';
 
 export interface CreationModel {
   prompt: string;
@@ -166,8 +167,16 @@ export class CreationService {
     }
   }
 
-  deleteCreation(creation: Creation) {
-    this._creationList.update((list) => list.filter((c) => c.id !== creation.id));
-    this.notificationService.show('Creation permanently deleted', 'success');
+  /** Deletes a creation on the backend and removes it from the local list. */
+  async deleteCreation(id: string) {
+    try {
+      await this.apiService.executeDeleteOperation(`/creations/${id}`);
+      this._creationList.update((list) => list.filter((c) => c.id !== id));
+      this.notificationService.show('Creation permanently deleted', 'success');
+    } catch (err) {
+      const message = this.extractErrorMessage(err, DEFAULT_DELETE_CREATION_ERROR_MESSAGE);
+      this.notificationService.show(message, 'error');
+      throw new Error(message);
+    }
   }
 }

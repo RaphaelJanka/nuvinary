@@ -68,9 +68,13 @@ export class DialogService {
     });
   }
 
-  private deleteCreation(creation: Creation) {
-    this.creationService.deleteCreation(creation);
-    this.collectionService.removeCreationFromAllCollections(creation.id);
+  private async deleteCreation(creation: Creation) {
+    try {
+      await this.creationService.deleteCreation(creation.id);
+      this.collectionService.removeCreationFromAllCollections(creation.id);
+    } catch {
+      //
+    }
   }
 
   openConfirmDialogToDeleteCollection(collection: Collection): DialogRef<boolean, unknown> {
