@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { post } from 'aws-amplify/api';
+import { get, post, put } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 export type ApiBody = Record<string, string | number | boolean>;
@@ -19,9 +19,26 @@ export class ApiService {
     };
   }
 
-  // executeGetOperation() {}
+  async executeGetOperation(path: string) {
+    return get({
+      apiName: this.API_NAME,
+      path,
+      options: {
+        headers: await this.getAuthHeaders(),
+      },
+    });
+  }
 
-  // executePutOperation() {}
+  async executePutOperation(path: string, body: ApiBody) {
+    return put({
+      apiName: this.API_NAME,
+      path,
+      options: {
+        headers: await this.getAuthHeaders(),
+        body,
+      },
+    });
+  }
 
   async executePostOperation(path: string, body: ApiBody) {
     return post({
