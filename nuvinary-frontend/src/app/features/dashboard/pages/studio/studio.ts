@@ -23,6 +23,7 @@ import { NgClass } from '@angular/common';
 import { toPng } from 'html-to-image';
 import { ScreenSizeService } from '../../../../shared/services/screen-size-service';
 import { Tooltip } from '../../../../shared/directives/tooltip';
+import { CreationService } from '../../../services/creation-service';
 
 @Component({
   selector: 'app-studio',
@@ -37,6 +38,7 @@ import { Tooltip } from '../../../../shared/directives/tooltip';
 export class Studio {
   private readonly dialogService = inject(DialogService);
   private readonly screenSizeService = inject(ScreenSizeService);
+  private readonly creationService = inject(CreationService);
   protected readonly selectedCreation = this.dialogService.selectedCreation;
   protected isEditing = false;
   protected storyTitle = signal('');
@@ -138,6 +140,11 @@ export class Studio {
     this.cardBackground.set(this.cardBackgrounds[nextIndex]);
 
     this.iconRotation.update((v) => v + 360 / this.cardBackgrounds.length);
+  }
+
+  /** Presigned URL likely expired — refresh the list. */
+  protected onImageError() {
+    this.creationService.loadUserCreations();
   }
 
   toggleOrientation() {

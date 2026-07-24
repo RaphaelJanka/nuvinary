@@ -4,16 +4,12 @@ import {
   InvokeModelCommand,
   ValidationException,
 } from '@aws-sdk/client-bedrock-runtime';
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResponse, docClient } from '@shared/api-utils.js';
+import { getPresignedImageUrl, s3Client } from '@shared/s3-utils.js';
 import {
   CreationItem,
   GenerateCreationDto,
@@ -22,12 +18,10 @@ import {
 import { User } from '../models/user.model.js';
 
 const bedrockClient = new BedrockRuntimeClient({ region: 'us-west-2' });
-const s3Client = new S3Client({});
 
 const MODEL_ID = 'stability.stable-image-core-v1:1';
 const ASPECT_RATIO = '1:1';
 const OUTPUT_FORMAT = 'png';
-const PRESIGNED_URL_TTL_SECONDS = 3600;
 
 interface StableImageResponse {
   images?: string[];
@@ -36,6 +30,7 @@ interface StableImageResponse {
 
 class NoImageGeneratedError extends Error {}
 
+/** Generates an image via Bedrock, persists it to S3/DynamoDB, and decrements credits. */
 export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
@@ -99,6 +94,7 @@ export const handler = async (
   }
 };
 
+/** Fetches the user's profile/metadata item. */
 async function getUser(userId: string): Promise<User | undefined> {
   const userResult = await docClient.send(
     new GetCommand({
@@ -109,6 +105,7 @@ async function getUser(userId: string): Promise<User | undefined> {
   return userResult.Item as User | undefined;
 }
 
+/** Invokes Bedrock's Stable Image Core model and decodes the returned base64 image. */
 async function generateImage(prompt: string): Promise<Buffer> {
   const bedrockResponse = await bedrockClient.send(
     new InvokeModelCommand({
@@ -138,6 +135,7 @@ async function generateImage(prompt: string): Promise<Buffer> {
   return Buffer.from(stableImageResponse.images[0], 'base64');
 }
 
+/** Uploads the generated PNG to the creations bucket under the given key. */
 async function uploadImageToS3(
   imageKey: string,
   imageBuffer: Buffer,
@@ -152,6 +150,7 @@ async function uploadImageToS3(
   );
 }
 
+/** Assembles the DynamoDB item for a new creation. */
 function buildCreationItem(
   userId: string,
   id: string,
@@ -179,6 +178,7 @@ function buildCreationItem(
   };
 }
 
+/** Writes the creation item to DynamoDB. */
 async function saveCreation(creationItem: CreationItem): Promise<void> {
   await docClient.send(
     new PutCommand({
@@ -188,6 +188,7 @@ async function saveCreation(creationItem: CreationItem): Promise<void> {
   );
 }
 
+/** Atomically decrements credits by 1, guarded against going below 0. */
 async function decrementUserCredits(
   userId: string,
   currentCredits: number,
@@ -210,15 +211,4 @@ async function decrementUserCredits(
     }
     throw err;
   }
-}
-
-function getPresignedImageUrl(imageKey: string): Promise<string> {
-  return getSignedUrl(
-    s3Client,
-    new GetObjectCommand({
-      Bucket: process.env.BUCKET_NAME,
-      Key: imageKey,
-    }),
-    { expiresIn: PRESIGNED_URL_TTL_SECONDS },
-  );
 }
