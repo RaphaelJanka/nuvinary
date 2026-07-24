@@ -5,6 +5,7 @@
   <img
     [alt]="creation().title"
     [src]="creation().url"
+    (error)="onImageError()"
     class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
   />
 

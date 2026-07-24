@@ -96,4 +96,9 @@ export class CreationDetails {
   onClose() {
     this.dialogRef.close();
   }
+
+  /** The presigned image URL may have expired since it was fetched — refresh the list to get a fresh one. */
+  protected onImageError() {
+    this.creationService.loadUserCreations();
+  }
 }

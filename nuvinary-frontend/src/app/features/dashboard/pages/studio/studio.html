@@ -55,6 +55,7 @@
                 [src]="creation.url"
                 [alt]="creation.title"
                 crossOrigin="anonymous"
+                (error)="onImageError()"
                 class="absolute inset-0 w-full h-full object-cover pointer-events-none animate-in fade-in"
               />
             } @else {
