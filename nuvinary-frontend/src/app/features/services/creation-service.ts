@@ -24,21 +24,22 @@ export class CreationService {
 
   private readonly _creationList = signal<Creation[]>([]);
   private isRefreshingCreations = false;
+  private hasLoadedOnce = false;
 
-  /** The signed-in user's own creations, derived by filtering the shared list on the client. */
+  private readonly _isLoadingInitialCreations = signal(false);
+  /** True only while the very first `loadUserCreations()` call is in flight. */
+  readonly isLoadingInitialCreations = this._isLoadingInitialCreations.asReadonly();
+
+  /** The signed-in user's own creations. */
   readonly userCreationList = computed(() =>
     this._creationList().filter((c) => c.createdBy.id === this.currentUser()?.uid),
   );
 
-  /**
-   * Creations marked public. Currently only ever contains the current user's own public
-   * creations, since there is no backend endpoint yet for a cross-user community feed.
-   */
+  /** Public creations — only the current user's own for now, no community backend yet. */
   readonly communityCreationList = computed(() => this._creationList().filter((c) => c.isPublic));
 
   constructor() {
-    // Refetch whenever the authenticated user changes (login/app start), and clear
-    // the list on logout so the next user never sees a stale/previous user's data.
+    // Load on login, clear on logout.
     effect(() => {
       if (this.currentUser()) {
         this.loadUserCreations();
@@ -53,15 +54,13 @@ export class CreationService {
     title: '',
   });
 
-  /**
-   * Fetches the current user's creations from the backend and replaces the local list —
-   * including fresh presigned image URLs. Called automatically on login, and again
-   * whenever a rendered creation image fails to load (its presigned URL likely expired).
-   * Guarded against overlapping calls, since several images can fail around the same time.
-   */
+  /** Fetches the user's creations with fresh presigned URLs. Guarded against overlapping calls. */
   async loadUserCreations(): Promise<void> {
     if (this.isRefreshingCreations) return;
     this.isRefreshingCreations = true;
+    const isFirstLoad = !this.hasLoadedOnce;
+    if (isFirstLoad) this._isLoadingInitialCreations.set(true);
+
     try {
       const restOperation = await this.apiService.executeGetOperation('/creations');
       const response = await restOperation.response;
@@ -72,24 +71,19 @@ export class CreationService {
       this.notificationService.show(message, 'error');
     } finally {
       this.isRefreshingCreations = false;
+      this.hasLoadedOnce = true;
+      this._isLoadingInitialCreations.set(false);
     }
   }
 
-  /**
-   * Returns a signal that tracks a single creation by id within the shared list, so
-   * consumers stay in sync with later local mutations (title, visibility, deletion).
-   * Falls back to `initialCreation` if the item isn't (yet) in the list.
-   */
+  /** Tracks a single creation by id within the shared list, falling back to `initialCreation`. */
   getCreationSignalById(initialCreation: Creation): Signal<Creation> {
     return computed(
       () => this._creationList().find((c) => c.id === initialCreation.id) ?? initialCreation,
     );
   }
 
-  /**
-   * Triggers image generation via `POST /creations`, applies the returned remaining
-   * credit balance to the current user, and prepends the new creation to the local list.
-   */
+  /** Generates a new image and prepends it to the local list. */
   async generateCreation(creationModel: CreationModel): Promise<Creation> {
     const creationPayload: ApiBody = {
       prompt: creationModel.prompt,

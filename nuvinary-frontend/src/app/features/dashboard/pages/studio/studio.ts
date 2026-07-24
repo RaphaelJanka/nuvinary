@@ -142,7 +142,7 @@ export class Studio {
     this.iconRotation.update((v) => v + 360 / this.cardBackgrounds.length);
   }
 
-  /** The presigned image URL may have expired since it was fetched — refresh the list to get a fresh one. */
+  /** Presigned URL likely expired — refresh the list. */
   protected onImageError() {
     this.creationService.loadUserCreations();
   }

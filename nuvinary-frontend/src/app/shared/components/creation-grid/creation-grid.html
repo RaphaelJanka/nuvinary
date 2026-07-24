@@ -2,46 +2,48 @@
   <div
     class="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(150px,1fr))] 2xl:grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 sm:gap-6"
   >
-    @for (creation of creationList(); track creation.id; let i = $index) {
-      <div
-        [draggable]="allowDrag()"
-        (dragstart)="onDragStart($event, creation, i)"
-        (dragend)="onDragEnd()"
-        class="relative group transition-transform"
-        [class.opacity-40]="activeCreation()?.id === creation.id"
-        [class.cursor-grab]="allowDrag()"
-        [class.active:cursor-grabbing]="allowDrag()"
-        [class.hover:scale-105]="allowDrag()"
-      >
-        @if (allowDelete()) {
-          <button
-            (click)="onDeleteCreation(creation)"
-            class="absolute top-3 right-3 z-30 p-2 rounded-xl border border-white-soft bg-bg-strong/10 text-white-strong shadow-inner backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100 hover:border-danger-light hover:bg-bg-danger hover:text-danger active:scale-90"
-          >
-            <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
-          </button>
-        }
+    @if (!isFetching()) {
+      @for (creation of creationList(); track creation.id; let i = $index) {
+        <div
+          [draggable]="allowDrag()"
+          (dragstart)="onDragStart($event, creation, i)"
+          (dragend)="onDragEnd()"
+          class="relative group transition-transform"
+          [class.opacity-40]="activeCreation()?.id === creation.id"
+          [class.cursor-grab]="allowDrag()"
+          [class.active:cursor-grabbing]="allowDrag()"
+          [class.hover:scale-105]="allowDrag()"
+        >
+          @if (allowDelete()) {
+            <button
+              (click)="onDeleteCreation(creation)"
+              class="absolute top-3 right-3 z-30 p-2 rounded-xl border border-white-soft bg-bg-strong/10 text-white-strong shadow-inner backdrop-blur-md opacity-0 transition-all duration-300 group-hover:opacity-100 hover:border-danger-light hover:bg-bg-danger hover:text-danger active:scale-90"
+            >
+              <lucide-icon [img]="icons.trashIcon" class="w-4 h-4"></lucide-icon>
+            </button>
+          }
 
-        <app-creation-card [creation]="creation"></app-creation-card>
+          <app-creation-card [creation]="creation"></app-creation-card>
 
-        @if (allowDrag()) {
-          <div
-            #dragElement
-            class="fixed -top-250 z-[-1] overflow-hidden w-20 h-20 rounded-xl border-2 border-primary"
-          >
-            <img
-              [src]="creation.url"
-              [alt]="creation.title"
-              class="w-full h-full object-cover opacity-80"
-            />
-          </div>
-        }
-      </div>
-    } @empty {
-      <div class="flex flex-col items-center justify-center col-span-full py-20 text-text-gentle">
-        <lucide-icon [img]="icons.searchIcon" class="w-12 h-12 mb-4 opacity-20"></lucide-icon>
-        <p class="font-bold text-xs uppercase tracking-widest">No assets found</p>
-      </div>
+          @if (allowDrag()) {
+            <div
+              #dragElement
+              class="fixed -top-250 z-[-1] overflow-hidden w-20 h-20 rounded-xl border-2 border-primary"
+            >
+              <img
+                [src]="creation.url"
+                [alt]="creation.title"
+                class="w-full h-full object-cover opacity-80"
+              />
+            </div>
+          }
+        </div>
+      } @empty {
+        <div class="flex flex-col items-center justify-center col-span-full py-20 text-text-gentle">
+          <lucide-icon [img]="icons.searchIcon" class="w-12 h-12 mb-4 opacity-20"></lucide-icon>
+          <p class="font-bold text-xs uppercase tracking-widest">No assets found</p>
+        </div>
+      }
     }
   </div>
 </div>

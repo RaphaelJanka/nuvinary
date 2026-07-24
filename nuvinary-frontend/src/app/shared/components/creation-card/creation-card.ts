@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { Creation } from '../../models/creation.model';
 import { DialogService } from '../../services/dialog-service';
 import { CreationService } from '../../../features/services/creation-service';
@@ -14,11 +14,18 @@ export class CreationCard {
   private readonly creationService = inject(CreationService);
   readonly creation = input.required<Creation>();
 
+  /** Hide the image until fully loaded to avoid the PNG top-to-bottom paint-in. */
+  protected readonly isImageLoaded = signal(false);
+
   protected onOpenDetailsDialog() {
     this.dialogService.openCreationDetails(this.creation());
   }
 
-  /** The presigned image URL may have expired since it was fetched — refresh the list to get a fresh one. */
+  protected onImageLoad() {
+    this.isImageLoaded.set(true);
+  }
+
+  /** Presigned URL likely expired — refresh the list. */
   protected onImageError() {
     this.creationService.loadUserCreations();
   }

@@ -19,11 +19,7 @@ export class DialogService {
   private readonly collectionService = inject(CollectionService);
 
   private readonly _selectedCreationId = signal<string | null>(null);
-  /**
-   * The creation currently selected in Studio, looked up live from `CreationService`'s
-   * list (not a static snapshot) — so it automatically picks up a refreshed presigned
-   * URL if that list is reloaded (e.g. after an expired-image refresh) while selected.
-   */
+  /** The creation selected in Studio, looked up live so a refreshed URL is picked up automatically. */
   readonly selectedCreation = computed<Creation | null>(() => {
     const id = this._selectedCreationId();
     if (!id) return null;

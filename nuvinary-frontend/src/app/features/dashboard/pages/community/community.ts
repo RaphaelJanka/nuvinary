@@ -19,4 +19,5 @@ export class Community {
   private readonly filter = createCreationFilter(this.creationService.communityCreationList);
   protected searchQuery = this.filter.searchQuery;
   protected readonly filteredCreations = this.filter.filteredCreations;
+  protected readonly isFetching = this.creationService.isLoadingInitialCreations;
 }

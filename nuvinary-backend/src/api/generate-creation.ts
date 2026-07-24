@@ -30,11 +30,7 @@ interface StableImageResponse {
 
 class NoImageGeneratedError extends Error {}
 
-/**
- * Generates a new image via Bedrock Stable Image Core for the authenticated user,
- * persists it to S3/DynamoDB, decrements the user's credits, and returns a presigned
- * URL for the freshly created image.
- */
+/** Generates an image via Bedrock, persists it to S3/DynamoDB, and decrements credits. */
 export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
@@ -98,7 +94,7 @@ export const handler = async (
   }
 };
 
-/** Fetches the user's profile/metadata item (`PK: USER#<id>`, `SK: METADATA`), used for the credit check. */
+/** Fetches the user's profile/metadata item. */
 async function getUser(userId: string): Promise<User | undefined> {
   const userResult = await docClient.send(
     new GetCommand({
@@ -109,10 +105,7 @@ async function getUser(userId: string): Promise<User | undefined> {
   return userResult.Item as User | undefined;
 }
 
-/**
- * Invokes Bedrock's Stable Image Core model and decodes the base64 image it returns.
- * @throws {NoImageGeneratedError} if the model refused the prompt or returned no image.
- */
+/** Invokes Bedrock's Stable Image Core model and decodes the returned base64 image. */
 async function generateImage(prompt: string): Promise<Buffer> {
   const bedrockResponse = await bedrockClient.send(
     new InvokeModelCommand({
@@ -157,7 +150,7 @@ async function uploadImageToS3(
   );
 }
 
-/** Assembles the DynamoDB item for a new creation (`PK: USER#<id>`, `SK: CREATION#<id>`). */
+/** Assembles the DynamoDB item for a new creation. */
 function buildCreationItem(
   userId: string,
   id: string,
@@ -195,10 +188,7 @@ async function saveCreation(creationItem: CreationItem): Promise<void> {
   );
 }
 
-/**
- * Atomically decrements the user's credits by 1, guarded by `credits > 0` so concurrent
- * requests can't drive the balance negative. Returns 0 if the condition failed (race lost).
- */
+/** Atomically decrements credits by 1, guarded against going below 0. */
 async function decrementUserCredits(
   userId: string,
   currentCredits: number,

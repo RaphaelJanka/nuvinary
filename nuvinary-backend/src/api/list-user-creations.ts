@@ -4,10 +4,7 @@ import { createResponse, docClient } from '@shared/api-utils.js';
 import { getPresignedImageUrl } from '@shared/s3-utils.js';
 import { CreationItem, CreationResponse } from '../models/creation.model.js';
 
-/**
- * Lists all creations belonging to the authenticated user, newest first, with each
- * image's S3 key resolved to a presigned URL the frontend can render directly.
- */
+/** Lists the authenticated user's creations, newest first, with presigned image URLs. */
 export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
