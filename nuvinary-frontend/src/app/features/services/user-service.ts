@@ -1,9 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { NotificationService } from '../../shared/services/notification-service';
 import { User } from '../../core/auth/auth.interfaces';
-import { get, put } from 'aws-amplify/api';
-import { fetchAuthSession } from 'aws-amplify/auth';
-import { ApiBody } from '../../core/api/api.service';
+import { ApiBody, ApiService } from '../../core/api/api.service';
 
 export interface UserCredentialModel {
   firstName: string;
@@ -17,24 +15,10 @@ export interface UserCredentialModel {
 })
 export class UserService {
   private readonly notificationService = inject(NotificationService);
-
-  private async getAuthHeaders(): Promise<Record<string, string>> {
-    const session = await fetchAuthSession();
-    const token = session.tokens?.idToken?.toString();
-    if (!token) throw new Error('No access token found');
-    return {
-      Authorization: `Bearer ${token}`,
-    };
-  }
+  private readonly apiService = inject(ApiService);
 
   async getUserProfile(): Promise<User> {
-    const restOperation = get({
-      apiName: 'NuvinaryApi',
-      path: `/me`,
-      options: {
-        headers: await this.getAuthHeaders(),
-      },
-    });
+    const restOperation = await this.apiService.executeGetOperation('/me');
     const response = await restOperation.response;
     const data = (await response.body.json()) as unknown as User;
 
@@ -53,15 +37,7 @@ export class UserService {
     };
 
     try {
-      const restOperation = put({
-        apiName: 'NuvinaryApi',
-        path: `/users/${uid}`,
-        options: {
-          headers: await this.getAuthHeaders(),
-          body: body,
-        },
-      });
-
+      const restOperation = await this.apiService.executePutOperation(`/users/${uid}`, body);
       const response = await restOperation.response;
       const updatedUser = (await response.body.json()) as unknown as User;
       this.notificationService.show('Profile updated successfully', 'success');
