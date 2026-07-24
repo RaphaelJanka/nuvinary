@@ -47,7 +47,6 @@ export class CreationDetails {
   protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
   protected isMobile = this.screenSizeService.isMobile;
   protected isEditingTitle = signal(false);
-  protected editValue = signal('');
   private readonly titleModel = signal({
     title: this.creation().title,
   });
@@ -76,12 +75,19 @@ export class CreationDetails {
     checkIcon: Check,
   };
 
-  onSaveTitle() {
-    const newTitle = this.editValue().trim();
-    if (newTitle && newTitle !== this.creation().title) {
-      this.creationService.updateTitle(this.creation().id, newTitle);
+  /** Saves the edited title, keeping the edit form open if the save fails. */
+  async onSaveTitle() {
+    const newTitle = this.editTitleForm.title().value().trim();
+    if (!newTitle || newTitle === this.creation().title) {
+      this.isEditingTitle.set(false);
+      return;
     }
-    this.isEditingTitle.set(false);
+    try {
+      await this.creationService.updateTitle(this.creation().id, newTitle);
+      this.isEditingTitle.set(false);
+    } catch {
+      // Keep edit mode open on failure; the service already surfaced a notification.
+    }
   }
 
   onCancelEdit() {
@@ -90,7 +96,8 @@ export class CreationDetails {
 
   onTogglePublic() {
     const currentId = this.creation().id;
-    this.creationService.togglePublicStatus(currentId);
+    const isPublic = !this.creation().isPublic;
+    this.creationService.togglePublicStatus(currentId, isPublic);
   }
 
   onClose() {
