@@ -73,22 +73,36 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     );
 
-    const generateCreationFn = lambdaFactory.createFunction('GenerateCreation', {
-      entry: '../nuvinary-backend/src/api/generate-creation.ts',
-      handler: 'handler',
-      permissions: {
-        bedrock: true,
-        dynamoDb: 'readWrite',
-        s3: 'readWrite',
+    const generateCreationFn = lambdaFactory.createFunction(
+      'GenerateCreation',
+      {
+        entry: '../nuvinary-backend/src/api/generate-creation.ts',
+        handler: 'handler',
+        permissions: {
+          bedrock: true,
+          dynamoDb: 'readWrite',
+          s3: 'readWrite',
+        },
       },
-    });
+    );
 
-    const listUserCreationsFn = lambdaFactory.createFunction('ListUserCreations', {
-      entry: '../nuvinary-backend/src/api/list-user-creations.ts',
+    const listUserCreationsFn = lambdaFactory.createFunction(
+      'ListUserCreations',
+      {
+        entry: '../nuvinary-backend/src/api/list-user-creations.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'read',
+          s3: 'read',
+        },
+      },
+    );
+
+    const updateCreationFn = lambdaFactory.createFunction('UpdateCreation', {
+      entry: '../nuvinary-backend/src/api/update-creation.ts',
       handler: 'handler',
       permissions: {
-        dynamoDb: 'read',
-        s3: 'read',
+        dynamoDb: 'readWrite',
       },
     });
 
@@ -115,6 +129,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'GET',
           path: '/creations',
           fn: listUserCreationsFn,
+        },
+        {
+          fetchType: 'PATCH',
+          path: '/creations/{id}',
+          fn: updateCreationFn,
         },
       ],
     });

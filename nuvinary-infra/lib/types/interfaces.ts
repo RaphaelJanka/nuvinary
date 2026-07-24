@@ -51,7 +51,7 @@ export interface NuvinaryLambdaProps {
 }
 
 export interface ApiRoute {
-  fetchType: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  fetchType: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   path: string;
   fn: lambda.IFunction;
 }

@@ -37,3 +37,8 @@ export interface CreationResponse {
 export interface GenerateCreationResponse extends CreationResponse {
   remainingCredits: number;
 }
+
+export interface CreationUpdateDto {
+  title?: string;
+  isPublic?: boolean;
+}
