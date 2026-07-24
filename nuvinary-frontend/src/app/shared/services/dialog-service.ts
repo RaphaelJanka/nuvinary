@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Creation } from '../models/creation.model';
 import { ConfirmDialog } from '../components/dialogs/confirmation-dialog/confirmation-dialog';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
@@ -18,8 +18,13 @@ export class DialogService {
   private readonly creationService = inject(CreationService);
   private readonly collectionService = inject(CollectionService);
 
-  private readonly _selectedCreation = signal<Creation | null>(null);
-  readonly selectedCreation = this._selectedCreation.asReadonly();
+  private readonly _selectedCreationId = signal<string | null>(null);
+  /** The creation selected in Studio, looked up live so a refreshed URL is picked up automatically. */
+  readonly selectedCreation = computed<Creation | null>(() => {
+    const id = this._selectedCreationId();
+    if (!id) return null;
+    return this.creationService.userCreationList().find((c) => c.id === id) ?? null;
+  });
 
   private readonly _studioCardBackground = signal<string>('');
   readonly studioCardBackground = this._studioCardBackground.asReadonly();
@@ -86,12 +91,12 @@ export class DialogService {
 
     dialogRef.closed.subscribe((creation) => {
       if (creation) {
-        this._selectedCreation.set(creation);
+        this._selectedCreationId.set(creation.id);
       }
     });
   }
 
   clearSelectedCreation() {
-    this._selectedCreation.set(null);
+    this._selectedCreationId.set(null);
   }
 }

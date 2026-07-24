@@ -21,4 +21,5 @@ export class Gallery {
   private readonly filter = createCreationFilter(this.creationService.userCreationList);
   protected searchQuery = this.filter.searchQuery;
   protected readonly filteredCreations = this.filter.filteredCreations;
+  protected readonly isFetching = this.creationService.isLoadingInitialCreations;
 }

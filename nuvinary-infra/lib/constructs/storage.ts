@@ -36,6 +36,14 @@ export class StorageConstruct extends Construct {
       autoDeleteObjects: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
+      cors: [
+        {
+          allowedMethods: [s3.HttpMethods.GET],
+          allowedOrigins: [`https://${props.subDomainName}`, 'http://localhost:4200'],
+          allowedHeaders: ['*'],
+          maxAge: 3000,
+        },
+      ],
     });
 
     if (props.alarmTopic) {

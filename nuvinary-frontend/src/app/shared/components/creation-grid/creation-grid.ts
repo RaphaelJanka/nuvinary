@@ -26,6 +26,8 @@ export class CreationGrid {
   readonly creationList = input.required<Creation[]>();
   readonly allowDrag = input<boolean>(false);
   readonly allowDelete = input<boolean>(false);
+  /** Suppresses the "no assets found" empty state while the initial fetch is still in flight. */
+  readonly isFetching = input<boolean>(false);
   protected readonly activeCreation = this.dragService.activeCreation;
   protected readonly icons = {
     searchIcon: Search,
