@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { get, post, put } from 'aws-amplify/api';
+import { del, get, patch, post, put } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
 
 export type ApiBody = Record<string, string | number | boolean>;
@@ -47,6 +47,29 @@ export class ApiService {
       options: {
         headers: await this.getAuthHeaders(),
         body,
+      },
+    });
+  }
+
+  /** Sends a partial update to the given path. */
+  async executePatchOperation(path: string, body: ApiBody) {
+    return patch({
+      apiName: this.API_NAME,
+      path,
+      options: {
+        headers: await this.getAuthHeaders(),
+        body,
+      },
+    });
+  }
+
+  /** Sends a delete request to the given path. */
+  async executeDeleteOperation(path: string) {
+    return del({
+      apiName: this.API_NAME,
+      path,
+      options: {
+        headers: await this.getAuthHeaders(),
       },
     });
   }
