@@ -34,6 +34,8 @@ interface StableImageResponse {
   finish_reasons?: (string | null)[];
 }
 
+class NoImageGeneratedError extends Error {}
+
 export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
@@ -48,13 +50,7 @@ export const handler = async (
   }
 
   try {
-    const userResult = await docClient.send(
-      new GetCommand({
-        TableName: process.env.TABLE_NAME,
-        Key: { PK: `USER#${userId}`, SK: 'METADATA' },
-      }),
-    );
-    const user = userResult.Item as User | undefined;
+    const user = await getUser(userId);
     if (!user) {
       return createResponse(404, { message: 'User not found' });
     }
@@ -62,99 +58,25 @@ export const handler = async (
       return createResponse(403, { message: 'No credits remaining' });
     }
 
-    const bedrockResponse = await bedrockClient.send(
-      new InvokeModelCommand({
-        modelId: MODEL_ID,
-        contentType: 'application/json',
-        accept: 'application/json',
-        body: JSON.stringify({
-          prompt: body.prompt,
-          aspect_ratio: ASPECT_RATIO,
-          output_format: OUTPUT_FORMAT,
-        }),
-      }),
-    );
-
-    const stableImageResponse = JSON.parse(
-      new TextDecoder().decode(bedrockResponse.body),
-    ) as StableImageResponse;
-    const finishReason = stableImageResponse.finish_reasons?.[0];
-
-    if (finishReason || !stableImageResponse.images?.[0]) {
-      console.error('Stable Image Core returned no image', stableImageResponse);
-      return createResponse(422, {
-        message: finishReason ?? 'Your prompt could not be turned into an image.',
-      });
+    let imageBuffer: Buffer;
+    try {
+      imageBuffer = await generateImage(body.prompt);
+    } catch (err) {
+      if (err instanceof NoImageGeneratedError) {
+        return createResponse(422, { message: err.message });
+      }
+      throw err;
     }
 
-    const imageBuffer = Buffer.from(stableImageResponse.images[0], 'base64');
     const id = randomUUID();
     const imageKey = `creations/${userId}/${id}.png`;
+    await uploadImageToS3(imageKey, imageBuffer);
 
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
-        Key: imageKey,
-        Body: imageBuffer,
-        ContentType: 'image/png',
-      }),
-    );
+    const creationItem = buildCreationItem(userId, id, imageKey, user, body);
+    await saveCreation(creationItem);
 
-    const creationItem: CreationItem = {
-      PK: `USER#${userId}`,
-      SK: `CREATION#${id}`,
-      id,
-      title: body.title,
-      imageKey,
-      createdAt: new Date().toISOString(),
-      isPublic: false,
-      createdBy: {
-        id: userId,
-        displayName: user.displayName,
-        avatarColor: user.avatarColor,
-      },
-      aiMetadata: {
-        model: MODEL_ID,
-        prompt: body.prompt,
-      },
-    };
-
-    await docClient.send(
-      new PutCommand({
-        TableName: process.env.TABLE_NAME,
-        Item: creationItem,
-      }),
-    );
-
-    let remainingCredits = user.credits - 1;
-    try {
-      const updateResult = await docClient.send(
-        new UpdateCommand({
-          TableName: process.env.TABLE_NAME,
-          Key: { PK: `USER#${userId}`, SK: 'METADATA' },
-          UpdateExpression: 'SET credits = credits - :one',
-          ConditionExpression: 'credits > :zero',
-          ExpressionAttributeValues: { ':one': 1, ':zero': 0 },
-          ReturnValues: 'UPDATED_NEW',
-        }),
-      );
-      remainingCredits = updateResult.Attributes?.credits ?? remainingCredits;
-    } catch (err) {
-      if (err instanceof ConditionalCheckFailedException) {
-        remainingCredits = 0;
-      } else {
-        throw err;
-      }
-    }
-
-    const url = await getSignedUrl(
-      s3Client,
-      new GetObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
-        Key: imageKey,
-      }),
-      { expiresIn: PRESIGNED_URL_TTL_SECONDS },
-    );
+    const remainingCredits = await decrementUserCredits(userId, user.credits);
+    const url = await getPresignedImageUrl(imageKey);
 
     const creation: GenerateCreationResponse = {
       id: creationItem.id,
@@ -176,3 +98,127 @@ export const handler = async (
     return createResponse(500, { message: 'Error generating image' });
   }
 };
+
+async function getUser(userId: string): Promise<User | undefined> {
+  const userResult = await docClient.send(
+    new GetCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: { PK: `USER#${userId}`, SK: 'METADATA' },
+    }),
+  );
+  return userResult.Item as User | undefined;
+}
+
+async function generateImage(prompt: string): Promise<Buffer> {
+  const bedrockResponse = await bedrockClient.send(
+    new InvokeModelCommand({
+      modelId: MODEL_ID,
+      contentType: 'application/json',
+      accept: 'application/json',
+      body: JSON.stringify({
+        prompt,
+        aspect_ratio: ASPECT_RATIO,
+        output_format: OUTPUT_FORMAT,
+      }),
+    }),
+  );
+
+  const stableImageResponse = JSON.parse(
+    new TextDecoder().decode(bedrockResponse.body),
+  ) as StableImageResponse;
+  const finishReason = stableImageResponse.finish_reasons?.[0];
+
+  if (finishReason || !stableImageResponse.images?.[0]) {
+    console.error('Stable Image Core returned no image', stableImageResponse);
+    throw new NoImageGeneratedError(
+      finishReason ?? 'Your prompt could not be turned into an image.',
+    );
+  }
+
+  return Buffer.from(stableImageResponse.images[0], 'base64');
+}
+
+async function uploadImageToS3(
+  imageKey: string,
+  imageBuffer: Buffer,
+): Promise<void> {
+  await s3Client.send(
+    new PutObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: imageKey,
+      Body: imageBuffer,
+      ContentType: 'image/png',
+    }),
+  );
+}
+
+function buildCreationItem(
+  userId: string,
+  id: string,
+  imageKey: string,
+  user: User,
+  body: GenerateCreationDto,
+): CreationItem {
+  return {
+    PK: `USER#${userId}`,
+    SK: `CREATION#${id}`,
+    id,
+    title: body.title,
+    imageKey,
+    createdAt: new Date().toISOString(),
+    isPublic: false,
+    createdBy: {
+      id: userId,
+      displayName: user.displayName,
+      avatarColor: user.avatarColor,
+    },
+    aiMetadata: {
+      model: MODEL_ID,
+      prompt: body.prompt,
+    },
+  };
+}
+
+async function saveCreation(creationItem: CreationItem): Promise<void> {
+  await docClient.send(
+    new PutCommand({
+      TableName: process.env.TABLE_NAME,
+      Item: creationItem,
+    }),
+  );
+}
+
+async function decrementUserCredits(
+  userId: string,
+  currentCredits: number,
+): Promise<number> {
+  try {
+    const updateResult = await docClient.send(
+      new UpdateCommand({
+        TableName: process.env.TABLE_NAME,
+        Key: { PK: `USER#${userId}`, SK: 'METADATA' },
+        UpdateExpression: 'SET credits = credits - :one',
+        ConditionExpression: 'credits > :zero',
+        ExpressionAttributeValues: { ':one': 1, ':zero': 0 },
+        ReturnValues: 'UPDATED_NEW',
+      }),
+    );
+    return updateResult.Attributes?.credits ?? currentCredits - 1;
+  } catch (err) {
+    if (err instanceof ConditionalCheckFailedException) {
+      return 0;
+    }
+    throw err;
+  }
+}
+
+function getPresignedImageUrl(imageKey: string): Promise<string> {
+  return getSignedUrl(
+    s3Client,
+    new GetObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: imageKey,
+    }),
+    { expiresIn: PRESIGNED_URL_TTL_SECONDS },
+  );
+}
