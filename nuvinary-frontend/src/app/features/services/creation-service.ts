@@ -23,7 +23,9 @@ export class CreationService {
   private readonly notificationService = inject(NotificationService);
 
   private readonly _creationList = signal<Creation[]>([]);
+  /** Prevents overlapping `loadUserCreations()` calls (e.g. multiple images erroring at once). */
   private isRefreshingCreations = false;
+  /** Distinguishes the initial load from later silent refreshes. */
   private hasLoadedOnce = false;
 
   private readonly _isLoadingInitialCreations = signal(false);

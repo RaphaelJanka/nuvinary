@@ -1,6 +1,6 @@
 <button
   (click)="onOpenDetailsDialog()"
-  class="group relative overflow-hidden w-full aspect-4/5 rounded-3xl border border-border-gentle bg-bg-light shadow-md transition-all duration-500 hover:shadow-2xl hover:shadow-primary-subtle"
+  class="group relative overflow-hidden w-full aspect-4/5 rounded-3xl bg-bg-light shadow-[0_0_30px_8px_var(--color-primary-muted)] transition-all duration-500 hover:shadow-[0_0_32px_9px_var(--color-primary-muted)]"
 >
   <img
     [alt]="creation().title"
@@ -10,6 +10,14 @@
     [class.opacity-0]="!isImageLoaded()"
     class="w-full h-full object-cover transition-[opacity,transform] duration-700 group-hover:scale-110"
   />
+
+  @if (!isImageLoaded()) {
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="h-10 w-10">
+        <app-loader />
+      </div>
+    </div>
+  }
 
   <div
     class="absolute inset-0 flex flex-col justify-end p-5 opacity-0 bg-linear-to-t from-black/60 via-black/0 to-transparent transition-all duration-300 group-hover:opacity-100"

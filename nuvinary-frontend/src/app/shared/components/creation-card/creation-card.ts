@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angu
 import { Creation } from '../../models/creation.model';
 import { DialogService } from '../../services/dialog-service';
 import { CreationService } from '../../../features/services/creation-service';
+import { Loader } from '../loader/loader';
 
 @Component({
   selector: 'app-creation-card',
-  imports: [],
+  imports: [Loader],
   templateUrl: './creation-card.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
