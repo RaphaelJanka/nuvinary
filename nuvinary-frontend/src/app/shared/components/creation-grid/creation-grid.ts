@@ -24,6 +24,8 @@ export class CreationGrid {
   private readonly dragElements = viewChildren<ElementRef<HTMLElement>>('dragElement');
 
   readonly creationList = input.required<Creation[]>();
+  /** Which backing list this grid renders, so a card knows which list to refresh on image error. */
+  readonly source = input.required<'own' | 'community'>();
   readonly allowDrag = input<boolean>(false);
   readonly allowDelete = input<boolean>(false);
   /** Suppresses the "no assets found" empty state while the initial fetch is still in flight. */

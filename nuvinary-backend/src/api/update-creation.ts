@@ -37,14 +37,11 @@ export const handler = async (
       );
       return createResponse(200, { message: 'Title successfully changed' });
     } else if (body.isPublic !== undefined) {
-      await docClient.send(
-        new UpdateCommand({
-          TableName: process.env.TABLE_NAME,
-          Key: key,
-          UpdateExpression: 'SET isPublic = :p',
-          ExpressionAttributeValues: { ':p': body.isPublic },
-        }),
-      );
+      if (body.isPublic) {
+        await setCreationPublic(body, key);
+      } else {
+        await setCreationPrivate(body, key);
+      }
       return createResponse(200, {
         message: 'Visibility successfully changed',
       });
@@ -55,3 +52,36 @@ export const handler = async (
     return createResponse(500, { message: 'Internal server error' });
   }
 };
+
+/** Marks a creation public and adds it to the community GSI. */
+async function setCreationPublic(
+  body: CreationUpdateDto,
+  key: { PK: string; SK: string },
+) {
+  await docClient.send(
+    new UpdateCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: key,
+      UpdateExpression: 'SET isPublic = :p, GSI1PK = :gpk, GSI1SK = createdAt',
+      ExpressionAttributeValues: {
+        ':p': body.isPublic,
+        ':gpk': 'PUBLIC',
+      },
+    }),
+  );
+}
+
+/** Marks a creation private and removes it from the community GSI. */
+async function setCreationPrivate(
+  body: CreationUpdateDto,
+  key: { PK: string; SK: string },
+) {
+  await docClient.send(
+    new UpdateCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: key,
+      UpdateExpression: 'SET isPublic = :p REMOVE GSI1PK, GSI1SK',
+      ExpressionAttributeValues: { ':p': body.isPublic },
+    }),
+  );
+}

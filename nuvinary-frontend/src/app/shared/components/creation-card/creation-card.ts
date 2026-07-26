@@ -14,6 +14,8 @@ export class CreationCard {
   private readonly dialogService = inject(DialogService);
   private readonly creationService = inject(CreationService);
   readonly creation = input.required<Creation>();
+  /** Which list this card was rendered from, so `onImageError` refreshes the right one. */
+  readonly source = input.required<'own' | 'community'>();
 
   /** Hide the image until fully loaded to avoid the PNG top-to-bottom paint-in. */
   protected readonly isImageLoaded = signal(false);
@@ -26,8 +28,12 @@ export class CreationCard {
     this.isImageLoaded.set(true);
   }
 
-  /** Presigned URL likely expired — refresh the list. */
+  /** Presigned URL likely expired — refresh whichever list this card belongs to. */
   protected onImageError() {
-    this.creationService.loadUserCreations();
+    if (this.source() === 'own') {
+      this.creationService.loadUserCreations();
+    } else {
+      this.creationService.loadCommunityCreations();
+    }
   }
 }
