@@ -2,6 +2,7 @@ import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { createResponse, docClient } from '@shared/api-utils.js';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { CreationUpdateDto } from '../models/creation.model.js';
+import { COMMUNITY_GSI1PK, creationSk, userPk } from '@shared/db-keys.js';
 
 /** Updates a creation's title or visibility, whichever is present in the body. */
 export const handler = async (
@@ -24,7 +25,7 @@ export const handler = async (
       return createResponse(400, { message: 'Missing required fields' });
     }
 
-    const key = { PK: `USER#${userId}`, SK: `CREATION#${creationId}` };
+    const key = { PK: userPk(userId), SK: creationSk(creationId) };
 
     if (body.title !== undefined) {
       await docClient.send(
@@ -65,7 +66,7 @@ async function setCreationPublic(
       UpdateExpression: 'SET isPublic = :p, GSI1PK = :gpk, GSI1SK = createdAt',
       ExpressionAttributeValues: {
         ':p': body.isPublic,
-        ':gpk': 'PUBLIC',
+        ':gpk': COMMUNITY_GSI1PK,
       },
     }),
   );

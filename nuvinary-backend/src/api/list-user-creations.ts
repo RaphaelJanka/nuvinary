@@ -3,6 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResponse, docClient } from '@shared/api-utils.js';
 import { getPresignedImageUrl } from '@shared/s3-utils.js';
 import { CreationItem, CreationResponse } from '../models/creation.model.js';
+import { CREATION_SK_PREFIX, userPk } from '@shared/db-keys.js';
 
 /** Lists the authenticated user's creations, newest first, with presigned image URLs. */
 export const handler = async (
@@ -19,8 +20,8 @@ export const handler = async (
         TableName: process.env.TABLE_NAME,
         KeyConditionExpression: 'PK = :pk AND begins_with(SK, :skPrefix)',
         ExpressionAttributeValues: {
-          ':pk': `USER#${userId}`,
-          ':skPrefix': 'CREATION#',
+          ':pk': userPk(userId),
+          ':skPrefix': CREATION_SK_PREFIX,
         },
       }),
     );

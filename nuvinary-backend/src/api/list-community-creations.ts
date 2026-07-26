@@ -3,6 +3,7 @@ import { createResponse, docClient } from '@shared/api-utils.js';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { CreationItem, CreationResponse } from '../models/creation.model.js';
 import { getPresignedImageUrl } from '@shared/s3-utils.js';
+import { COMMUNITY_GSI1PK } from '@shared/db-keys.js';
 
 /** Lists all public creations across all users, newest first, with presigned image URLs. */
 export const handler = async (
@@ -15,7 +16,7 @@ export const handler = async (
         IndexName: 'CreationIndex',
         KeyConditionExpression: 'GSI1PK = :gpk',
         ExpressionAttributeValues: {
-          ':gpk': 'PUBLIC',
+          ':gpk': COMMUNITY_GSI1PK,
         },
         ScanIndexForward: false,
       }),

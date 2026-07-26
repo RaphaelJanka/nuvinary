@@ -1,7 +1,7 @@
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
 import { createResponse, docClient } from '@shared/api-utils.js';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { create } from 'node:domain';
+import { METADATA_SK, userPk } from '@shared/db-keys.js';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -21,8 +21,8 @@ export const handler = async (
       new GetCommand({
         TableName: process.env.TABLE_NAME,
         Key: {
-          PK: `USER#${userId}`,
-          SK: `METADATA`,
+          PK: userPk(userId),
+          SK: METADATA_SK,
         },
       }),
     );
