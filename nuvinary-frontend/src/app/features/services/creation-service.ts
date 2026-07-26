@@ -170,7 +170,7 @@ export class CreationService {
     return defaultMessage;
   }
 
-  /** Updates a creation's title on the backend and in the local list. */
+  /** Updates a creation's title on the backend and in both local lists. */
   async updateTitle(id: string, title: string) {
     const creationPayload: ApiBody = {
       title,
@@ -181,6 +181,9 @@ export class CreationService {
       this._userCreationList.update((list) =>
         list.map((c) => (c.id === id ? { ...c, title } : c)),
       );
+      this._communityCreationList.update((list) =>
+        list.map((c) => (c.id === id ? { ...c, title } : c)),
+      );
       this.notificationService.show('Title successfully changed', 'success');
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_TITLE_CHANGE_ERROR_MESSAGE);
@@ -189,7 +192,7 @@ export class CreationService {
     }
   }
 
-  /** Sets a creation's visibility on the backend and in the local list. */
+  /** Sets a creation's visibility on the backend, and adds/removes it from the community list. */
   async togglePublicStatus(id: string, isPublic: boolean) {
     const creationPayload: ApiBody = {
       isPublic,
@@ -199,17 +202,29 @@ export class CreationService {
       this._userCreationList.update((list) =>
         list.map((c) => (c.id === id ? { ...c, isPublic } : c)),
       );
+
+      if (isPublic) {
+        const creation = this._userCreationList().find((c) => c.id === id);
+        if (creation) {
+          this._communityCreationList.update((list) =>
+            list.some((c) => c.id === id) ? list : [creation, ...list],
+          );
+        }
+      } else {
+        this._communityCreationList.update((list) => list.filter((c) => c.id !== id));
+      }
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_VISIBILITY_CHANGE_ERROR_MESSAGE);
       this.notificationService.show(message, 'error');
     }
   }
 
-  /** Deletes a creation on the backend and removes it from the local list. */
+  /** Deletes a creation on the backend and removes it from both local lists. */
   async deleteCreation(id: string) {
     try {
       await this.apiService.executeDeleteOperation(`/creations/${id}`);
       this._userCreationList.update((list) => list.filter((c) => c.id !== id));
+      this._communityCreationList.update((list) => list.filter((c) => c.id !== id));
       this.notificationService.show('Creation permanently deleted', 'success');
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_DELETE_CREATION_ERROR_MESSAGE);
