@@ -3,6 +3,7 @@ import { DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import { createResponse, docClient } from '@shared/api-utils.js';
 import { s3Client } from '@shared/s3-utils.js';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { creationSk, userPk } from '@shared/db-keys.js';
 
 /** Deletes a creation's DynamoDB item and its S3 image. */
 export const handler = async (
@@ -23,8 +24,8 @@ export const handler = async (
       new DeleteCommand({
         TableName: process.env.TABLE_NAME,
         Key: {
-          PK: `USER#${userId}`,
-          SK: `CREATION#${creationId}`,
+          PK: userPk(userId),
+          SK: creationSk(creationId),
         },
         ReturnValues: 'ALL_OLD',
       }),

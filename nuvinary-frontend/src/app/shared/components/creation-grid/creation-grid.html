@@ -23,7 +23,7 @@
             </button>
           }
 
-          <app-creation-card [creation]="creation"></app-creation-card>
+          <app-creation-card [creation]="creation" [source]="source()"></app-creation-card>
 
           @if (allowDrag()) {
             <div

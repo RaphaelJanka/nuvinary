@@ -98,6 +98,18 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     );
 
+    const listCommunityCreationsFn = lambdaFactory.createFunction(
+      'ListCommunityCreations',
+      {
+        entry: '../nuvinary-backend/src/api/list-community-creations.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'read',
+          s3: 'read',
+        },
+      },
+    );
+
     const updateCreationFn = lambdaFactory.createFunction('UpdateCreation', {
       entry: '../nuvinary-backend/src/api/update-creation.ts',
       handler: 'handler',
@@ -138,6 +150,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'GET',
           path: '/creations',
           fn: listUserCreationsFn,
+        },
+        {
+          fetchType: 'GET',
+          path: '/community',
+          fn: listCommunityCreationsFn,
         },
         {
           fetchType: 'PATCH',
