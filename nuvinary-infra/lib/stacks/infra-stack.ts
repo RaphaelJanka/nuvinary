@@ -127,6 +127,17 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     });
 
+    const createCollectionFn = lambdaFactory.createFunction(
+      'CreateCollection',
+      {
+        entry: '../nuvinary-backend/src/api/collections/create.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'write',
+        },
+      },
+    );
+
     new ApiConstruct(this, 'NuvinaryApi', {
       stageName: props.isProd ? 'prod' : 'dev',
       userPool: auth.userPool,
@@ -165,6 +176,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'DELETE',
           path: '/creations/{id}',
           fn: deleteCreationFn,
+        },
+        {
+          fetchType: 'POST',
+          path: '/collections',
+          fn: createCollectionFn,
         },
       ],
     });

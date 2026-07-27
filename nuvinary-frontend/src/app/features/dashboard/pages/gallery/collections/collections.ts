@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
+import { Check, Folder, ImageOff, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
 import { CollectionService } from '../../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
-import { form, maxLength, required, submit } from '@angular/forms/signals';
+import { form, maxLength, required } from '@angular/forms/signals';
 import { DragAndDropService } from '../../../../services/drag-and-drop-service';
 import { DialogService } from '../../../../../shared/services/dialog-service';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
 import { Button } from '../../../../../shared/components/button/button';
 import { Tooltip } from '../../../../../shared/directives/tooltip';
+import { Loader } from '../../../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-collections',
-  imports: [LucideAngularModule, FormInput, Button, Tooltip],
+  imports: [LucideAngularModule, FormInput, Button, Tooltip, Loader],
   templateUrl: './collections.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
@@ -30,7 +31,13 @@ export class Collections {
     penIcon: Pen,
     checkIcon: Check,
     cancelIcon: X,
+    imageOffIcon: ImageOff,
   };
+
+  /** Ids of collection thumbnails whose image has finished loading, so the loader hides. */
+  protected readonly loadedCreationIds = signal<ReadonlySet<string>>(new Set());
+  /** Ids of collection thumbnails whose presigned URL failed to load. */
+  protected readonly erroredCreationIds = signal<ReadonlySet<string>>(new Set());
 
   protected readonly expandedCollectionId = signal<string | null>(null);
   protected readonly editingCollectionId = signal<string | null>(null);
@@ -85,18 +92,25 @@ export class Collections {
     this.resetAll();
   }
 
-  protected onSubmit(event: Event) {
+  protected async onCreateSubmit(event: Event) {
     event.preventDefault();
-    submit(this.collectionForm, async () => {
-      const collection = this.collectionModel();
-      const editId = this.editingCollectionId();
-      if (editId) {
-        this.collectionService.updateCollectionTitle(editId, collection.title);
-      } else {
-        this.collectionService.addCollection(collection);
-      }
+    const { title } = this.collectionModel();
+    try {
+      await this.collectionService.addCollection(title);
       this.resetAll();
-    });
+    } catch {
+      // Notification already shown by the service; keep the form open for retry.
+    }
+  }
+
+  protected onEditSubmit(event: Event) {
+    event.preventDefault();
+    const editId = this.editingCollectionId();
+    if (!editId) return;
+
+    const { title } = this.collectionModel();
+    this.collectionService.updateCollectionTitle(editId, title);
+    this.resetAll();
   }
 
   // Edit of collection title
@@ -151,5 +165,15 @@ export class Collections {
 
   protected onRemoveCreationFromCollection(collectionId: string, creationId: string) {
     this.collectionService.removeCreationFromCollection(collectionId, creationId);
+  }
+
+  // Thumbnail load/error state
+
+  protected onImageLoad(creationId: string) {
+    this.loadedCreationIds.update((ids) => new Set(ids).add(creationId));
+  }
+
+  protected onImageError(creationId: string) {
+    this.erroredCreationIds.update((ids) => new Set(ids).add(creationId));
   }
 }

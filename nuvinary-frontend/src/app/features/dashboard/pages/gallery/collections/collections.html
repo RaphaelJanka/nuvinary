@@ -32,7 +32,7 @@
             [class.shadow-lg]="dragOverId() === collection.id"
           >
             @if (editingCollectionId() === collection.id) {
-              <form (submit)="onSubmit($event)">
+              <form (submit)="onEditSubmit($event)">
                 <app-form-input [field]="collectionForm.title" purpose="updateCollection">
                   <div class="flex">
                     <button
@@ -114,11 +114,31 @@
                 <div
                   class="relative aspect-square overflow-hidden rounded-lg border border-border-gentle group"
                 >
-                  <img
-                    [src]="creation.url"
-                    [alt]="creation.title"
-                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
+                  @if (erroredCreationIds().has(creation.id)) {
+                    <div
+                      class="flex items-center justify-center w-full h-full bg-bg-light text-text-gentle"
+                    >
+                      <lucide-icon [img]="icons.imageOffIcon" class="w-5 h-5"></lucide-icon>
+                    </div>
+                  } @else {
+                    <img
+                      [src]="creation.url"
+                      [alt]="collection.title"
+                      (load)="onImageLoad(creation.id)"
+                      (error)="onImageError(creation.id)"
+                      [class.opacity-0]="!loadedCreationIds().has(creation.id)"
+                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+
+                    @if (!loadedCreationIds().has(creation.id)) {
+                      <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="h-6 w-6">
+                          <app-loader />
+                        </div>
+                      </div>
+                    }
+                  }
+
                   <button
                     (click)="onRemoveCreationFromCollection(collection.id, creation.id)"
                     class="absolute top-1 right-1 p-1 rounded-md border border-border-gentle bg-white-strong opacity-0 shadow-sm backdrop-blur-sm transition-all duration-200 group-hover:opacity-100 hover:border-danger-light hover:bg-bg-danger hover:text-danger"
@@ -153,7 +173,7 @@
   } @else {
     <section>
       <form
-        (submit)="onSubmit($event)"
+        (submit)="onCreateSubmit($event)"
         class="flex flex-col gap-4 pt-4 animate-in zoom-in-95 fade-in duration-200"
       >
         <app-form-input [field]="collectionForm.title" purpose="collection"> </app-form-input>

@@ -1,47 +1,59 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { mockCollections } from '../../test/testdata/collections';
-import { Collection } from '../dashboard/pages/models/collection.model';
-import { Creation } from '../../shared/models/creation.model';
+import { Collection, CollectionCreation } from '../dashboard/pages/models/collection.model';
 import { NotificationService } from '../../shared/services/notification-service';
+import { ApiBody, ApiService } from '../../core/api/api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CollectionService {
   private readonly notificationService = inject(NotificationService);
-  private _mockCollections = signal<Collection[]>(mockCollections);
-  readonly collections = this._mockCollections.asReadonly();
+  private readonly apiService = inject(ApiService);
+  private _collections = signal<Collection[]>([]);
+  readonly collections = this._collections.asReadonly();
 
   getDefaultCollection = (): Collection => ({
     id: '',
     createdBy: '',
     title: '',
-    createdAt: new Date(),
+    createdAt: new Date().toISOString(),
     creations: [],
   });
 
-  addCollection(collection: Collection) {
-    const newEntry = {
-      ...collection,
-      id: Math.random().toString(36).substring(2, 9),
+  async addCollection(title: string) {
+    const collectionPayload: ApiBody = {
+      title,
     };
-    this._mockCollections.update((list) => [...list, newEntry]);
-    this.notificationService.show('Collection created successfully', 'success');
+    try {
+      const restOperation = await this.apiService.executePostOperation(
+        '/collections',
+        collectionPayload,
+      );
+      const response = await restOperation.response;
+      const collection = (await response.body.json()) as unknown as Collection;
+
+      this._collections.update((list) => [...list, collection]);
+      this.notificationService.show('Collection created successfully', 'success');
+    } catch (err) {
+      console.error('Error creating collection:', err);
+      this.notificationService.show('Error creating collection', 'error');
+      throw err;
+    }
   }
 
   updateCollectionTitle(id: string, newTitle: string) {
-    this._mockCollections.update((collections) =>
+    this._collections.update((collections) =>
       collections.map((c) => (c.id === id ? { ...c, title: newTitle } : c)),
     );
   }
 
   deleteCollection(id: string | null) {
-    this._mockCollections.update((collections) => collections.filter((c) => c.id !== id));
+    this._collections.update((collections) => collections.filter((c) => c.id !== id));
     this.notificationService.show('Collection deleted');
   }
 
-  addCreationToCollection(collectionId: string, newCreation: Creation) {
-    this._mockCollections.update((collections) =>
+  addCreationToCollection(collectionId: string, newCreation: CollectionCreation) {
+    this._collections.update((collections) =>
       collections.map((coll) => {
         if (coll.id !== collectionId) return coll;
         const isDuplicate = coll.creations.some((c) => c.id === newCreation.id);
@@ -59,7 +71,7 @@ export class CollectionService {
   }
 
   removeCreationFromCollection(collectionId: string, creationId: string) {
-    this._mockCollections.update((collections) =>
+    this._collections.update((collections) =>
       collections.map((coll) => {
         if (coll.id !== collectionId) return coll;
         return {
@@ -72,7 +84,7 @@ export class CollectionService {
   }
 
   removeCreationFromAllCollections(creationId: string) {
-    this._mockCollections.update((collections) =>
+    this._collections.update((collections) =>
       collections.map((coll) => {
         const hasCreation = coll.creations.some((c) => c.id === creationId);
         if (!hasCreation) return coll;

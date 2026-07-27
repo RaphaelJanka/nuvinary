@@ -40,7 +40,7 @@ export class CreationGrid {
   protected onDragStart(event: DragEvent, creation: Creation, index: number) {
     if (!this.allowDrag()) return;
 
-    this.dragService.startDrag(creation);
+    this.dragService.startDrag({ id: creation.id, url: creation.url });
     const dragEl = this.dragElements()[index]?.nativeElement;
 
     if (dragEl && event.dataTransfer) {
