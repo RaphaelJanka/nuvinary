@@ -24,6 +24,7 @@ export function creationSk(creationId: string): string {
   return `${CREATION_SK_PREFIX}${creationId}`;
 }
 
+/** Builds the SK for a specific collection. */
 export function collectionSk(collectionId: string): string {
   return `${COLLECTION_SK_PREFIX}${collectionId}`;
 }

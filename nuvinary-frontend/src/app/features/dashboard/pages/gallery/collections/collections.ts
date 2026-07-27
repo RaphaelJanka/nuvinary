@@ -23,7 +23,7 @@ export class Collections {
   private readonly collectionService = inject(CollectionService);
   private readonly dragService = inject(DragAndDropService);
   private readonly dialogService = inject(DialogService);
-  protected readonly collections = this.collectionService.collections;
+  protected readonly collections = this.collectionService.collectionsList;
   protected readonly icons = {
     plusIcon: Plus,
     folderIcon: Folder,
@@ -54,9 +54,20 @@ export class Collections {
 
   protected readonly dragOverId = this.dragService.dragOverId;
   protected readonly isDragging = this.dragService.isDragging;
+
+  /** Keep in sync with MAX_COLLECTIONS_PER_USER in the backend's create.ts. */
+  protected readonly maxCollections = 8;
+  protected readonly isCollectionLimitReached = computed(
+    () => this.collections().length >= this.maxCollections,
+  );
+
   protected readonly collectionHeaderTooltip = computed(() => {
     if (this.editingCollectionId()) {
       return 'Currently editing...';
+    }
+
+    if (this.isCollectionLimitReached() && !this.isCreating()) {
+      return `Limit of ${this.maxCollections} collections reached`;
     }
 
     if (this.isCreating()) {

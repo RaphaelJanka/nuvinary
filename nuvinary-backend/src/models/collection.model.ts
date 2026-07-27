@@ -14,7 +14,7 @@ export interface CollectionItem {
   createdBy: string;
   title: string;
   createdAt: string;
-  creations: CollectionCreation[];
+  creationIds: string[];
 }
 
 export interface CollectionResponse {

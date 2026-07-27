@@ -5,7 +5,7 @@
 
   <button
     (click)="onCreate()"
-    [disabled]="editingCollectionId()"
+    [disabled]="editingCollectionId() || (isCollectionLimitReached() && !isCreating())"
     class="flex items-center justify-center w-9 h-9 rounded-xl bg-white-soft text-white transition-all duration-300 hover:bg-white hover:text-primary disabled:opacity-50"
     [class.rotate-45]="isCreating()"
     [class.bg-white]="isCreating()"

@@ -14,11 +14,13 @@ export class DragAndDropService {
 
   private leaveTimer: ReturnType<typeof setTimeout> | null = null;
 
+  /** Marks a creation as the one currently being dragged. */
   startDrag(creation: CollectionCreation) {
     this._activeCreation.set(creation);
     this._isDragging.set(true);
   }
 
+  /** Marks a collection as the current drop target and expands it via the callback. */
   notifyDragOver(id: string, onExpand: (id: string) => void) {
     if (this.leaveTimer) {
       clearTimeout(this.leaveTimer);
@@ -28,6 +30,7 @@ export class DragAndDropService {
     onExpand(id);
   }
 
+  /** Clears the drop target after a short delay, so briefly crossing into a child element doesn't flicker it off. */
   notifyDragLeave() {
     if (this.leaveTimer) clearTimeout(this.leaveTimer);
 
@@ -37,6 +40,7 @@ export class DragAndDropService {
     }, 300);
   }
 
+  /** Resets all drag state once a drag ends, regardless of whether it was dropped. */
   stopDrag() {
     this._activeCreation.set(null);
     this._isDragging.set(false);

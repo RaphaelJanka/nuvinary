@@ -1,13 +1,15 @@
 import { randomUUID } from 'node:crypto';
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
+import { PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResponse, docClient } from '@shared/api-utils.js';
-import { collectionSk, userPk } from '@shared/db-keys.js';
+import { COLLECTION_SK_PREFIX, collectionSk, userPk } from '@shared/db-keys.js';
 import {
   CollectionItem,
   CollectionResponse,
   CreateCollectionDto,
 } from '../../models/collection.model.js';
+
+const MAX_COLLECTIONS_PER_USER = 8;
 
 /** Creates a new empty collection for the authenticated user. */
 export const handler = async (
@@ -24,6 +26,13 @@ export const handler = async (
   }
 
   try {
+    const collectionCount = await countCollections(userId);
+    if (collectionCount >= MAX_COLLECTIONS_PER_USER) {
+      return createResponse(403, {
+        message: `You can only have up to ${MAX_COLLECTIONS_PER_USER} collections`,
+      });
+    }
+
     const collectionItem = buildCollectionItem(userId, body);
     await docClient.send(
       new PutCommand({
@@ -37,7 +46,7 @@ export const handler = async (
       createdBy: collectionItem.createdBy,
       title: collectionItem.title,
       createdAt: collectionItem.createdAt,
-      creations: collectionItem.creations,
+      creations: [],
     };
     return createResponse(200, collection);
   } catch (err) {
@@ -45,6 +54,22 @@ export const handler = async (
     return createResponse(500, { message: 'Error creating collection' });
   }
 };
+
+/** Counts how many collections the user already has. */
+async function countCollections(userId: string): Promise<number> {
+  const result = await docClient.send(
+    new QueryCommand({
+      TableName: process.env.TABLE_NAME,
+      KeyConditionExpression: 'PK = :pk AND begins_with(SK, :skPrefix)',
+      ExpressionAttributeValues: {
+        ':pk': userPk(userId),
+        ':skPrefix': COLLECTION_SK_PREFIX,
+      },
+      Select: 'COUNT',
+    }),
+  );
+  return result.Count ?? 0;
+}
 
 /** Assembles the DynamoDB item for a new collection. */
 function buildCollectionItem(
@@ -59,6 +84,6 @@ function buildCollectionItem(
     title: body.title,
     createdAt: new Date().toISOString(),
     createdBy: userId,
-    creations: [],
+    creationIds: [],
   };
 }
