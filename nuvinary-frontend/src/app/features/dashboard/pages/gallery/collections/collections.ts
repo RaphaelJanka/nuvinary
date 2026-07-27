@@ -141,12 +141,15 @@ export class Collections {
     this.resetAll();
     this.dialogService
       .openConfirmDialogToDeleteCollection(collection)
-      .closed.subscribe((confirmed) => {
-        if (confirmed) {
-          this.collectionService.deleteCollection(collection.id);
+      .closed.subscribe(async (confirmed) => {
+        if (!confirmed) return;
+        try {
+          await this.collectionService.deleteCollection(collection.id);
           if (this.expandedCollectionId() === collection.id) {
             this.expandedCollectionId.set(null);
           }
+        } catch {
+          // Notification already shown by the service.
         }
       });
   }

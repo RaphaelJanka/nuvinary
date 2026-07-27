@@ -84,9 +84,17 @@ export class CollectionService {
     }
   }
 
-  deleteCollection(id: string | null) {
-    this._collectionList.update((collections) => collections.filter((c) => c.id !== id));
-    this.notificationService.show('Collection deleted');
+  /** Deletes a collection on the backend and removes it from the local list. */
+  async deleteCollection(id: string | null) {
+    try {
+      await this.apiService.executeDeleteOperation(`/collections/${id}`);
+      this._collectionList.update((collections) => collections.filter((c) => c.id !== id));
+      this.notificationService.show('Collection deleted', 'info');
+    } catch (err) {
+      console.error('Error deleting collection', err);
+      this.notificationService.show('Error deleting collection', 'error');
+      throw err;
+    }
   }
 
   addCreationToCollection(collectionId: string, newCreation: CollectionCreation) {
