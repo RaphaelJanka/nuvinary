@@ -7,6 +7,10 @@ export interface CreateCollectionDto {
   title: string;
 }
 
+export interface AddCreationToCollectionDto {
+  creationId: string;
+}
+
 export interface CollectionItem {
   PK: string;
   SK: string;

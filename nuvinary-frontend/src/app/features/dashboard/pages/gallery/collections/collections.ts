@@ -170,18 +170,26 @@ export class Collections {
 
   // add new Creation to Collection
 
-  protected onDrop(collectionId: string) {
+  protected async onDrop(collectionId: string) {
     const creation = this.dragService.activeCreation();
-    if (creation) {
-      this.collectionService.addCreationToCollection(collectionId, creation);
-    }
     this.dragService.stopDrag();
+    if (!creation) return;
+
+    try {
+      await this.collectionService.addCreationToCollection(collectionId, creation);
+    } catch {
+      // Notification already shown by the service.
+    }
   }
 
   // remove creation from collection
 
-  protected onRemoveCreationFromCollection(collectionId: string, creationId: string) {
-    this.collectionService.removeCreationFromCollection(collectionId, creationId);
+  protected async onRemoveCreationFromCollection(collectionId: string, creationId: string) {
+    try {
+      await this.collectionService.removeCreationFromCollection(collectionId, creationId);
+    } catch {
+      // Notification already shown by the service.
+    }
   }
 
   // Thumbnail load/error state

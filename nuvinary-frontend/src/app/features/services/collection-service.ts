@@ -97,35 +97,54 @@ export class CollectionService {
     }
   }
 
-  addCreationToCollection(collectionId: string, newCreation: CollectionCreation) {
-    this._collectionList.update((collections) =>
-      collections.map((coll) => {
-        if (coll.id !== collectionId) return coll;
-        const isDuplicate = coll.creations.some((c) => c.id === newCreation.id);
+  /** Adds a creation to a collection on the backend and in the local list, rejecting duplicates. */
+  async addCreationToCollection(collectionId: string, newCreation: CollectionCreation) {
+    const collection = this._collectionList().find((c) => c.id === collectionId);
+    if (collection?.creations.some((c) => c.id === newCreation.id)) {
+      this.notificationService.show('Already in this collection', 'error');
+      return;
+    }
 
-        if (isDuplicate) {
-          this.notificationService.show('Already in this collection', 'error');
-          return coll;
-        }
-        return {
-          ...coll,
-          creations: [...coll.creations, newCreation],
-        };
-      }),
-    );
+    const payload: ApiBody = { creationId: newCreation.id };
+    try {
+      await this.apiService.executePostOperation(
+        `/collections/${collectionId}/creations`,
+        payload,
+      );
+      this._collectionList.update((collections) =>
+        collections.map((coll) =>
+          coll.id === collectionId
+            ? { ...coll, creations: [...coll.creations, newCreation] }
+            : coll,
+        ),
+      );
+      this.notificationService.show('Added to collection', 'success');
+    } catch (err) {
+      console.error('Error adding creation to collection:', err);
+      this.notificationService.show('Error adding creation to collection', 'error');
+      throw err;
+    }
   }
 
-  removeCreationFromCollection(collectionId: string, creationId: string) {
-    this._collectionList.update((collections) =>
-      collections.map((coll) => {
-        if (coll.id !== collectionId) return coll;
-        return {
-          ...coll,
-          creations: coll.creations.filter((c) => c.id !== creationId),
-        };
-      }),
-    );
-    this.notificationService.show('Removed from collection');
+  /** Removes a creation from a collection on the backend and in the local list. */
+  async removeCreationFromCollection(collectionId: string, creationId: string) {
+    try {
+      await this.apiService.executeDeleteOperation(
+        `/collections/${collectionId}/creations/${creationId}`,
+      );
+      this._collectionList.update((collections) =>
+        collections.map((coll) =>
+          coll.id === collectionId
+            ? { ...coll, creations: coll.creations.filter((c) => c.id !== creationId) }
+            : coll,
+        ),
+      );
+      this.notificationService.show('Removed from collection');
+    } catch (err) {
+      console.error('Error removing creation from collection:', err);
+      this.notificationService.show('Error removing creation from collection', 'error');
+      throw err;
+    }
   }
 
   removeCreationFromAllCollections(creationId: string) {
