@@ -3,6 +3,7 @@
     <app-search-input searchHeader [(query)]="searchQuery" class="flex-1"></app-search-input>
     <app-creation-grid
       [creationList]="filteredCreations()"
+      [source]="'community'"
       [allowDrag]="false"
       [allowDelete]="false"
       [isFetching]="isFetching()"

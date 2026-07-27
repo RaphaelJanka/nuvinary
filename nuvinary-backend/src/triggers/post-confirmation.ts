@@ -3,6 +3,7 @@ import { AVATAR_COLORS, User } from '../models/user.model.js';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { PostConfirmationTriggerEvent } from 'aws-lambda';
 import { docClient } from '@shared/api-utils.js';
+import { METADATA_SK, userPk } from '@shared/db-keys.js';
 
 const sesClient = new SESClient({ region: 'eu-central-1' });
 
@@ -10,8 +11,8 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
   const { sub, given_name, family_name } = event.request.userAttributes;
 
   const newUser: User = {
-    PK: `USER#${sub}`,
-    SK: `METADATA`,
+    PK: userPk(sub),
+    SK: METADATA_SK,
     uid: sub,
     firstName: given_name,
     lastName: family_name,

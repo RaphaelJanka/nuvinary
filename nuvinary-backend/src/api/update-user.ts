@@ -2,6 +2,7 @@ import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { UserUpdateDto } from '../models/user.model.js';
 import { createResponse, docClient } from '@shared/api-utils.js';
+import { METADATA_SK, userPk } from '@shared/db-keys.js';
 
 export const handler = async (
   event: APIGatewayProxyEvent,
@@ -28,8 +29,8 @@ export const handler = async (
       new UpdateCommand({
         TableName: process.env.TABLE_NAME,
         Key: {
-          PK: `USER#${userId}`,
-          SK: `METADATA`,
+          PK: userPk(userId),
+          SK: METADATA_SK,
         },
         UpdateExpression:
           'SET firstName = :f, lastName = :l, displayName = :d, avatarColor = :c',

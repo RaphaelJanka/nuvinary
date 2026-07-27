@@ -1,28 +1,24 @@
 import { QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResponse, docClient } from '@shared/api-utils.js';
-import { getPresignedImageUrl } from '@shared/s3-utils.js';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { CreationItem, CreationResponse } from '../models/creation.model.js';
-import { CREATION_SK_PREFIX, userPk } from '@shared/db-keys.js';
+import { getPresignedImageUrl } from '@shared/s3-utils.js';
+import { COMMUNITY_GSI1PK } from '@shared/db-keys.js';
 
-/** Lists the authenticated user's creations, newest first, with presigned image URLs. */
+/** Lists all public creations across all users, newest first, with presigned image URLs. */
 export const handler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
-  const userId = event.requestContext.authorizer?.claims.sub;
-  if (!userId) {
-    return createResponse(401, { message: 'User ID not found' });
-  }
-
   try {
     const result = await docClient.send(
       new QueryCommand({
         TableName: process.env.TABLE_NAME,
-        KeyConditionExpression: 'PK = :pk AND begins_with(SK, :skPrefix)',
+        IndexName: 'CreationIndex',
+        KeyConditionExpression: 'GSI1PK = :gpk',
         ExpressionAttributeValues: {
-          ':pk': userPk(userId),
-          ':skPrefix': CREATION_SK_PREFIX,
+          ':gpk': COMMUNITY_GSI1PK,
         },
+        ScanIndexForward: false,
       }),
     );
 
@@ -38,8 +34,6 @@ export const handler = async (
         aiMetadata: item.aiMetadata,
       })),
     );
-
-    creations.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
     return createResponse(200, creations);
   } catch (err) {

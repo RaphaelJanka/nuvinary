@@ -16,6 +16,7 @@ import {
   GenerateCreationResponse,
 } from '../models/creation.model.js';
 import { User } from '../models/user.model.js';
+import { METADATA_SK, creationSk, userPk } from '@shared/db-keys.js';
 
 const bedrockClient = new BedrockRuntimeClient({ region: 'us-west-2' });
 
@@ -99,7 +100,7 @@ async function getUser(userId: string): Promise<User | undefined> {
   const userResult = await docClient.send(
     new GetCommand({
       TableName: process.env.TABLE_NAME,
-      Key: { PK: `USER#${userId}`, SK: 'METADATA' },
+      Key: { PK: userPk(userId), SK: METADATA_SK },
     }),
   );
   return userResult.Item as User | undefined;
@@ -159,8 +160,8 @@ function buildCreationItem(
   body: GenerateCreationDto,
 ): CreationItem {
   return {
-    PK: `USER#${userId}`,
-    SK: `CREATION#${id}`,
+    PK: userPk(userId),
+    SK: creationSk(id),
     id,
     title: body.title,
     imageKey,
@@ -197,7 +198,7 @@ async function decrementUserCredits(
     const updateResult = await docClient.send(
       new UpdateCommand({
         TableName: process.env.TABLE_NAME,
-        Key: { PK: `USER#${userId}`, SK: 'METADATA' },
+        Key: { PK: userPk(userId), SK: METADATA_SK },
         UpdateExpression: 'SET credits = credits - :one',
         ConditionExpression: 'credits > :zero',
         ExpressionAttributeValues: { ':one': 1, ':zero': 0 },

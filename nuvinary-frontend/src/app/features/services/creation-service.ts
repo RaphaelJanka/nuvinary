@@ -25,7 +25,9 @@ export class CreationService {
   private readonly currentUser = this.authService.authUser;
   private readonly notificationService = inject(NotificationService);
 
-  private readonly _creationList = signal<Creation[]>([]);
+  private readonly _userCreationList = signal<Creation[]>([]);
+  /** The signed-in user's own creations. */
+  readonly userCreationList = this._userCreationList.asReadonly();
   /** Prevents overlapping `loadUserCreations()` calls (e.g. multiple images erroring at once). */
   private isRefreshingCreations = false;
   /** Distinguishes the initial load from later silent refreshes. */
@@ -35,21 +37,28 @@ export class CreationService {
   /** True only while the very first `loadUserCreations()` call is in flight. */
   readonly isLoadingInitialCreations = this._isLoadingInitialCreations.asReadonly();
 
-  /** The signed-in user's own creations. */
-  readonly userCreationList = computed(() =>
-    this._creationList().filter((c) => c.createdBy.id === this.currentUser()?.uid),
-  );
+  private readonly _communityCreationList = signal<Creation[]>([]);
+  /** All public creations across all users. */
+  readonly communityCreationList = this._communityCreationList.asReadonly();
+  /** Prevents overlapping `loadCommunityCreations()` calls. */
+  private isRefreshingCommunityCreations = false;
+  /** Distinguishes the initial load from later silent refreshes. */
+  private hasLoadedCommunityOnce = false;
 
-  /** Public creations — only the current user's own for now, no community backend yet. */
-  readonly communityCreationList = computed(() => this._creationList().filter((c) => c.isPublic));
+  private readonly _isLoadingInitialCommunityCreations = signal(false);
+  /** True only while the very first `loadCommunityCreations()` call is in flight. */
+  readonly isLoadingInitialCommunityCreations =
+    this._isLoadingInitialCommunityCreations.asReadonly();
 
   constructor() {
     // Load on login, clear on logout.
     effect(() => {
       if (this.currentUser()) {
         this.loadUserCreations();
+        this.loadCommunityCreations();
       } else {
-        this._creationList.set([]);
+        this._userCreationList.set([]);
+        this._communityCreationList.set([]);
       }
     });
   }
@@ -70,7 +79,7 @@ export class CreationService {
       const restOperation = await this.apiService.executeGetOperation('/creations');
       const response = await restOperation.response;
       const creations = (await response.body.json()) as unknown as Creation[];
-      this._creationList.set(creations);
+      this._userCreationList.set(creations);
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_LOAD_ERROR_MESSAGE);
       this.notificationService.show(message, 'error');
@@ -81,10 +90,35 @@ export class CreationService {
     }
   }
 
-  /** Tracks a single creation by id within the shared list, falling back to `initialCreation`. */
+  /** Fetches all public creations with fresh presigned URLs. Guarded against overlapping calls. */
+  async loadCommunityCreations(): Promise<void> {
+    if (this.isRefreshingCommunityCreations) return;
+    this.isRefreshingCommunityCreations = true;
+    const isFirstLoad = !this.hasLoadedCommunityOnce;
+    if (isFirstLoad) this._isLoadingInitialCommunityCreations.set(true);
+
+    try {
+      const restOperation = await this.apiService.executeGetOperation('/community');
+      const response = await restOperation.response;
+      const creations = (await response.body.json()) as unknown as Creation[];
+      this._communityCreationList.set(creations);
+    } catch (err) {
+      const message = this.extractErrorMessage(err, DEFAULT_LOAD_ERROR_MESSAGE);
+      this.notificationService.show(message, 'error');
+    } finally {
+      this.isRefreshingCommunityCreations = false;
+      this.hasLoadedCommunityOnce = true;
+      this._isLoadingInitialCommunityCreations.set(false);
+    }
+  }
+
+  /** Tracks a single creation by id across both lists, falling back to `initialCreation`. */
   getCreationSignalById(initialCreation: Creation): Signal<Creation> {
     return computed(
-      () => this._creationList().find((c) => c.id === initialCreation.id) ?? initialCreation,
+      () =>
+        this._userCreationList().find((c) => c.id === initialCreation.id) ??
+        this._communityCreationList().find((c) => c.id === initialCreation.id) ??
+        initialCreation,
     );
   }
 
@@ -111,7 +145,7 @@ export class CreationService {
         this.authService.setUser({ ...user, credits: remainingCredits });
       }
 
-      this._creationList.update((list) => [creation, ...list]);
+      this._userCreationList.update((list) => [creation, ...list]);
       this.notificationService.show('Creation generated', 'success');
       return creation;
     } catch (err) {
@@ -136,7 +170,7 @@ export class CreationService {
     return defaultMessage;
   }
 
-  /** Updates a creation's title on the backend and in the local list. */
+  /** Updates a creation's title on the backend and in both local lists. */
   async updateTitle(id: string, title: string) {
     const creationPayload: ApiBody = {
       title,
@@ -144,7 +178,12 @@ export class CreationService {
 
     try {
       await this.apiService.executePatchOperation(`/creations/${id}`, creationPayload);
-      this._creationList.update((list) => list.map((c) => (c.id === id ? { ...c, title } : c)));
+      this._userCreationList.update((list) =>
+        list.map((c) => (c.id === id ? { ...c, title } : c)),
+      );
+      this._communityCreationList.update((list) =>
+        list.map((c) => (c.id === id ? { ...c, title } : c)),
+      );
       this.notificationService.show('Title successfully changed', 'success');
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_TITLE_CHANGE_ERROR_MESSAGE);
@@ -153,25 +192,39 @@ export class CreationService {
     }
   }
 
-  /** Sets a creation's visibility on the backend and in the local list. */
+  /** Sets a creation's visibility on the backend, and adds/removes it from the community list. */
   async togglePublicStatus(id: string, isPublic: boolean) {
     const creationPayload: ApiBody = {
       isPublic,
     };
     try {
       await this.apiService.executePatchOperation(`/creations/${id}`, creationPayload);
-      this._creationList.update((list) => list.map((c) => (c.id === id ? { ...c, isPublic } : c)));
+      this._userCreationList.update((list) =>
+        list.map((c) => (c.id === id ? { ...c, isPublic } : c)),
+      );
+
+      if (isPublic) {
+        const creation = this._userCreationList().find((c) => c.id === id);
+        if (creation) {
+          this._communityCreationList.update((list) =>
+            list.some((c) => c.id === id) ? list : [creation, ...list],
+          );
+        }
+      } else {
+        this._communityCreationList.update((list) => list.filter((c) => c.id !== id));
+      }
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_VISIBILITY_CHANGE_ERROR_MESSAGE);
       this.notificationService.show(message, 'error');
     }
   }
 
-  /** Deletes a creation on the backend and removes it from the local list. */
+  /** Deletes a creation on the backend and removes it from both local lists. */
   async deleteCreation(id: string) {
     try {
       await this.apiService.executeDeleteOperation(`/creations/${id}`);
-      this._creationList.update((list) => list.filter((c) => c.id !== id));
+      this._userCreationList.update((list) => list.filter((c) => c.id !== id));
+      this._communityCreationList.update((list) => list.filter((c) => c.id !== id));
       this.notificationService.show('Creation permanently deleted', 'success');
     } catch (err) {
       const message = this.extractErrorMessage(err, DEFAULT_DELETE_CREATION_ERROR_MESSAGE);
