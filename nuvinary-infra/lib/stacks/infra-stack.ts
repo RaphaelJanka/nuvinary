@@ -147,6 +147,17 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     );
 
+    const updateCollectionTitleFn = lambdaFactory.createFunction(
+      'UpdateCollectionTitle',
+      {
+        entry: '../nuvinary-backend/src/api/collections/update-title.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
     new ApiConstruct(this, 'NuvinaryApi', {
       stageName: props.isProd ? 'prod' : 'dev',
       userPool: auth.userPool,
@@ -195,6 +206,11 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'POST',
           path: '/collections',
           fn: createCollectionFn,
+        },
+        {
+          fetchType: 'PATCH',
+          path: '/collections/{id}',
+          fn: updateCollectionTitleFn,
         },
       ],
     });

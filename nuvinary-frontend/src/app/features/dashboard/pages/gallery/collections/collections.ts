@@ -114,14 +114,17 @@ export class Collections {
     }
   }
 
-  protected onEditSubmit(event: Event) {
+  protected async onEditSubmit(event: Event) {
     event.preventDefault();
     const editId = this.editingCollectionId();
     if (!editId) return;
-
-    const { title } = this.collectionModel();
-    this.collectionService.updateCollectionTitle(editId, title);
-    this.resetAll();
+    try {
+      const { title } = this.collectionModel();
+      await this.collectionService.updateCollectionTitle(editId, title);
+      this.resetAll();
+    } catch {
+      //
+    }
   }
 
   // Edit of collection title

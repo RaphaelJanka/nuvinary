@@ -58,20 +58,30 @@ export class CollectionService {
       );
       const response = await restOperation.response;
       const collection = (await response.body.json()) as unknown as Collection;
-
       this._collectionList.update((list) => [...list, collection]);
       this.notificationService.show('Collection created successfully', 'success');
     } catch (err) {
-      console.error('Error creating collection:', err);
       this.notificationService.show('Error creating collection', 'error');
       throw err;
     }
   }
 
-  updateCollectionTitle(id: string, newTitle: string) {
-    this._collectionList.update((collections) =>
-      collections.map((c) => (c.id === id ? { ...c, title: newTitle } : c)),
-    );
+  async updateCollectionTitle(id: string, title: string) {
+    const collectionPayload: ApiBody = {
+      title,
+    };
+
+    try {
+      await this.apiService.executePatchOperation(`/collections/${id}`, collectionPayload);
+      this._collectionList.update((collections) =>
+        collections.map((c) => (c.id === id ? { ...c, title } : c)),
+      );
+      this.notificationService.show('Collection title successfully updated', 'success');
+    } catch (err) {
+      console.error('Error updating collection title', err);
+      this.notificationService.show('Error updating collection title', 'error');
+      throw err;
+    }
   }
 
   deleteCollection(id: string | null) {
