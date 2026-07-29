@@ -142,7 +142,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
         entry: '../nuvinary-backend/src/api/collections/create.ts',
         handler: 'handler',
         permissions: {
-          dynamoDb: 'write',
+          dynamoDb: 'readWrite',
         },
       },
     );
