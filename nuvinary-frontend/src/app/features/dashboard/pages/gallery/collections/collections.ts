@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Check, Folder, ImageOff, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
+import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
 import { CollectionService } from '../../../../services/collection-service';
 import { Collection } from '../../models/collection.model';
 import { form, maxLength, required } from '@angular/forms/signals';
@@ -31,13 +31,10 @@ export class Collections {
     penIcon: Pen,
     checkIcon: Check,
     cancelIcon: X,
-    imageOffIcon: ImageOff,
   };
 
   /** Ids of collection thumbnails whose image has finished loading, so the loader hides. */
   protected readonly loadedCreationIds = signal<ReadonlySet<string>>(new Set());
-  /** Ids of collection thumbnails whose presigned URL failed to load. */
-  protected readonly erroredCreationIds = signal<ReadonlySet<string>>(new Set());
 
   protected readonly expandedCollectionId = signal<string | null>(null);
   protected readonly editingCollectionId = signal<string | null>(null);
@@ -198,7 +195,8 @@ export class Collections {
     this.loadedCreationIds.update((ids) => new Set(ids).add(creationId));
   }
 
-  protected onImageError(creationId: string) {
-    this.erroredCreationIds.update((ids) => new Set(ids).add(creationId));
+  /** Presigned URL likely expired — refresh the collections list to get a fresh one. */
+  protected onImageError() {
+    this.collectionService.loadCollections();
   }
 }

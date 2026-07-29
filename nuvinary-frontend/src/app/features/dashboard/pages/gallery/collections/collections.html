@@ -114,29 +114,21 @@
                 <div
                   class="relative aspect-square overflow-hidden rounded-lg border border-border-gentle group"
                 >
-                  @if (erroredCreationIds().has(creation.id)) {
-                    <div
-                      class="flex items-center justify-center w-full h-full bg-bg-light text-text-gentle"
-                    >
-                      <lucide-icon [img]="icons.imageOffIcon" class="w-5 h-5"></lucide-icon>
-                    </div>
-                  } @else {
-                    <img
-                      [src]="creation.url"
-                      [alt]="collection.title"
-                      (load)="onImageLoad(creation.id)"
-                      (error)="onImageError(creation.id)"
-                      [class.opacity-0]="!loadedCreationIds().has(creation.id)"
-                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
+                  <img
+                    [src]="creation.url"
+                    [alt]="collection.title"
+                    (load)="onImageLoad(creation.id)"
+                    (error)="onImageError()"
+                    [class.opacity-0]="!loadedCreationIds().has(creation.id)"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
 
-                    @if (!loadedCreationIds().has(creation.id)) {
-                      <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="h-6 w-6">
-                          <app-loader />
-                        </div>
+                  @if (!loadedCreationIds().has(creation.id)) {
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="h-6 w-6">
+                        <app-loader />
                       </div>
-                    }
+                    </div>
                   }
 
                   <button

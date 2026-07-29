@@ -35,7 +35,7 @@ export class CollectionService {
   });
 
   /** Fetches the user's collections, with each creation resolved to a fresh presigned URL. */
-  private async loadCollections() {
+  async loadCollections() {
     try {
       const restOperation = await this.apiService.executeGetOperation('/collections');
       const response = await restOperation.response;
