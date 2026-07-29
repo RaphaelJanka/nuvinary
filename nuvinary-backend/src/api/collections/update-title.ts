@@ -3,7 +3,7 @@ import { UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { createResponse, docClient } from '@shared/api-utils.js';
 import { collectionSk, userPk } from '@shared/db-keys.js';
-import { CreateCollectionDto } from '../../models/collection.model.js';
+import { CollectionTitleDto } from '../../models/collection.model.js';
 
 /** Updates a collection's title. */
 export const handler = async (
@@ -20,7 +20,7 @@ export const handler = async (
     return createResponse(400, { message: 'Missing collection id' });
   }
 
-  const body = JSON.parse(event.body || '{}') as CreateCollectionDto;
+  const body = JSON.parse(event.body || '{}') as CollectionTitleDto;
   if (!body.title?.trim()) {
     return createResponse(400, { message: 'Title is required' });
   }

@@ -6,7 +6,7 @@ import { COLLECTION_SK_PREFIX, collectionSk, userPk } from '@shared/db-keys.js';
 import {
   CollectionItem,
   CollectionResponse,
-  CreateCollectionDto,
+  CollectionTitleDto,
 } from '../../models/collection.model.js';
 
 const MAX_COLLECTIONS_PER_USER = 8;
@@ -20,7 +20,7 @@ export const handler = async (
     return createResponse(401, { message: 'User ID not found' });
   }
 
-  const body = JSON.parse(event.body || '{}') as CreateCollectionDto;
+  const body = JSON.parse(event.body || '{}') as CollectionTitleDto;
   if (!body.title?.trim()) {
     return createResponse(400, { message: 'Title is required' });
   }
@@ -74,7 +74,7 @@ async function countCollections(userId: string): Promise<number> {
 /** Assembles the DynamoDB item for a new collection. */
 function buildCollectionItem(
   userId: string,
-  body: CreateCollectionDto,
+  body: CollectionTitleDto,
 ): CollectionItem {
   const id = randomUUID();
   return {

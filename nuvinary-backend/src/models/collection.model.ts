@@ -3,7 +3,7 @@ export interface CollectionCreation {
   url: string;
 }
 
-export interface CreateCollectionDto {
+export interface CollectionTitleDto {
   title: string;
 }
 
