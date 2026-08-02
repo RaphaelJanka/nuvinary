@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   ElementRef,
   inject,
@@ -8,6 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
+import { Loader } from '../../../../shared/components/loader/loader';
 import {
   Check,
   Download,
@@ -27,7 +29,7 @@ import { CreationService } from '../../../services/creation-service';
 
 @Component({
   selector: 'app-studio',
-  imports: [PageLayout, LucideAngularModule, NgClass, Tooltip],
+  imports: [PageLayout, LucideAngularModule, NgClass, Tooltip, Loader],
   templateUrl: './studio.html',
   styleUrl: './studio.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +49,10 @@ export class Studio {
   private readonly iconRotation = signal(0);
   private readonly studioCard = viewChild<ElementRef<HTMLElement>>('studioCard');
   protected readonly isGenerating = signal(false);
+  private readonly loadedImageUrl = signal<string | null>(null);
+  protected readonly isImageLoading = computed(
+    () => this.selectedCreation()?.url !== this.loadedImageUrl(),
+  );
 
   protected readonly toolbarButtons = [
     {
@@ -147,6 +153,10 @@ export class Studio {
     this.creationService.loadUserCreations();
   }
 
+  protected onImageLoad(url: string) {
+    this.loadedImageUrl.set(url);
+  }
+
   toggleOrientation() {
     this.orientation.update((current) => (current === 'portrait' ? 'landscape' : 'portrait'));
   }
@@ -167,7 +177,7 @@ export class Studio {
 
     this.isGenerating.set(true);
 
-    toPng(node, { quality: 1, pixelRatio: 2, cacheBust: true })
+    toPng(node, { quality: 1, pixelRatio: 2 })
       .then((dataUrl) => {
         const link = document.createElement('a');
         link.download = `nuvinary-export-${this.storyTitle()}-${Date.now()}.png`;
