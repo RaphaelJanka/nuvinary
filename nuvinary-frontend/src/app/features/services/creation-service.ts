@@ -1,15 +1,9 @@
 import { computed, effect, inject, Injectable, Signal, signal } from '@angular/core';
-import { ApiError } from 'aws-amplify/api';
 import { AuthService } from '../../core/auth/auth.service';
 import { Creation } from '../../shared/models/creation.model';
 import { NotificationService } from '../../shared/services/notification-service';
+import { ErrorHandlingService } from '../../shared/services/error-handling-service';
 import { ApiBody, ApiService } from '../../core/api/api.service';
-
-const DEFAULT_GENERATE_ERROR_MESSAGE = 'Failed to generate your creation';
-const DEFAULT_LOAD_ERROR_MESSAGE = 'Failed to load your creations';
-const DEFAULT_TITLE_CHANGE_ERROR_MESSAGE = 'Failed to change title';
-const DEFAULT_VISIBILITY_CHANGE_ERROR_MESSAGE = 'Failed to change visibility';
-const DEFAULT_DELETE_CREATION_ERROR_MESSAGE = 'Failed to delete creation';
 
 export interface CreationModel {
   prompt: string;
@@ -24,6 +18,7 @@ export class CreationService {
   private readonly apiService = inject(ApiService);
   private readonly currentUser = this.authService.authUser;
   private readonly notificationService = inject(NotificationService);
+  private readonly errorHandlingService = inject(ErrorHandlingService);
 
   private readonly _userCreationList = signal<Creation[]>([]);
   /** The signed-in user's own creations. */
@@ -81,8 +76,7 @@ export class CreationService {
       const creations = (await response.body.json()) as unknown as Creation[];
       this._userCreationList.set(creations);
     } catch (err) {
-      const message = this.extractErrorMessage(err, DEFAULT_LOAD_ERROR_MESSAGE);
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
     } finally {
       this.isRefreshingCreations = false;
       this.hasLoadedOnce = true;
@@ -103,8 +97,7 @@ export class CreationService {
       const creations = (await response.body.json()) as unknown as Creation[];
       this._communityCreationList.set(creations);
     } catch (err) {
-      const message = this.extractErrorMessage(err, DEFAULT_LOAD_ERROR_MESSAGE);
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
     } finally {
       this.isRefreshingCommunityCreations = false;
       this.hasLoadedCommunityOnce = true;
@@ -149,25 +142,9 @@ export class CreationService {
       this.notificationService.show('Creation generated', 'success');
       return creation;
     } catch (err) {
-      const message = this.extractErrorMessage(err, DEFAULT_GENERATE_ERROR_MESSAGE);
-      this.notificationService.show(message, 'error');
+      const message = this.errorHandlingService.handle(err);
       throw new Error(message);
     }
-  }
-
-  /** Unwraps a backend-supplied error message from an ApiError, or falls back to `defaultMessage`. */
-  private extractErrorMessage(err: unknown, defaultMessage: string): string {
-    if (err instanceof ApiError && err.response?.body) {
-      try {
-        const body = JSON.parse(err.response.body) as { message?: string };
-        if (body.message) {
-          return body.message;
-        }
-      } catch {
-        // response body wasn't JSON, fall through to the default message
-      }
-    }
-    return defaultMessage;
   }
 
   /** Updates a creation's title on the backend and in both local lists. */
@@ -186,8 +163,7 @@ export class CreationService {
       );
       this.notificationService.show('Title successfully changed', 'success');
     } catch (err) {
-      const message = this.extractErrorMessage(err, DEFAULT_TITLE_CHANGE_ERROR_MESSAGE);
-      this.notificationService.show(message, 'error');
+      const message = this.errorHandlingService.handle(err);
       throw new Error(message);
     }
   }
@@ -214,8 +190,7 @@ export class CreationService {
         this._communityCreationList.update((list) => list.filter((c) => c.id !== id));
       }
     } catch (err) {
-      const message = this.extractErrorMessage(err, DEFAULT_VISIBILITY_CHANGE_ERROR_MESSAGE);
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
     }
   }
 
@@ -227,8 +202,7 @@ export class CreationService {
       this._communityCreationList.update((list) => list.filter((c) => c.id !== id));
       this.notificationService.show('Creation permanently deleted', 'success');
     } catch (err) {
-      const message = this.extractErrorMessage(err, DEFAULT_DELETE_CREATION_ERROR_MESSAGE);
-      this.notificationService.show(message, 'error');
+      const message = this.errorHandlingService.handle(err);
       throw new Error(message);
     }
   }
