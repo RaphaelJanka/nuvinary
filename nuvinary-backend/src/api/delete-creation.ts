@@ -1,51 +1,45 @@
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { DeleteCommand } from '@aws-sdk/lib-dynamodb';
-import { createResponse, docClient } from '@shared/api-utils.js';
+import { createResponse, docClient, withErrorHandling } from '@shared/api-utils.js';
 import { s3Client } from '@shared/s3-utils.js';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { creationSk, userPk } from '@shared/db-keys.js';
+import { Errors } from '@shared/errors.js';
 
 /** Deletes a creation's DynamoDB item and its S3 image. */
-export const handler = async (
-  event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyResult> => {
+export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => {
   const userId = event.requestContext.authorizer?.claims.sub;
   if (!userId) {
-    return createResponse(401, { message: 'User ID not found' });
+    throw Errors.missingUserId;
   }
 
   const creationId = event.pathParameters?.id;
   if (!creationId) {
-    return createResponse(400, { message: 'Missing creation id' });
+    throw Errors.missingCreationId;
   }
 
-  try {
-    const deleteResult = await docClient.send(
-      new DeleteCommand({
-        TableName: process.env.TABLE_NAME,
-        Key: {
-          PK: userPk(userId),
-          SK: creationSk(creationId),
-        },
-        ReturnValues: 'ALL_OLD',
-      }),
-    );
+  const deleteResult = await docClient.send(
+    new DeleteCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: {
+        PK: userPk(userId),
+        SK: creationSk(creationId),
+      },
+      ReturnValues: 'ALL_OLD',
+    }),
+  );
 
-    const imageKey = deleteResult.Attributes?.imageKey;
-    if (!imageKey) {
-      return createResponse(404, { message: 'Creation not found' });
-    }
-
-    await s3Client.send(
-      new DeleteObjectCommand({
-        Bucket: process.env.BUCKET_NAME,
-        Key: imageKey,
-      }),
-    );
-
-    return createResponse(200, { message: 'Creation successfully deleted' });
-  } catch (err) {
-    console.error('Error deleting creation:', err);
-    return createResponse(500, { message: 'Internal server error' });
+  const imageKey = deleteResult.Attributes?.imageKey;
+  if (!imageKey) {
+    throw Errors.creationNotFound;
   }
-};
+
+  await s3Client.send(
+    new DeleteObjectCommand({
+      Bucket: process.env.BUCKET_NAME,
+      Key: imageKey,
+    }),
+  );
+
+  return createResponse(200, { message: 'Creation successfully deleted' });
+});
