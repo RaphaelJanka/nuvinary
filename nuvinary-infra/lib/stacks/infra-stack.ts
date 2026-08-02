@@ -127,6 +127,70 @@ export class NuvinaryInfraStack extends cdk.Stack {
       },
     });
 
+    const listCollectionsFn = lambdaFactory.createFunction('ListCollections', {
+      entry: '../nuvinary-backend/src/api/collections/list.ts',
+      handler: 'handler',
+      permissions: {
+        dynamoDb: 'read',
+        s3: 'read',
+      },
+    });
+
+    const createCollectionFn = lambdaFactory.createFunction(
+      'CreateCollection',
+      {
+        entry: '../nuvinary-backend/src/api/collections/create.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
+    const updateCollectionTitleFn = lambdaFactory.createFunction(
+      'UpdateCollectionTitle',
+      {
+        entry: '../nuvinary-backend/src/api/collections/update-title.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
+    const deleteCollectionFn = lambdaFactory.createFunction(
+      'DeleteCollection',
+      {
+        entry: '../nuvinary-backend/src/api/collections/delete.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
+    const addCreationToCollectionFn = lambdaFactory.createFunction(
+      'AddCreationToCollection',
+      {
+        entry: '../nuvinary-backend/src/api/collections/add-creation.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
+    const removeCreationFromCollectionFn = lambdaFactory.createFunction(
+      'RemoveCreationFromCollection',
+      {
+        entry: '../nuvinary-backend/src/api/collections/remove-creation.ts',
+        handler: 'handler',
+        permissions: {
+          dynamoDb: 'readWrite',
+        },
+      },
+    );
+
     new ApiConstruct(this, 'NuvinaryApi', {
       stageName: props.isProd ? 'prod' : 'dev',
       userPool: auth.userPool,
@@ -165,6 +229,36 @@ export class NuvinaryInfraStack extends cdk.Stack {
           fetchType: 'DELETE',
           path: '/creations/{id}',
           fn: deleteCreationFn,
+        },
+        {
+          fetchType: 'GET',
+          path: '/collections',
+          fn: listCollectionsFn,
+        },
+        {
+          fetchType: 'POST',
+          path: '/collections',
+          fn: createCollectionFn,
+        },
+        {
+          fetchType: 'PATCH',
+          path: '/collections/{id}',
+          fn: updateCollectionTitleFn,
+        },
+        {
+          fetchType: 'DELETE',
+          path: '/collections/{id}',
+          fn: deleteCollectionFn,
+        },
+        {
+          fetchType: 'POST',
+          path: '/collections/{id}/creations',
+          fn: addCreationToCollectionFn,
+        },
+        {
+          fetchType: 'DELETE',
+          path: '/collections/{id}/creations/{creationId}',
+          fn: removeCreationFromCollectionFn,
         },
       ],
     });
