@@ -190,6 +190,7 @@ deploy_dev:
       artifacts: true
     - job: build_infra_dev
       artifacts: true
+    - job: diff_dev
   script:
     - echo "Deploying to dev environment"
     - cd nuvinary-infra
@@ -209,6 +210,7 @@ deploy_prod:
       artifacts: true
     - job: build_infra_prod
       artifacts: true
+    - job: diff_prod
   script:
     - echo "Deploying to prod environment"
     - cd nuvinary-infra
