@@ -51,12 +51,21 @@
             ></div>
 
             @if (selectedCreation(); as creation) {
+              @if (isImageLoading()) {
+                <div class="absolute inset-0 z-1 flex items-center justify-center">
+                  <div class="h-12 w-12">
+                    <app-loader loadType="loader"></app-loader>
+                  </div>
+                </div>
+              }
               <img
                 [src]="creation.url"
                 [alt]="creation.title"
                 crossOrigin="anonymous"
+                (load)="onImageLoad(creation.url)"
                 (error)="onImageError()"
                 class="absolute inset-0 w-full h-full object-cover pointer-events-none animate-in fade-in"
+                [class.opacity-0]="isImageLoading()"
               />
             } @else {
               <div class="absolute inset-6 md:inset-8 flex items-center justify-center">
