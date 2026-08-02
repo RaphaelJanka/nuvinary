@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { NotificationService } from '../../shared/services/notification-service';
+import { ErrorHandlingService } from '../../shared/services/error-handling-service';
 import { User } from '../../core/auth/auth.interfaces';
 import { ApiBody, ApiService } from '../../core/api/api.service';
 
@@ -15,6 +16,7 @@ export interface UserCredentialModel {
 })
 export class UserService {
   private readonly notificationService = inject(NotificationService);
+  private readonly errorHandlingService = inject(ErrorHandlingService);
   private readonly apiService = inject(ApiService);
 
   async getUserProfile(): Promise<User> {
@@ -43,8 +45,7 @@ export class UserService {
       this.notificationService.show('Profile updated successfully', 'success');
       return updatedUser;
     } catch (error) {
-      console.error('Error updating user profile:', error);
-      this.notificationService.show('Failed to update profile', 'error');
+      this.errorHandlingService.handle(error);
       throw error;
     }
   }

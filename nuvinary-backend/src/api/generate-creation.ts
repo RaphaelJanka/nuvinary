@@ -7,8 +7,8 @@ import {
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
 import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { createResponse, docClient } from '@shared/api-utils.js';
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import { createResponse, docClient, withErrorHandling } from '@shared/api-utils.js';
 import { getPresignedImageUrl, s3Client } from '@shared/s3-utils.js';
 import {
   CreationItem,
@@ -17,6 +17,8 @@ import {
 } from '../models/creation.model.js';
 import { User } from '../models/user.model.js';
 import { METADATA_SK, creationSk, userPk } from '@shared/db-keys.js';
+import { Errors } from '@shared/errors.js';
+import { HttpError } from '@shared/http-error.js';
 
 const bedrockClient = new BedrockRuntimeClient({ region: 'us-west-2' });
 
@@ -29,71 +31,59 @@ interface StableImageResponse {
   finish_reasons?: (string | null)[];
 }
 
-class NoImageGeneratedError extends Error {}
-
 /** Generates an image via Bedrock, persists it to S3/DynamoDB, and decrements credits. */
-export const handler = async (
-  event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyResult> => {
+export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => {
   const userId = event.requestContext.authorizer?.claims.sub;
   if (!userId) {
-    return createResponse(401, { message: 'User ID not found' });
+    throw Errors.missingUserId;
   }
 
   const body = JSON.parse(event.body || '{}') as GenerateCreationDto;
   if (!body.title?.trim() || !body.prompt?.trim()) {
-    return createResponse(400, { message: 'Title and prompt are required' });
+    throw Errors.titleAndPromptRequired;
   }
 
+  const user = await getUser(userId);
+  if (!user) {
+    throw Errors.userNotFound;
+  }
+  if (user.credits <= 0) {
+    throw Errors.noCreditsRemaining;
+  }
+
+  let imageBuffer: Buffer;
   try {
-    const user = await getUser(userId);
-    if (!user) {
-      return createResponse(404, { message: 'User not found' });
-    }
-    if (user.credits <= 0) {
-      return createResponse(403, { message: 'No credits remaining' });
-    }
-
-    let imageBuffer: Buffer;
-    try {
-      imageBuffer = await generateImage(body.prompt);
-    } catch (err) {
-      if (err instanceof NoImageGeneratedError) {
-        return createResponse(422, { message: err.message });
-      }
-      throw err;
-    }
-
-    const id = randomUUID();
-    const imageKey = `creations/${userId}/${id}.png`;
-    await uploadImageToS3(imageKey, imageBuffer);
-
-    const creationItem = buildCreationItem(userId, id, imageKey, user, body);
-    await saveCreation(creationItem);
-
-    const remainingCredits = await decrementUserCredits(userId, user.credits);
-    const url = await getPresignedImageUrl(imageKey);
-
-    const creation: GenerateCreationResponse = {
-      id: creationItem.id,
-      title: creationItem.title,
-      url,
-      createdAt: creationItem.createdAt,
-      isPublic: creationItem.isPublic,
-      createdBy: creationItem.createdBy,
-      aiMetadata: creationItem.aiMetadata,
-      remainingCredits,
-    };
-
-    return createResponse(200, creation);
+    imageBuffer = await generateImage(body.prompt);
   } catch (err) {
     if (err instanceof ValidationException) {
-      return createResponse(400, { message: err.message });
+      throw new HttpError(400, err.message);
     }
-    console.error('Error generating image:', err);
-    return createResponse(500, { message: 'Error generating image' });
+    throw err;
   }
-};
+
+  const id = randomUUID();
+  const imageKey = `creations/${userId}/${id}.png`;
+  await uploadImageToS3(imageKey, imageBuffer);
+
+  const creationItem = buildCreationItem(userId, id, imageKey, user, body);
+  await saveCreation(creationItem);
+
+  const remainingCredits = await decrementUserCredits(userId, user.credits);
+  const url = await getPresignedImageUrl(imageKey);
+
+  const creation: GenerateCreationResponse = {
+    id: creationItem.id,
+    title: creationItem.title,
+    url,
+    createdAt: creationItem.createdAt,
+    isPublic: creationItem.isPublic,
+    createdBy: creationItem.createdBy,
+    aiMetadata: creationItem.aiMetadata,
+    remainingCredits,
+  };
+
+  return createResponse(200, creation);
+});
 
 /** Fetches the user's profile/metadata item. */
 async function getUser(userId: string): Promise<User | undefined> {
@@ -127,10 +117,7 @@ async function generateImage(prompt: string): Promise<Buffer> {
   const finishReason = stableImageResponse.finish_reasons?.[0];
 
   if (finishReason || !stableImageResponse.images?.[0]) {
-    console.error('Stable Image Core returned no image', stableImageResponse);
-    throw new NoImageGeneratedError(
-      finishReason ?? 'Your prompt could not be turned into an image.',
-    );
+    throw new HttpError(422, finishReason ?? 'Your prompt could not be turned into an image.');
   }
 
   return Buffer.from(stableImageResponse.images[0], 'base64');
