@@ -1,52 +1,49 @@
 import { GetCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { createResponse, docClient } from '@shared/api-utils.js';
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import { createResponse, docClient, withErrorHandling } from '@shared/api-utils.js';
 import { collectionSk, creationSk, userPk } from '@shared/db-keys.js';
 import { AddCreationToCollectionDto, CollectionItem } from '../../models/collection.model.js';
+import { Errors } from '@shared/errors.js';
 
 const MAX_CREATIONS_PER_COLLECTION = 10;
 
 /** Adds a creation to a collection. */
-export const handler = async (
-  event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyResult> => {
+export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => {
   const userId = event.requestContext.authorizer?.claims.sub;
   if (!userId) {
-    return createResponse(401, { message: 'User ID not found' });
+    throw Errors.missingUserId;
   }
 
   const collectionId = event.pathParameters?.id;
   if (!collectionId) {
-    return createResponse(400, { message: 'Missing collection id' });
+    throw Errors.missingCollectionId;
   }
 
   const body = JSON.parse(event.body || '{}') as AddCreationToCollectionDto;
   if (!body.creationId?.trim()) {
-    return createResponse(400, { message: 'Creation id is required' });
+    throw Errors.creationIdRequired;
+  }
+
+  const collectionItem = await getCollectionItem(userId, collectionId);
+  if (!collectionItem) {
+    throw Errors.collectionNotFound;
+  }
+
+  const creationExists = await checkCreationExists(userId, body.creationId);
+  if (!creationExists) {
+    throw Errors.creationNotFound;
+  }
+
+  if (collectionItem.creationIds.includes(body.creationId)) {
+    throw Errors.alreadyInCollection;
+  }
+
+  if (collectionItem.creationIds.length >= MAX_CREATIONS_PER_COLLECTION) {
+    throw Errors.maxCreationsInCollectionReached(MAX_CREATIONS_PER_COLLECTION);
   }
 
   try {
-    const collectionItem = await getCollectionItem(userId, collectionId);
-    if (!collectionItem) {
-      return createResponse(404, { message: 'Collection not found' });
-    }
-
-    const creationExists = await checkCreationExists(userId, body.creationId);
-    if (!creationExists) {
-      return createResponse(404, { message: 'Creation not found' });
-    }
-
-    if (collectionItem.creationIds.includes(body.creationId)) {
-      return createResponse(409, { message: 'Already in this collection' });
-    }
-
-    if (collectionItem.creationIds.length >= MAX_CREATIONS_PER_COLLECTION) {
-      return createResponse(403, {
-        message: `You can only have up to ${MAX_CREATIONS_PER_COLLECTION} creations in a collection`,
-      });
-    }
-
     await docClient.send(
       new UpdateCommand({
         TableName: process.env.TABLE_NAME,
@@ -56,16 +53,15 @@ export const handler = async (
         ExpressionAttributeValues: { ':newId': [body.creationId] },
       }),
     );
-
-    return createResponse(200, { message: 'Creation added to collection' });
   } catch (err) {
     if (err instanceof ConditionalCheckFailedException) {
-      return createResponse(404, { message: 'Collection not found' });
+      throw Errors.collectionNotFound;
     }
-    console.error('Error adding creation to collection:', err);
-    return createResponse(500, { message: 'Error adding creation to collection' });
+    throw err;
   }
-};
+
+  return createResponse(200, { message: 'Creation added to collection' });
+});
 
 /** Fetches the collection item, or undefined if it doesn't exist. */
 async function getCollectionItem(

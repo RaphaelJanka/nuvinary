@@ -1,34 +1,28 @@
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
-import { createResponse, docClient } from '@shared/api-utils.js';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { createResponse, docClient, withErrorHandling } from '@shared/api-utils.js';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { METADATA_SK, userPk } from '@shared/db-keys.js';
+import { Errors } from '@shared/errors.js';
 
-export const handler = async (
-  event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyResult> => {
+export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => {
   const userId = event.requestContext.authorizer?.claims.sub;
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Content-Type': 'application/json',
-  };
-
   if (!userId) {
-    return createResponse(401, { message: 'User ID not found' });
+    throw Errors.missingUserId;
   }
 
-  try {
-    const user = await docClient.send(
-      new GetCommand({
-        TableName: process.env.TABLE_NAME,
-        Key: {
-          PK: userPk(userId),
-          SK: METADATA_SK,
-        },
-      }),
-    );
-    return createResponse(200, user.Item);
-  } catch (err) {
-    console.error('Error fetching user profile:', err);
-    return createResponse(500, { message: 'Error fetching user profile' });
+  const user = await docClient.send(
+    new GetCommand({
+      TableName: process.env.TABLE_NAME,
+      Key: {
+        PK: userPk(userId),
+        SK: METADATA_SK,
+      },
+    }),
+  );
+
+  if (!user.Item) {
+    throw Errors.userNotFound;
   }
-};
+
+  return createResponse(200, user.Item);
+});

@@ -1,6 +1,7 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { Collection, CollectionCreation } from '../dashboard/pages/models/collection.model';
 import { NotificationService } from '../../shared/services/notification-service';
+import { ErrorHandlingService } from '../../shared/services/error-handling-service';
 import { ApiBody, ApiService } from '../../core/api/api.service';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -9,6 +10,7 @@ import { AuthService } from '../../core/auth/auth.service';
 })
 export class CollectionService {
   private readonly notificationService = inject(NotificationService);
+  private readonly errorHandlingService = inject(ErrorHandlingService);
   private readonly authService = inject(AuthService);
   private readonly apiService = inject(ApiService);
   private readonly authUser = this.authService.authUser;
@@ -42,7 +44,7 @@ export class CollectionService {
       const collections: Collection[] = (await response.body.json()) as unknown as Collection[];
       this._collectionList.set(collections);
     } catch (err) {
-      console.error('Error fetching collections', err);
+      this.errorHandlingService.handle(err);
     }
   }
 
@@ -61,7 +63,7 @@ export class CollectionService {
       this._collectionList.update((list) => [...list, collection]);
       this.notificationService.show('Collection created successfully', 'success');
     } catch (err) {
-      this.notificationService.show('Error creating collection', 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }
@@ -78,8 +80,7 @@ export class CollectionService {
       );
       this.notificationService.show('Collection title successfully updated', 'success');
     } catch (err) {
-      console.error('Error updating collection title', err);
-      this.notificationService.show('Error updating collection title', 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }
@@ -91,8 +92,7 @@ export class CollectionService {
       this._collectionList.update((collections) => collections.filter((c) => c.id !== id));
       this.notificationService.show('Collection deleted', 'info');
     } catch (err) {
-      console.error('Error deleting collection', err);
-      this.notificationService.show('Error deleting collection', 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }
@@ -120,8 +120,7 @@ export class CollectionService {
       );
       this.notificationService.show('Added to collection', 'success');
     } catch (err) {
-      console.error('Error adding creation to collection:', err);
-      this.notificationService.show('Error adding creation to collection', 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }
@@ -141,8 +140,7 @@ export class CollectionService {
       );
       this.notificationService.show('Removed from collection');
     } catch (err) {
-      console.error('Error removing creation from collection:', err);
-      this.notificationService.show('Error removing creation from collection', 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }

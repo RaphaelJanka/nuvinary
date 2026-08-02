@@ -1,10 +1,10 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { LoginData, User, UserRegistrationForm } from './auth.interfaces';
 import { NotificationService } from '../../shared/services/notification-service';
+import { ErrorHandlingService } from '../../shared/services/error-handling-service';
 import {
   signUp,
   signOut,
-  AuthError,
   confirmSignUp,
   resendSignUpCode,
   getCurrentUser,
@@ -25,6 +25,7 @@ import { UserService } from '../../features/services/user-service';
 export class AuthService {
   readonly STORAGE_KEY = 'nuvinary_user';
   private readonly notificationService = inject(NotificationService);
+  private readonly errorHandlingService = inject(ErrorHandlingService);
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
 
@@ -101,14 +102,7 @@ export class AuthService {
       this.notificationService.show('Login successful!', 'success');
       await this.updateAuthContext();
     } catch (err: unknown) {
-      let message = 'An unknown error has occurred';
-
-      if (err instanceof AuthError) {
-        message = err.message;
-      } else if (err instanceof Error) {
-        message = err.message;
-      }
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -122,8 +116,7 @@ export class AuthService {
       this.notificationService.show('Logged out successfully', 'info');
       this.router.navigate(['/login']);
     } catch (err: unknown) {
-      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }
@@ -149,8 +142,7 @@ export class AuthService {
         'success',
       );
     } catch (err: unknown) {
-      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -168,8 +160,7 @@ export class AuthService {
       this.isLoading.set(false);
     } catch (err: unknown) {
       this.isLoading.set(false);
-      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     }
   }
@@ -185,8 +176,7 @@ export class AuthService {
       this.router.navigate(['/auth/signin']);
       this.notificationService.show('Registration confirmed. You can now sign in.', 'success');
     } catch (err: unknown) {
-      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -205,8 +195,7 @@ export class AuthService {
       );
       this._pendingUserEmailSignal.set(email);
     } catch (err: unknown) {
-      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -236,8 +225,7 @@ export class AuthService {
       this.notificationService.show('Passwort erfolgreich zurückgesetzt.', 'success');
       this.router.navigate(['/auth/signin']);
     } catch (err: unknown) {
-      const message = err instanceof AuthError ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -259,8 +247,7 @@ export class AuthService {
         'success',
       );
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -277,8 +264,7 @@ export class AuthService {
       this.notificationService.show('Email updated. Please login again.', 'info');
       await this.logOut();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
@@ -297,8 +283,7 @@ export class AuthService {
       this.notificationService.show('Password successfully changed.', 'success');
       this._pendingUserEmailSignal.set(null);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An unknown error has occurred';
-      this.notificationService.show(message, 'error');
+      this.errorHandlingService.handle(err);
       throw err;
     } finally {
       this.isLoading.set(false);
