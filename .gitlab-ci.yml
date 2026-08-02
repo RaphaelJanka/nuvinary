@@ -190,14 +190,16 @@ deploy_dev:
       artifacts: true
     - job: build_infra_dev
       artifacts: true
+    - job: diff_dev
   script:
     - echo "Deploying to dev environment"
     - cd nuvinary-infra
     - npx cdk deploy NuvinaryInfraStack-dev --require-approval never
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
     - if: $CI_COMMIT_BRANCH == "main"
-  when: manual
+      when: on_success
 
 deploy_prod:
   extends: [.node_setup, .aws_auth]
@@ -209,6 +211,7 @@ deploy_prod:
       artifacts: true
     - job: build_infra_prod
       artifacts: true
+    - job: diff_prod
   script:
     - echo "Deploying to prod environment"
     - cd nuvinary-infra
