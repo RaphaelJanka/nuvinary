@@ -55,7 +55,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     });
 
     const getUserProfileFn = lambdaFactory.createFunction('GetUserProfile', {
-      entry: '../nuvinary-backend/src/api/get-user.ts',
+      entry: '../nuvinary-backend/src/user/get-user.ts',
       handler: 'handler',
       permissions: {
         dynamoDb: 'read',
@@ -65,7 +65,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const updateUserProfileFn = lambdaFactory.createFunction(
       'UpdateUserProfile',
       {
-        entry: '../nuvinary-backend/src/api/update-user.ts',
+        entry: '../nuvinary-backend/src/user/update-user.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'readWrite',
@@ -76,7 +76,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const generateCreationFn = lambdaFactory.createFunction(
       'GenerateCreation',
       {
-        entry: '../nuvinary-backend/src/api/generate-creation.ts',
+        entry: '../nuvinary-backend/src/creation/generate-creation.ts',
         handler: 'handler',
         permissions: {
           bedrock: true,
@@ -89,7 +89,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const listUserCreationsFn = lambdaFactory.createFunction(
       'ListUserCreations',
       {
-        entry: '../nuvinary-backend/src/api/list-user-creations.ts',
+        entry: '../nuvinary-backend/src/creation/list-user-creations.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'read',
@@ -101,7 +101,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const listCommunityCreationsFn = lambdaFactory.createFunction(
       'ListCommunityCreations',
       {
-        entry: '../nuvinary-backend/src/api/list-community-creations.ts',
+        entry: '../nuvinary-backend/src/creation/list-community-creations.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'read',
@@ -111,7 +111,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     );
 
     const updateCreationFn = lambdaFactory.createFunction('UpdateCreation', {
-      entry: '../nuvinary-backend/src/api/update-creation.ts',
+      entry: '../nuvinary-backend/src/creation/update-creation.ts',
       handler: 'handler',
       permissions: {
         dynamoDb: 'readWrite',
@@ -119,7 +119,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     });
 
     const deleteCreationFn = lambdaFactory.createFunction('DeleteCreation', {
-      entry: '../nuvinary-backend/src/api/delete-creation.ts',
+      entry: '../nuvinary-backend/src/creation/delete-creation.ts',
       handler: 'handler',
       permissions: {
         dynamoDb: 'readWrite',
@@ -128,7 +128,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     });
 
     const listCollectionsFn = lambdaFactory.createFunction('ListCollections', {
-      entry: '../nuvinary-backend/src/api/collections/list.ts',
+      entry: '../nuvinary-backend/src/collection/list.ts',
       handler: 'handler',
       permissions: {
         dynamoDb: 'read',
@@ -139,7 +139,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const createCollectionFn = lambdaFactory.createFunction(
       'CreateCollection',
       {
-        entry: '../nuvinary-backend/src/api/collections/create.ts',
+        entry: '../nuvinary-backend/src/collection/create.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'readWrite',
@@ -150,7 +150,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const updateCollectionTitleFn = lambdaFactory.createFunction(
       'UpdateCollectionTitle',
       {
-        entry: '../nuvinary-backend/src/api/collections/update-title.ts',
+        entry: '../nuvinary-backend/src/collection/update-title.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'readWrite',
@@ -161,7 +161,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const deleteCollectionFn = lambdaFactory.createFunction(
       'DeleteCollection',
       {
-        entry: '../nuvinary-backend/src/api/collections/delete.ts',
+        entry: '../nuvinary-backend/src/collection/delete.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'readWrite',
@@ -172,7 +172,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const addCreationToCollectionFn = lambdaFactory.createFunction(
       'AddCreationToCollection',
       {
-        entry: '../nuvinary-backend/src/api/collections/add-creation.ts',
+        entry: '../nuvinary-backend/src/collection/add-creation.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'readWrite',
@@ -183,7 +183,7 @@ export class NuvinaryInfraStack extends cdk.Stack {
     const removeCreationFromCollectionFn = lambdaFactory.createFunction(
       'RemoveCreationFromCollection',
       {
-        entry: '../nuvinary-backend/src/api/collections/remove-creation.ts',
+        entry: '../nuvinary-backend/src/collection/remove-creation.ts',
         handler: 'handler',
         permissions: {
           dynamoDb: 'readWrite',
