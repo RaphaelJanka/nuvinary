@@ -1,9 +1,8 @@
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
-import { AVATAR_COLORS, User } from '../models/user.model.js';
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';
 import { PostConfirmationTriggerEvent } from 'aws-lambda';
-import { docClient } from '@shared/api-utils.js';
 import { METADATA_SK, userPk } from '@shared/db-keys.js';
+import { AVATAR_COLORS, User } from '../user/user.model.js';
+import { createUser } from '../user/user.repository.js';
 
 const sesClient = new SESClient({ region: 'eu-central-1' });
 
@@ -23,12 +22,7 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
     createdAt: new Date().toISOString(),
   };
 
-  await docClient.send(
-    new PutCommand({
-      TableName: process.env.TABLE_NAME,
-      Item: newUser,
-    }),
-  );
+  await createUser(newUser);
 
   try {
     await sesClient.send(
@@ -42,10 +36,10 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
           Body: {
             Text: {
               Data: `Es gab eine neue Registrierung:
-                     
+
                      User-ID: ${sub}
                      Zeitpunkt: ${new Date().toISOString()}
-                     
+
                      Bitte prüfe den User im Admin-Dashboard/DynamoDB.`,
             },
           },

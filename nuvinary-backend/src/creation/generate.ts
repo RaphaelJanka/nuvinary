@@ -5,20 +5,17 @@ import {
   ValidationException,
 } from '@aws-sdk/client-bedrock-runtime';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { ConditionalCheckFailedException } from '@aws-sdk/client-dynamodb';
-import { GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { createResponse, docClient, withErrorHandling } from '@shared/api-utils.js';
+import { createResponse, withErrorHandling } from '@shared/api-utils.js';
 import { getPresignedImageUrl, s3Client } from '@shared/s3-utils.js';
-import {
-  CreationItem,
-  GenerateCreationDto,
-  GenerateCreationResponse,
-} from '../models/creation.model.js';
-import { User } from '../models/user.model.js';
-import { METADATA_SK, creationSk, userPk } from '@shared/db-keys.js';
+import { getUserIdOrThrow } from '@shared/auth.js';
+import { creationSk, userPk } from '@shared/db-keys.js';
 import { Errors } from '@shared/errors.js';
 import { HttpError } from '@shared/http-error.js';
+import { CreationItem, GenerateCreationDto, GenerateCreationResponse } from './creation.model.js';
+import { saveCreation } from './creation.repository.js';
+import { decrementCredits, getUser } from '../user/user.repository.js';
+import { User } from '../user/user.model.js';
 
 const bedrockClient = new BedrockRuntimeClient({ region: 'us-west-2' });
 
@@ -33,10 +30,7 @@ interface StableImageResponse {
 
 /** Generates an image via Bedrock, persists it to S3/DynamoDB, and decrements credits. */
 export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => {
-  const userId = event.requestContext.authorizer?.claims.sub;
-  if (!userId) {
-    throw Errors.missingUserId;
-  }
+  const userId = getUserIdOrThrow(event);
 
   const body = JSON.parse(event.body || '{}') as GenerateCreationDto;
   if (!body.title?.trim() || !body.prompt?.trim()) {
@@ -68,7 +62,7 @@ export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => 
   const creationItem = buildCreationItem(userId, id, imageKey, user, body);
   await saveCreation(creationItem);
 
-  const remainingCredits = await decrementUserCredits(userId, user.credits);
+  const remainingCredits = await decrementCredits(userId, user.credits);
   const url = await getPresignedImageUrl(imageKey);
 
   const creation: GenerateCreationResponse = {
@@ -84,17 +78,6 @@ export const handler = withErrorHandling(async (event: APIGatewayProxyEvent) => 
 
   return createResponse(200, creation);
 });
-
-/** Fetches the user's profile/metadata item. */
-async function getUser(userId: string): Promise<User | undefined> {
-  const userResult = await docClient.send(
-    new GetCommand({
-      TableName: process.env.TABLE_NAME,
-      Key: { PK: userPk(userId), SK: METADATA_SK },
-    }),
-  );
-  return userResult.Item as User | undefined;
-}
 
 /** Invokes Bedrock's Stable Image Core model and decodes the returned base64 image. */
 async function generateImage(prompt: string): Promise<Buffer> {
@@ -164,39 +147,4 @@ function buildCreationItem(
       prompt: body.prompt,
     },
   };
-}
-
-/** Writes the creation item to DynamoDB. */
-async function saveCreation(creationItem: CreationItem): Promise<void> {
-  await docClient.send(
-    new PutCommand({
-      TableName: process.env.TABLE_NAME,
-      Item: creationItem,
-    }),
-  );
-}
-
-/** Atomically decrements credits by 1, guarded against going below 0. */
-async function decrementUserCredits(
-  userId: string,
-  currentCredits: number,
-): Promise<number> {
-  try {
-    const updateResult = await docClient.send(
-      new UpdateCommand({
-        TableName: process.env.TABLE_NAME,
-        Key: { PK: userPk(userId), SK: METADATA_SK },
-        UpdateExpression: 'SET credits = credits - :one',
-        ConditionExpression: 'credits > :zero',
-        ExpressionAttributeValues: { ':one': 1, ':zero': 0 },
-        ReturnValues: 'UPDATED_NEW',
-      }),
-    );
-    return updateResult.Attributes?.credits ?? currentCredits - 1;
-  } catch (err) {
-    if (err instanceof ConditionalCheckFailedException) {
-      return 0;
-    }
-    throw err;
-  }
 }
