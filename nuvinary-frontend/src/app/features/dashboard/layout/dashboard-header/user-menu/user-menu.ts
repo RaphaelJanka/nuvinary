@@ -9,7 +9,7 @@ import {
 import { ChartLine, CircleUserRound, LockOpen, LogOut, LucideAngularModule } from 'lucide-angular';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../../core/auth/auth.service';
-import { MenuItem } from '../../../../../shared/models/menu-item.model';
+import { MenuItem } from './menu-item.model';
 
 @Component({
   selector: 'app-user-menu',

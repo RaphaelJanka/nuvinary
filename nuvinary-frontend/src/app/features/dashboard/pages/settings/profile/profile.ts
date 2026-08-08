@@ -4,7 +4,8 @@ import { AuthService } from '../../../../../core/auth/auth.service';
 import { Check, Lock, LucideAngularModule } from 'lucide-angular';
 import { UserInitialPipe } from '../../../../../shared/pipes/user-initial.pipe';
 import { form, maxLength } from '@angular/forms/signals';
-import { UserCredentialModel, UserService } from '../../../../services/user-service';
+import { UserService } from '../../../user/user.service';
+import { UserUpdateDto } from '../../../user/user-update.model';
 import { Button } from '../../../../../shared/components/button/button';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
 import { verifyName } from '../../../../../shared/utils/validation-functions';
@@ -41,14 +42,14 @@ export class Profile {
   };
   protected isLoading = false;
 
-  private readonly userCredentialModel = signal<UserCredentialModel>({
+  private readonly userProfileUpdate = signal<UserUpdateDto>({
     firstName: this.user()?.firstName || '',
     lastName: this.user()?.lastName || '',
     displayName: this.user()?.displayName || '',
-    color: this.selectedAvatarColor() || '',
+    avatarColor: this.selectedAvatarColor() || '',
   });
 
-  protected readonly userCredentialsForm = form(this.userCredentialModel, (schema) => {
+  protected readonly userProfileForm = form(this.userProfileUpdate, (schema) => {
     verifyName(schema.firstName, 'First Name');
     verifyName(schema.lastName, 'Last Name');
     verifyName(schema.displayName, 'Display Name');
@@ -59,17 +60,17 @@ export class Profile {
 
   protected isDisabled(): boolean {
     return (
-      this.userCredentialsForm().invalid() ||
+      this.userProfileForm().invalid() ||
       (this.selectedAvatarColor() === this.user()?.avatarColor &&
-        this.userCredentialModel().firstName === this.user()?.firstName &&
-        this.userCredentialModel().lastName === this.user()?.lastName &&
-        this.userCredentialModel().displayName === this.user()?.displayName)
+        this.userProfileUpdate().firstName === this.user()?.firstName &&
+        this.userProfileUpdate().lastName === this.user()?.lastName &&
+        this.userProfileUpdate().displayName === this.user()?.displayName)
     );
   }
 
-  protected onColorSelect(color: string) {
-    this.selectedAvatarColor.set(color);
-    this.userCredentialModel.update((current) => ({ ...current, color }));
+  protected onColorSelect(avatarColor: string) {
+    this.selectedAvatarColor.set(avatarColor);
+    this.userProfileUpdate.update((current) => ({ ...current, avatarColor }));
   }
 
   protected async onSubmit(event: Event) {
@@ -80,7 +81,7 @@ export class Profile {
         this.isLoading = true;
         const updatedUser = await this.userService.updateUser(
           uid,
-          this.userCredentialsForm().value(),
+          this.userProfileForm().value(),
         );
         this.authService.setUser(updatedUser);
       } finally {

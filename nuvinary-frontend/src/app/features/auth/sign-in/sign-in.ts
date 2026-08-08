@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { form, maxLength } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
-import { LoginData } from '../../../core/auth/auth.interfaces';
+import { LoginData } from '../../../core/auth/auth.model';
 import { FormInput } from '../../../shared/components/form-input/form-input';
 import { verifyEmail, verifyPassword } from '../../../shared/utils/validation-functions';
 import { Button } from '../../../shared/components/button/button';

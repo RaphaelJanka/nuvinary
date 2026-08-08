@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { del, get, patch, post, put } from 'aws-amplify/api';
 import { fetchAuthSession } from 'aws-amplify/auth';
-
-export type ApiBody = Record<string, string | number | boolean>;
+import { ApiBody } from './api.model';
 
 @Injectable({
   providedIn: 'root',

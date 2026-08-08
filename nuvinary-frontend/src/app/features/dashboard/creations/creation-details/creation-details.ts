@@ -1,0 +1,111 @@
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
+import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  Signal,
+} from '@angular/core';
+import {
+  Calendar,
+  Check,
+  Cpu,
+  FileText,
+  Globe,
+  Lock,
+  LucideAngularModule,
+  Maximize,
+  Pen,
+  Trash,
+  User,
+  X,
+} from 'lucide-angular';
+import { Creation } from '../creation.model';
+import { CreationService } from '../creation.service';
+import { AuthService } from '../../../../core/auth/auth.service';
+import { Router } from '@angular/router';
+import { FormInput } from '../../../../shared/components/form-input/form-input';
+import { form, maxLength, required } from '@angular/forms/signals';
+import { ScreenSizeService } from '../../../../shared/services/screen-size.service';
+
+@Component({
+  selector: 'app-creation-details',
+  imports: [CommonModule, LucideAngularModule, FormInput],
+  templateUrl: './creation-details.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class CreationDetails {
+  private readonly creationService = inject(CreationService);
+  private readonly authService = inject(AuthService);
+  private readonly screenSizeService = inject(ScreenSizeService);
+  private readonly router = inject(Router);
+  private readonly dialogRef = inject(DialogRef);
+
+  protected readonly currentUser = this.authService.authUser;
+  protected readonly creation = inject<Signal<Creation>>(DIALOG_DATA);
+  protected isMobile = this.screenSizeService.isMobile;
+  protected isEditingTitle = signal(false);
+  private readonly titleModel = signal({
+    title: this.creation().title,
+  });
+  protected readonly editTitleForm = form(this.titleModel, (schema) => {
+    required(schema.title, { message: 'Title is required' });
+    maxLength(schema.title, 40);
+  });
+
+  protected readonly canEdit = computed(() => {
+    return this.router.url.includes('/gallery');
+  });
+  protected readonly createdByInitial = computed(() =>
+    this.creation().createdBy.displayName.charAt(0).toUpperCase(),
+  );
+  protected readonly icons = {
+    cpuIcon: Cpu,
+    lockIcon: Lock,
+    globeIcon: Globe,
+    trashIcon: Trash,
+    editIcon: Pen,
+    closeIcon: X,
+    maximizeIcon: Maximize,
+    dateIcon: Calendar,
+    userIcon: User,
+    fileTextIcon: FileText,
+    checkIcon: Check,
+  };
+
+  /** Saves the edited title, keeping the edit form open if the save fails. */
+  async onSaveTitle() {
+    const newTitle = this.editTitleForm.title().value().trim();
+    if (!newTitle || newTitle === this.creation().title) {
+      this.isEditingTitle.set(false);
+      return;
+    }
+    try {
+      await this.creationService.updateTitle(this.creation().id, newTitle);
+      this.isEditingTitle.set(false);
+    } catch {
+      // Keep edit mode open on failure; the service already surfaced a notification.
+    }
+  }
+
+  onCancelEdit() {
+    this.isEditingTitle.set(false);
+  }
+
+  onTogglePublic() {
+    const currentId = this.creation().id;
+    const isPublic = !this.creation().isPublic;
+    this.creationService.togglePublicStatus(currentId, isPublic);
+  }
+
+  onClose() {
+    this.dialogRef.close();
+  }
+
+  /** Presigned URL likely expired — refresh the list. */
+  protected onImageError() {
+    this.creationService.loadUserCreations();
+  }
+}

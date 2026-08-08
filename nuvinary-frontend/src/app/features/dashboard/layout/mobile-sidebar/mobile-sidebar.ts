@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideAngularModule, LucideIconData, X } from 'lucide-angular';
-import { SidebarService } from '../../../services/sidebar-service';
+import { SidebarService } from '../sidebar.service';
 import { RouterLink } from '@angular/router';
 
 @Component({

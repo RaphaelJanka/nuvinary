@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { SidebarService } from '../../../services/sidebar-service';
+import { SidebarService } from '../sidebar.service';
 import { LucideAngularModule, Menu } from 'lucide-angular';
 
 import { UserMenu } from './user-menu/user-menu';
@@ -16,7 +16,7 @@ import { Tooltip } from '../../../../shared/directives/tooltip';
     class: 'bg-surface',
   },
 })
-export class Header {
+export class DashboardHeader {
   private readonly sidebarService = inject(SidebarService);
   private readonly authService = inject(AuthService);
   protected readonly isCollapsed = this.sidebarService.isCollapsed;

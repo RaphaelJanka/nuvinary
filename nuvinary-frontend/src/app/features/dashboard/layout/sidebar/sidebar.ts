@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ArrowLeft, LucideAngularModule } from 'lucide-angular';
-import { SidebarService } from '../../../services/sidebar-service';
+import { SidebarService } from '../sidebar.service';
 
 import { NgTemplateOutlet } from '@angular/common';
 import { Tooltip } from '../../../../shared/directives/tooltip';

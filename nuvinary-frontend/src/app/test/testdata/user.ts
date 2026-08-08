@@ -1,4 +1,4 @@
-import { User } from '../../core/auth/auth.interfaces';
+import { User } from '../../shared/models/user.model';
 
 export const testUser: User = {
   uid: '101',
