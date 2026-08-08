@@ -1,4 +1,3 @@
-// src/app/shared/components/delete-confirm-dialog/delete-confirm-dialog.component.ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';

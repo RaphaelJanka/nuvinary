@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CreationService } from '../../../services/creation-service';
+import { CreationService } from '../../creations/creation.service';
 import { Collections } from './collections/collections';
-import { CreationGrid } from '../../../../shared/components/creation-grid/creation-grid';
+import { CreationGrid } from '../../creations/creation-grid/creation-grid';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import { LucideAngularModule } from 'lucide-angular';
 import { SearchInput } from '../../../../shared/components/page-layout/search-input/search-input';
-import { createCreationFilter } from '../../../../shared/utils/creation-filter';
+import { createCreationFilter } from '../../creations/creation-filter';
 
 @Component({
   selector: 'app-gallery',

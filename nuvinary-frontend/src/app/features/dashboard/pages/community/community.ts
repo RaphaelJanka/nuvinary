@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CreationGrid } from '../../../../shared/components/creation-grid/creation-grid';
-import { CreationService } from '../../../services/creation-service';
+import { CreationGrid } from '../../creations/creation-grid/creation-grid';
+import { CreationService } from '../../creations/creation.service';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import { SearchInput } from '../../../../shared/components/page-layout/search-input/search-input';
-import { createCreationFilter } from '../../../../shared/utils/creation-filter';
+import { createCreationFilter } from '../../creations/creation-filter';
 
 @Component({
   selector: 'app-community',

@@ -1,7 +1,8 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { LoginData, User, UserRegistrationForm } from './auth.interfaces';
-import { NotificationService } from '../../shared/services/notification-service';
-import { ErrorHandlingService } from '../../shared/services/error-handling-service';
+import { LoginData, UserRegistrationForm } from './auth.model';
+import { User } from '../../shared/models/user.model';
+import { NotificationService } from '../feedback/notification.service';
+import { ErrorHandlingService } from '../feedback/error-handling.service';
 import {
   signUp,
   signOut,
@@ -17,7 +18,7 @@ import {
   fetchUserAttributes,
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
-import { UserService } from '../../features/services/user-service';
+import { ApiService } from '../api/api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,7 @@ export class AuthService {
   private readonly notificationService = inject(NotificationService);
   private readonly errorHandlingService = inject(ErrorHandlingService);
   private readonly router = inject(Router);
-  private readonly userService = inject(UserService);
+  private readonly apiService = inject(ApiService);
 
   private readonly _pendingUserEmailSignal = signal<string | null>(null);
   pendingUserEmail = this._pendingUserEmailSignal.asReadonly();
@@ -54,6 +55,18 @@ export class AuthService {
     });
   }
 
+  /** Fetches the signed-in user's full profile from the backend. */
+  private async fetchUserProfile(): Promise<User> {
+    const restOperation = await this.apiService.executeGetOperation('/me');
+    const response = await restOperation.response;
+    const data = (await response.body.json()) as unknown as User;
+
+    if (!data.uid) {
+      throw new Error('Invalid user data received');
+    }
+    return data;
+  }
+
   getUserFromLocalStorage(): User | null {
     const userJson = localStorage.getItem(this.STORAGE_KEY);
     try {
@@ -76,7 +89,7 @@ export class AuthService {
       if (cachedUser) {
         this.setUser(cachedUser);
       } else {
-        const fullProfile = await this.userService.getUserProfile();
+        const fullProfile = await this.fetchUserProfile();
         this.setUser(fullProfile);
       }
       await this.updateAuthContext();
@@ -96,7 +109,7 @@ export class AuthService {
         username: credentials.email,
         password: credentials.password,
       });
-      const fullProfile = await this.userService.getUserProfile();
+      const fullProfile = await this.fetchUserProfile();
       this.setUser(fullProfile);
       this.router.navigate(['/dashboard']);
       this.notificationService.show('Login successful!', 'success');

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { NotificationService, Notification } from '../../services/notification-service';
+import { NotificationService } from '../../../core/feedback/notification.service';
+import { Notification } from '../../../core/feedback/notification.model';
 import { CircleAlert, CircleCheck, Info, LucideAngularModule, X } from 'lucide-angular';
 
 @Component({
