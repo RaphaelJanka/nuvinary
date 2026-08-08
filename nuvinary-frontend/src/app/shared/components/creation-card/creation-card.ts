@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { Creation } from '../../models/creation.model';
-import { DialogService } from '../../services/dialog-service';
-import { CreationService } from '../../../features/services/creation-service';
+import { DialogService } from '../../../core/ui/dialog.service';
+import { CreationService } from '../../../core/data/creation.service';
 import { Loader } from '../loader/loader';
 
 @Component({

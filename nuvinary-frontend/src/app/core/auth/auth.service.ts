@@ -1,7 +1,8 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { LoginData, User, UserRegistrationForm } from './auth.interfaces';
-import { NotificationService } from '../../shared/services/notification-service';
-import { ErrorHandlingService } from '../../shared/services/error-handling-service';
+import { LoginData, UserRegistrationForm } from './auth.model';
+import { User } from '../../shared/models/user.model';
+import { NotificationService } from '../feedback/notification.service';
+import { ErrorHandlingService } from '../feedback/error-handling.service';
 import {
   signUp,
   signOut,
@@ -17,7 +18,7 @@ import {
   fetchUserAttributes,
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
-import { UserService } from '../../features/services/user-service';
+import { UserService } from '../data/user.service';
 
 @Injectable({
   providedIn: 'root',

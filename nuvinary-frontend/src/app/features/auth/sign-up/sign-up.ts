@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { form, maxLength } from '@angular/forms/signals';
-import { UserRegistrationForm } from '../../../core/auth/auth.interfaces';
+import { UserRegistrationForm } from '../../../core/auth/auth.model';
 import {
   verifyCode,
   verifyConfirmPassword,

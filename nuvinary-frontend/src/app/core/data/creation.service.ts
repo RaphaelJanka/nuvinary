@@ -1,14 +1,11 @@
 import { computed, effect, inject, Injectable, Signal, signal } from '@angular/core';
-import { AuthService } from '../../core/auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Creation } from '../../shared/models/creation.model';
-import { NotificationService } from '../../shared/services/notification-service';
-import { ErrorHandlingService } from '../../shared/services/error-handling-service';
-import { ApiBody, ApiService } from '../../core/api/api.service';
-
-export interface CreationModel {
-  prompt: string;
-  title: string;
-}
+import { NotificationService } from '../feedback/notification.service';
+import { ErrorHandlingService } from '../feedback/error-handling.service';
+import { ApiService } from '../api/api.service';
+import { ApiBody } from '../api/api.model';
+import { GenerateCreationDto, GenerateCreationResponse } from './generate-creation.model';
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +55,7 @@ export class CreationService {
     });
   }
 
-  getDefaultCreationModel = (): CreationModel => ({
+  getDefaultCreationRequest = (): GenerateCreationDto => ({
     prompt: '',
     title: '',
   });
@@ -116,10 +113,10 @@ export class CreationService {
   }
 
   /** Generates a new image and prepends it to the local list. */
-  async generateCreation(creationModel: CreationModel): Promise<Creation> {
+  async generateCreation(creationRequest: GenerateCreationDto): Promise<Creation> {
     const creationPayload: ApiBody = {
-      prompt: creationModel.prompt,
-      title: creationModel.title,
+      prompt: creationRequest.prompt,
+      title: creationRequest.title,
     };
 
     try {
@@ -129,9 +126,7 @@ export class CreationService {
       );
       const response = await restOperation.response;
       const { remainingCredits, ...creation } =
-        (await response.body.json()) as unknown as Creation & {
-          remainingCredits: number;
-        };
+        (await response.body.json()) as unknown as GenerateCreationResponse;
 
       const user = this.currentUser();
       if (user) {

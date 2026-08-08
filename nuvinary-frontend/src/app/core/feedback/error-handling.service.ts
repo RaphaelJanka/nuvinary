@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiError } from 'aws-amplify/api';
 import { AuthError } from 'aws-amplify/auth';
-import { NotificationService } from './notification-service';
+import { NotificationService } from './notification.service';
 
 const GENERIC_ERROR_MESSAGE = 'Something went wrong. Please try again.';
 const NETWORK_ERROR_MESSAGE = 'Could not reach the server. Check your connection and try again.';

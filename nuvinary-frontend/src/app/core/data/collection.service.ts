@@ -1,9 +1,10 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { Collection, CollectionCreation } from '../dashboard/pages/models/collection.model';
-import { NotificationService } from '../../shared/services/notification-service';
-import { ErrorHandlingService } from '../../shared/services/error-handling-service';
-import { ApiBody, ApiService } from '../../core/api/api.service';
-import { AuthService } from '../../core/auth/auth.service';
+import { Collection, CollectionCreation } from '../../shared/models/collection.model';
+import { NotificationService } from '../feedback/notification.service';
+import { ErrorHandlingService } from '../feedback/error-handling.service';
+import { ApiService } from '../api/api.service';
+import { ApiBody } from '../api/api.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',

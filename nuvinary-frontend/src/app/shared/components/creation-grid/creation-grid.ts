@@ -9,8 +9,8 @@ import {
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
 import { CreationCard } from '../creation-card/creation-card';
-import { DragAndDropService } from '../../../features/services/drag-and-drop-service';
-import { DialogService } from '../../services/dialog-service';
+import { DragAndDropService } from '../../services/drag-and-drop.service';
+import { DialogService } from '../../../core/ui/dialog.service';
 
 @Component({
   selector: 'app-creation-grid',

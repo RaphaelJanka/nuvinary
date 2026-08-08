@@ -1,15 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { NotificationService } from '../../shared/services/notification-service';
-import { ErrorHandlingService } from '../../shared/services/error-handling-service';
-import { User } from '../../core/auth/auth.interfaces';
-import { ApiBody, ApiService } from '../../core/api/api.service';
-
-export interface UserCredentialModel {
-  firstName: string;
-  lastName: string;
-  displayName: string;
-  color: string;
-}
+import { NotificationService } from '../feedback/notification.service';
+import { ErrorHandlingService } from '../feedback/error-handling.service';
+import { User } from '../../shared/models/user.model';
+import { ApiService } from '../api/api.service';
+import { ApiBody } from '../api/api.model';
+import { UserUpdateDto } from './user-update.model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,12 +25,12 @@ export class UserService {
     return data;
   }
 
-  async updateUser(uid: string, userData: UserCredentialModel): Promise<User> {
+  async updateUser(uid: string, userData: UserUpdateDto): Promise<User> {
     const body: ApiBody = {
       firstName: userData.firstName,
       lastName: userData.lastName,
       displayName: userData.displayName,
-      avatarColor: userData.color,
+      avatarColor: userData.avatarColor,
     };
 
     try {

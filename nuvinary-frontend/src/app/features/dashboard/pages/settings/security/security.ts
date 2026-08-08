@@ -11,7 +11,7 @@ import {
   verifyNewPassword,
   verifyCode,
 } from '../../../../../shared/utils/validation-functions';
-import { UserService } from '../../../../services/user-service';
+import { UserService } from '../../../../../core/data/user.service';
 import { Button } from '../../../../../shared/components/button/button';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
 import { DELETE_PHRASE } from '../../../../../shared/utils/validation-functions';

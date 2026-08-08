@@ -1,14 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Creation } from '../models/creation.model';
-import { ConfirmDialog } from '../components/dialogs/confirmation-dialog/confirmation-dialog';
+import { Creation } from '../../shared/models/creation.model';
+import { ConfirmDialog } from '../../shared/components/dialogs/confirmation-dialog/confirmation-dialog';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
-import { CreationService } from '../../features/services/creation-service';
-import { CollectionService } from '../../features/services/collection-service';
-import { Collection } from '../../features/dashboard/pages/models/collection.model';
-import { CreationDetails } from '../components/creation-details/creation-details';
-import { ConfirmDialogData } from '../models/dialog-data.model';
-import { StudioDialog } from '../components/dialogs/studio-dialog/studio-dialog';
-import { CreationResultDialog } from '../components/dialogs/creation-result-dialog/creation-result-dialog';
+import { CreationService } from '../data/creation.service';
+import { CollectionService } from '../data/collection.service';
+import { Collection } from '../../shared/models/collection.model';
+import { CreationDetails } from '../../shared/components/creation-details/creation-details';
+import { ConfirmDialogData } from '../../shared/models/dialog-data.model';
+import { StudioDialog } from '../../shared/components/dialogs/studio-dialog/studio-dialog';
+import { CreationResultDialog } from '../../shared/components/dialogs/creation-result-dialog/creation-result-dialog';
 
 @Injectable({
   providedIn: 'root',

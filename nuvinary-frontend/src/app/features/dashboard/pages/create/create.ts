@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { typeWriter } from './typewriter.helper';
 import { ArrowRight, CloudUpload, LucideAngularModule } from 'lucide-angular';
-import { CreationModel, CreationService } from '../../../services/creation-service';
+import { CreationService } from '../../../../core/data/creation.service';
+import { GenerateCreationDto } from '../../../../core/data/generate-creation.model';
 import { form, maxLength, required, FormField } from '@angular/forms/signals';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import { Button } from '../../../../shared/components/button/button';
-import { DialogService } from '../../../../shared/services/dialog-service';
+import { DialogService } from '../../../../core/ui/dialog.service';
 import { Loader } from '../../../../shared/components/loader/loader';
 
 const THINKING_DELAY_MS = 1500;
@@ -35,10 +36,10 @@ export class Create {
   private readonly dialogService = inject(DialogService);
   protected readonly authUser = this.authService.authUser();
 
-  private readonly creationModel = signal<CreationModel>(
-    this.creationService.getDefaultCreationModel(),
+  private readonly creationRequest = signal<GenerateCreationDto>(
+    this.creationService.getDefaultCreationRequest(),
   );
-  protected readonly creationForm = form(this.creationModel, (creationSchema) => {
+  protected readonly creationForm = form(this.creationRequest, (creationSchema) => {
     required(creationSchema.prompt);
     required(creationSchema.title);
     maxLength(creationSchema.title, 20);
@@ -121,8 +122,8 @@ export class Create {
   protected onBack() {
     this.currentStep.set('prompt');
     this.displayedText.set('');
-    this.creationModel.update((model) => ({
-      ...model,
+    this.creationRequest.update((request) => ({
+      ...request,
       title: '',
     }));
     this.setMessage();
@@ -142,7 +143,7 @@ export class Create {
     this.displayedText.set('');
 
     try {
-      const creation = await this.creationService.generateCreation(this.creationModel());
+      const creation = await this.creationService.generateCreation(this.creationRequest());
       this.resetForm();
       this.say(`I named it "${creation.title}" for you. Take a look!`, () => {
         this.dialogService.openCreationResult(creation);
@@ -161,6 +162,6 @@ export class Create {
 
   private resetForm() {
     this.creationForm().reset();
-    this.creationModel.set(this.creationService.getDefaultCreationModel());
+    this.creationRequest.set(this.creationService.getDefaultCreationRequest());
   }
 }

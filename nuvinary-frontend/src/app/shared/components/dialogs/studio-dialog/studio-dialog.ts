@@ -2,7 +2,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { Creation } from '../../../models/creation.model';
 import { LucideAngularModule, Plus, X } from 'lucide-angular';
-import { CreationService } from '../../../../features/services/creation-service';
+import { CreationService } from '../../../../core/data/creation.service';
 
 @Component({
   selector: 'app-studio-dialog',

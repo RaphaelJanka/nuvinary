@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { LEGAL_NOTICE_CONTENT } from './legal-notice.content';
-import { LegalService } from '../../services/legal-service';
+import { LegalService } from '../legal.service';
 import { SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { TERMS_OF_SERVICE_CONTENT } from './terms-of-service.content';

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SidebarService } from './sidebar-service';
+import { DialogService } from './dialog.service';
 
-describe('SidebarService', () => {
-  let service: SidebarService;
+describe('DialogService', () => {
+  let service: DialogService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SidebarService);
+    service = TestBed.inject(DialogService);
   });
 
   it('should be created', () => {

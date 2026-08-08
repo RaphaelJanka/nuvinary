@@ -23,12 +23,12 @@ import {
   X,
 } from 'lucide-angular';
 import { Creation } from '../../models/creation.model';
-import { CreationService } from '../../../features/services/creation-service';
+import { CreationService } from '../../../core/data/creation.service';
 import { AuthService } from '../../../core/auth/auth.service';
 import { Router } from '@angular/router';
 import { FormInput } from '../form-input/form-input';
 import { form, maxLength, required } from '@angular/forms/signals';
-import { ScreenSizeService } from '../../services/screen-size-service';
+import { ScreenSizeService } from '../../services/screen-size.service';
 
 @Component({
   selector: 'app-creation-details',
