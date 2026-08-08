@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { typeWriter } from './typewriter.helper';
+import { typeWriter } from './typewriter';
 import { ArrowRight, CloudUpload, LucideAngularModule } from 'lucide-angular';
 import { CreationService } from '../../../../core/data/creation.service';
 import { GenerateCreationDto } from '../../../../core/data/generate-creation.model';

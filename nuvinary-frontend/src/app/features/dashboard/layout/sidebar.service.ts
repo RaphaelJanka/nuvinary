@@ -11,8 +11,8 @@ import {
   PencilRuler,
   Sparkles,
 } from 'lucide-angular';
-import { ScreenSizeService } from '../../shared/services/screen-size.service';
-import { NavItem } from '../../shared/models/nav-item.model';
+import { ScreenSizeService } from '../../../shared/services/screen-size.service';
+import { NavItem } from '../../../shared/models/nav-item.model';
 
 @Injectable({
   providedIn: 'root',
