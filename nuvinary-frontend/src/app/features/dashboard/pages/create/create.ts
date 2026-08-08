@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { typeWriter } from './typewriter';
 import { ArrowRight, CloudUpload, LucideAngularModule } from 'lucide-angular';
-import { CreationService } from '../../../../core/data/creation.service';
-import { GenerateCreationDto } from '../../../../core/data/generate-creation.model';
+import { CreationService } from '../../creations/creation.service';
+import { GenerateCreationDto } from '../../creations/generate-creation.model';
 import { form, maxLength, required, FormField } from '@angular/forms/signals';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { PageLayout } from '../../../../shared/components/page-layout/page-layout';
 import { Button } from '../../../../shared/components/button/button';
-import { DialogService } from '../../../../core/ui/dialog.service';
+import { DialogService } from '../../dialog.service';
 import { Loader } from '../../../../shared/components/loader/loader';
 
 const THINKING_DELAY_MS = 1500;

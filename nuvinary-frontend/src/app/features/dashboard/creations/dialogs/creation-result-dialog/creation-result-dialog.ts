@@ -2,7 +2,7 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideAngularModule, X } from 'lucide-angular';
-import { Creation } from '../../../models/creation.model';
+import { Creation } from '../../creation.model';
 
 const INTRO_LINES = [
   'Behold, your masterpiece.',

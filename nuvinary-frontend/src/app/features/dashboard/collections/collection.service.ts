@@ -1,10 +1,10 @@
 import { effect, inject, Injectable, signal } from '@angular/core';
-import { Collection, CollectionCreation } from '../../shared/models/collection.model';
-import { NotificationService } from '../feedback/notification.service';
-import { ErrorHandlingService } from '../feedback/error-handling.service';
-import { ApiService } from '../api/api.service';
-import { ApiBody } from '../api/api.model';
-import { AuthService } from '../auth/auth.service';
+import { Collection, CollectionCreation } from './collection.model';
+import { NotificationService } from '../../../core/feedback/notification.service';
+import { ErrorHandlingService } from '../../../core/feedback/error-handling.service';
+import { ApiService } from '../../../core/api/api.service';
+import { ApiBody } from '../../../core/api/api.model';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Injectable({
   providedIn: 'root',

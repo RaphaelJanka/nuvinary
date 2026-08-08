@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Header } from './layout/dashboard-header/dashboard-header';
+import { DashboardHeader } from './layout/dashboard-header/dashboard-header';
 import { Sidebar } from './layout/sidebar/sidebar';
 import { RouterOutlet } from '@angular/router';
 import { SidebarService } from './layout/sidebar.service';
@@ -8,7 +8,7 @@ import { ScreenSizeService } from '../../shared/services/screen-size.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Header, Sidebar, RouterOutlet, MobileSidebar],
+  imports: [DashboardHeader, Sidebar, RouterOutlet, MobileSidebar],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {

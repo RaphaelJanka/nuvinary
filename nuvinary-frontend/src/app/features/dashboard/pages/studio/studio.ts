@@ -20,12 +20,12 @@ import {
   SwatchBook,
   Trash,
 } from 'lucide-angular';
-import { DialogService } from '../../../../core/ui/dialog.service';
+import { DialogService } from '../../dialog.service';
 import { NgClass } from '@angular/common';
 import { toPng } from 'html-to-image';
 import { ScreenSizeService } from '../../../../shared/services/screen-size.service';
 import { Tooltip } from '../../../../shared/directives/tooltip';
-import { CreationService } from '../../../../core/data/creation.service';
+import { CreationService } from '../../creations/creation.service';
 
 @Component({
   selector: 'app-studio',

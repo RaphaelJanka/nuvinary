@@ -1,10 +1,10 @@
 import { computed, effect, inject, Injectable, Signal, signal } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
-import { Creation } from '../../shared/models/creation.model';
-import { NotificationService } from '../feedback/notification.service';
-import { ErrorHandlingService } from '../feedback/error-handling.service';
-import { ApiService } from '../api/api.service';
-import { ApiBody } from '../api/api.model';
+import { AuthService } from '../../../core/auth/auth.service';
+import { Creation } from './creation.model';
+import { NotificationService } from '../../../core/feedback/notification.service';
+import { ErrorHandlingService } from '../../../core/feedback/error-handling.service';
+import { ApiService } from '../../../core/api/api.service';
+import { ApiBody } from '../../../core/api/api.model';
 import { GenerateCreationDto, GenerateCreationResponse } from './generate-creation.model';
 
 @Injectable({

@@ -1,4 +1,4 @@
-import { Creation } from '../../shared/models/creation.model';
+import { Creation } from './creation.model';
 
 export interface GenerateCreationDto {
   prompt: string;

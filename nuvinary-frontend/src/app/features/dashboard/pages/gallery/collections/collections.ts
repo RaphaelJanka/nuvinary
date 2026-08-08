@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Check, Folder, LucideAngularModule, Pen, Plus, Trash, X } from 'lucide-angular';
-import { CollectionService } from '../../../../../core/data/collection.service';
-import { Collection } from '../../../../../shared/models/collection.model';
+import { CollectionService } from '../../../collections/collection.service';
+import { Collection } from '../../../collections/collection.model';
 import { form, maxLength, required } from '@angular/forms/signals';
 import { DragAndDropService } from '../../../../../shared/services/drag-and-drop.service';
-import { DialogService } from '../../../../../core/ui/dialog.service';
+import { DialogService } from '../../../dialog.service';
 import { FormInput } from '../../../../../shared/components/form-input/form-input';
 import { Button } from '../../../../../shared/components/button/button';
 import { Tooltip } from '../../../../../shared/directives/tooltip';

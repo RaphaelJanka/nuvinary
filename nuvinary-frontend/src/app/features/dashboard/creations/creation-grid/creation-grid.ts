@@ -7,10 +7,10 @@ import {
   viewChildren,
 } from '@angular/core';
 import { LucideAngularModule, Search, Trash2Icon, X } from 'lucide-angular';
-import { Creation } from '../../models/creation.model';
+import { Creation } from '../creation.model';
 import { CreationCard } from '../creation-card/creation-card';
-import { DragAndDropService } from '../../services/drag-and-drop.service';
-import { DialogService } from '../../../core/ui/dialog.service';
+import { DragAndDropService } from '../../../../shared/services/drag-and-drop.service';
+import { DialogService } from '../../dialog.service';
 
 @Component({
   selector: 'app-creation-grid',

@@ -1,14 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Creation } from '../../shared/models/creation.model';
+import { Creation } from './creations/creation.model';
 import { ConfirmDialog } from '../../shared/components/dialogs/confirmation-dialog/confirmation-dialog';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
-import { CreationService } from '../data/creation.service';
-import { CollectionService } from '../data/collection.service';
-import { Collection } from '../../shared/models/collection.model';
-import { CreationDetails } from '../../shared/components/creation-details/creation-details';
+import { CreationService } from './creations/creation.service';
+import { CollectionService } from './collections/collection.service';
+import { Collection } from './collections/collection.model';
+import { CreationDetails } from './creations/creation-details/creation-details';
 import { ConfirmDialogData } from '../../shared/models/dialog-data.model';
-import { StudioDialog } from '../../shared/components/dialogs/studio-dialog/studio-dialog';
-import { CreationResultDialog } from '../../shared/components/dialogs/creation-result-dialog/creation-result-dialog';
+import { StudioDialog } from './creations/dialogs/studio-dialog/studio-dialog';
+import { CreationResultDialog } from './creations/dialogs/creation-result-dialog/creation-result-dialog';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
 import { computed, signal, Signal, WritableSignal } from '@angular/core';
-import { Creation } from '../models/creation.model';
+import { Creation } from './creation.model';
 
 export function createCreationFilter(sourceList: Signal<Creation[]>): {
   searchQuery: WritableSignal<string>;

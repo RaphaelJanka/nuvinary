@@ -1,9 +1,9 @@
 import { Injectable, signal } from '@angular/core';
-import { CollectionCreation } from '../../shared/models/collection.model';
+import { DraggableItem } from '../models/draggable-item.model';
 
 @Injectable({ providedIn: 'root' })
 export class DragAndDropService {
-  private readonly _activeCreation = signal<CollectionCreation | null>(null);
+  private readonly _activeCreation = signal<DraggableItem | null>(null);
   readonly activeCreation = this._activeCreation.asReadonly();
 
   private readonly _isDragging = signal<boolean>(false);
@@ -15,7 +15,7 @@ export class DragAndDropService {
   private leaveTimer: ReturnType<typeof setTimeout> | null = null;
 
   /** Marks a creation as the one currently being dragged. */
-  startDrag(creation: CollectionCreation) {
+  startDrag(creation: DraggableItem) {
     this._activeCreation.set(creation);
     this._isDragging.set(true);
   }

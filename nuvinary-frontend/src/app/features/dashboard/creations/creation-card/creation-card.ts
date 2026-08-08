@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
-import { Creation } from '../../models/creation.model';
-import { DialogService } from '../../../core/ui/dialog.service';
-import { CreationService } from '../../../core/data/creation.service';
-import { Loader } from '../loader/loader';
+import { Creation } from '../creation.model';
+import { DialogService } from '../../dialog.service';
+import { CreationService } from '../creation.service';
+import { Loader } from '../../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-creation-card',
